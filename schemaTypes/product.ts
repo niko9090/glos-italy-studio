@@ -8,125 +8,174 @@ export default defineType({
   title: 'Prodotti',
   type: 'document',
   icon: () => '📦',
+
+  // Raggruppamento campi
+  groups: [
+    { name: 'basic', title: '📋 Info Base', default: true },
+    { name: 'content', title: '📝 Contenuti' },
+    { name: 'specs', title: '🔧 Specifiche' },
+    { name: 'media', title: '🖼️ Immagini' },
+    { name: 'pricing', title: '💰 Prezzo' },
+    { name: 'settings', title: '⚙️ Impostazioni' },
+  ],
+
   fields: [
-    // Codice prodotto
+    // === INFO BASE ===
     defineField({
       name: 'code',
       title: 'Codice Prodotto',
       type: 'string',
-      description: 'Es: GLOS-100, POLICUT-350',
-      validation: Rule => Rule.required(),
+      description: 'Codice univoco del prodotto usato internamente',
+      placeholder: 'Es: GLOS-100, POLICUT-350',
+      validation: Rule => Rule.required().error('Il codice prodotto è obbligatorio'),
+      group: 'basic',
     }),
 
-    // Categoria
+    defineField({
+      name: 'slug',
+      title: 'URL Prodotto',
+      type: 'slug',
+      description: 'Generato automaticamente dal codice. È l\'indirizzo web del prodotto.',
+      options: {
+        source: 'code',
+        maxLength: 96,
+        slugify: input => input.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, ''),
+      },
+      validation: Rule => Rule.required().error('L\'URL è obbligatorio - clicca "Generate"'),
+      group: 'basic',
+    }),
+
     defineField({
       name: 'category',
       title: 'Categoria',
       type: 'reference',
       to: [{ type: 'productCategory' }],
-      validation: Rule => Rule.required(),
+      description: 'Seleziona la categoria del prodotto (Blender, Taglierine, Accessori...)',
+      validation: Rule => Rule.required().error('Seleziona una categoria'),
+      group: 'basic',
     }),
 
-    // Nome multilingua
+    // === CONTENUTI MULTILINGUA ===
     defineField({
       name: 'name',
-      title: 'Nome Prodotto',
+      title: '🏷️ Nome Prodotto',
       type: 'object',
+      description: 'Nome commerciale del prodotto nelle varie lingue',
+      group: 'content',
+      options: { collapsible: true, collapsed: false },
       fields: [
-        { name: 'it', title: '🇮🇹 Italiano', type: 'string' },
-        { name: 'en', title: '🇬🇧 English', type: 'string' },
-        { name: 'es', title: '🇪🇸 Español', type: 'string' },
+        { name: 'it', title: '🇮🇹 Italiano', type: 'string', placeholder: 'Es: Blender GLOS 100 Litri' },
+        { name: 'en', title: '🇬🇧 English', type: 'string', placeholder: 'Es: GLOS 100 Liters Blender' },
+        { name: 'es', title: '🇪🇸 Español', type: 'string', placeholder: 'Es: Mezclador GLOS 100 Litros' },
       ],
       validation: Rule => Rule.required(),
     }),
 
-    // Tagline/Slogan
+    defineField({
+      name: 'shortDescription',
+      title: '📄 Descrizione Breve',
+      type: 'object',
+      description: 'Breve descrizione per le anteprime (1-2 frasi)',
+      group: 'content',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        { name: 'it', title: '🇮🇹 Italiano', type: 'text', rows: 2 },
+        { name: 'en', title: '🇬🇧 English', type: 'text', rows: 2 },
+        { name: 'es', title: '🇪🇸 Español', type: 'text', rows: 2 },
+      ],
+    }),
+
+    defineField({
+      name: 'description',
+      title: '📖 Descrizione Completa',
+      type: 'object',
+      description: 'Descrizione dettagliata del prodotto',
+      group: 'content',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        { name: 'it', title: '🇮🇹 Italiano', type: 'text', rows: 6 },
+        { name: 'en', title: '🇬🇧 English', type: 'text', rows: 6 },
+        { name: 'es', title: '🇪🇸 Español', type: 'text', rows: 6 },
+      ],
+    }),
+
     defineField({
       name: 'tagline',
-      title: 'Tagline',
+      title: '✨ Slogan/Tagline',
       type: 'object',
+      description: 'Frase d\'effetto breve (opzionale)',
+      group: 'content',
+      options: { collapsible: true, collapsed: true },
       fields: [
-        { name: 'it', title: '🇮🇹 Italiano', type: 'string' },
+        { name: 'it', title: '🇮🇹 Italiano', type: 'string', placeholder: 'Es: Potenza e precisione' },
         { name: 'en', title: '🇬🇧 English', type: 'string' },
         { name: 'es', title: '🇪🇸 Español', type: 'string' },
       ],
     }),
 
-    // Descrizione
-    defineField({
-      name: 'description',
-      title: 'Descrizione',
-      type: 'object',
-      fields: [
-        { name: 'it', title: '🇮🇹 Italiano', type: 'text', rows: 4 },
-        { name: 'en', title: '🇬🇧 English', type: 'text', rows: 4 },
-        { name: 'es', title: '🇪🇸 Español', type: 'text', rows: 4 },
-      ],
-    }),
-
-    // Caratteristiche tecniche
-    defineField({
-      name: 'specs',
-      title: 'Specifiche Tecniche',
-      type: 'object',
-      fields: [
-        { name: 'capacity', title: 'Capacità', type: 'string', description: 'Es: 100 litri' },
-        { name: 'width', title: 'Larghezza', type: 'string', description: 'Es: 350 mm' },
-        { name: 'thickness', title: 'Spessore Taglio', type: 'string', description: 'Es: 0.1-5 mm' },
-        { name: 'weight', title: 'Peso', type: 'string', description: 'Es: 85 kg' },
-        { name: 'power', title: 'Potenza', type: 'string', description: 'Es: 750W' },
-        { name: 'voltage', title: 'Voltaggio', type: 'string', description: 'Es: 220V 50Hz' },
-        { name: 'dimensions', title: 'Dimensioni', type: 'string', description: 'Es: 60x80x120 cm' },
-      ],
-    }),
-
-    // Caratteristiche/Features
+    // === CARATTERISTICHE ===
     defineField({
       name: 'features',
-      title: 'Caratteristiche',
+      title: '✅ Caratteristiche Principali',
       type: 'array',
+      description: 'Lista dei punti di forza del prodotto (max 6-8 elementi)',
+      group: 'content',
       of: [
         {
           type: 'object',
           fields: [
-            { name: 'it', title: '🇮🇹 Italiano', type: 'string' },
-            { name: 'en', title: '🇬🇧 English', type: 'string' },
-            { name: 'es', title: '🇪🇸 Español', type: 'string' },
+            { name: 'it', title: '🇮🇹', type: 'string', placeholder: 'Es: Vasca in acciaio inox AISI 304' },
+            { name: 'en', title: '🇬🇧', type: 'string' },
+            { name: 'es', title: '🇪🇸', type: 'string' },
           ],
           preview: {
             select: { title: 'it' },
+            prepare({ title }) {
+              return { title: `✓ ${title || 'Nuova caratteristica'}` }
+            },
           },
         },
       ],
     }),
 
-    // Prezzo
+    // === SPECIFICHE TECNICHE ===
     defineField({
-      name: 'price',
-      title: 'Prezzo',
+      name: 'specs',
+      title: 'Specifiche Tecniche',
       type: 'object',
+      description: 'Dati tecnici del prodotto. Compila solo i campi pertinenti.',
+      group: 'specs',
+      options: { collapsible: true, collapsed: false },
       fields: [
-        { name: 'amount', title: 'Importo (€)', type: 'number' },
-        { name: 'displayText', title: 'Testo Visualizzato', type: 'string', description: 'Es: "€ 1.200,00" o "Su richiesta"' },
-        { name: 'isOnRequest', title: 'Prezzo su Richiesta', type: 'boolean', initialValue: false },
+        { name: 'capacity', title: '📊 Capacità', type: 'string', description: 'Es: 100 litri, 50 kg' },
+        { name: 'width', title: '📏 Larghezza Taglio', type: 'string', description: 'Per taglierine. Es: 350 mm' },
+        { name: 'thickness', title: '📐 Spessore Taglio', type: 'string', description: 'Per taglierine. Es: 0.1-5 mm' },
+        { name: 'weight', title: '⚖️ Peso', type: 'string', description: 'Es: 85 kg' },
+        { name: 'power', title: '⚡ Potenza', type: 'string', description: 'Es: 750W, 1.5 kW' },
+        { name: 'voltage', title: '🔌 Voltaggio', type: 'string', description: 'Es: 220V 50Hz, 380V trifase' },
+        { name: 'dimensions', title: '📦 Dimensioni', type: 'string', description: 'LxPxH. Es: 60x80x120 cm' },
+        { name: 'materials', title: '🏗️ Materiali', type: 'string', description: 'Es: Acciaio inox AISI 304' },
       ],
     }),
 
-    // Immagine principale
+    // === IMMAGINI ===
     defineField({
       name: 'mainImage',
       title: 'Immagine Principale',
       type: 'image',
+      description: 'Foto principale del prodotto. Consigliato: 800x600px, sfondo bianco',
+      group: 'media',
       options: {
         hotspot: true,
       },
       fields: [
         {
           name: 'alt',
-          title: 'Testo Alternativo',
+          title: 'Testo Alternativo (per SEO)',
           type: 'object',
+          description: 'Descrivi brevemente l\'immagine',
           fields: [
-            { name: 'it', title: '🇮🇹', type: 'string' },
+            { name: 'it', title: '🇮🇹', type: 'string', placeholder: 'Es: Blender GLOS 100 litri vista frontale' },
             { name: 'en', title: '🇬🇧', type: 'string' },
             { name: 'es', title: '🇪🇸', type: 'string' },
           ],
@@ -134,11 +183,12 @@ export default defineType({
       ],
     }),
 
-    // Galleria immagini
     defineField({
       name: 'gallery',
       title: 'Galleria Immagini',
       type: 'array',
+      description: 'Foto aggiuntive del prodotto (dettagli, viste laterali, in uso)',
+      group: 'media',
       of: [
         {
           type: 'image',
@@ -158,6 +208,7 @@ export default defineType({
               name: 'caption',
               title: 'Didascalia',
               type: 'object',
+              description: 'Descrizione visibile sotto l\'immagine',
               fields: [
                 { name: 'it', title: '🇮🇹', type: 'string' },
                 { name: 'en', title: '🇬🇧', type: 'string' },
@@ -169,61 +220,112 @@ export default defineType({
       ],
     }),
 
-    // Badge (Più Venduto, Nuovo, etc.)
+    // === PREZZO ===
+    defineField({
+      name: 'price',
+      title: 'Prezzo',
+      type: 'object',
+      description: 'Informazioni sul prezzo del prodotto',
+      group: 'pricing',
+      fields: [
+        {
+          name: 'isOnRequest',
+          title: '📞 Prezzo su Richiesta',
+          type: 'boolean',
+          description: 'Attiva se il prezzo non è pubblico',
+          initialValue: true,
+        },
+        {
+          name: 'amount',
+          title: '💰 Importo (€)',
+          type: 'number',
+          description: 'Prezzo in euro (senza simbolo). Visibile solo se "Prezzo su Richiesta" è disattivato',
+          validation: Rule => Rule.min(0).error('Il prezzo non può essere negativo'),
+          hidden: ({ parent }) => parent?.isOnRequest,
+        },
+        {
+          name: 'displayText',
+          title: '🏷️ Testo Visualizzato',
+          type: 'string',
+          description: 'Testo alternativo. Es: "A partire da € 1.200"',
+          placeholder: 'Es: Su richiesta, A partire da € 1.200',
+        },
+      ],
+    }),
+
+    // === BADGE ===
     defineField({
       name: 'badge',
-      title: 'Badge',
+      title: 'Badge Promozionale',
       type: 'object',
+      description: 'Etichetta visiva da mostrare sul prodotto',
+      group: 'settings',
       fields: [
-        { name: 'show', title: 'Mostra Badge', type: 'boolean', initialValue: false },
+        { name: 'show', title: '🏷️ Mostra Badge', type: 'boolean', initialValue: false },
         {
           name: 'type',
-          title: 'Tipo',
+          title: 'Tipo Badge',
           type: 'string',
           options: {
             list: [
-              { title: 'Più Venduto', value: 'bestseller' },
-              { title: 'Nuovo', value: 'new' },
-              { title: 'Offerta', value: 'sale' },
-              { title: 'Personalizzato', value: 'custom' },
+              { title: '🔥 Più Venduto', value: 'bestseller' },
+              { title: '🆕 Nuovo', value: 'new' },
+              { title: '💥 Offerta', value: 'sale' },
+              { title: '✏️ Personalizzato', value: 'custom' },
             ],
           },
+          hidden: ({ parent }) => !parent?.show,
         },
         {
           name: 'customText',
           title: 'Testo Personalizzato',
           type: 'object',
+          description: 'Solo se hai scelto "Personalizzato"',
           fields: [
             { name: 'it', title: '🇮🇹', type: 'string' },
             { name: 'en', title: '🇬🇧', type: 'string' },
             { name: 'es', title: '🇪🇸', type: 'string' },
           ],
+          hidden: ({ parent }) => parent?.type !== 'custom',
         },
       ],
     }),
 
-    // Stato
+    // === IMPOSTAZIONI ===
     defineField({
       name: 'isActive',
-      title: 'Attivo',
+      title: '✅ Prodotto Attivo',
       type: 'boolean',
+      description: 'Se disattivato, il prodotto non sarà visibile sul sito',
       initialValue: true,
+      group: 'settings',
     }),
 
-    // In evidenza
     defineField({
       name: 'isFeatured',
-      title: 'In Evidenza (Homepage)',
+      title: '⭐ In Evidenza (Homepage)',
       type: 'boolean',
+      description: 'Mostra questo prodotto nella sezione "In Evidenza" della homepage',
       initialValue: false,
+      group: 'settings',
     }),
 
-    // Ordine
+    defineField({
+      name: 'isNew',
+      title: '🆕 Nuovo Prodotto',
+      type: 'boolean',
+      description: 'Mostra il badge "Nuovo" sul prodotto',
+      initialValue: false,
+      group: 'settings',
+    }),
+
     defineField({
       name: 'order',
-      title: 'Ordine',
+      title: '🔢 Ordine di Visualizzazione',
       type: 'number',
+      description: 'Numeri più bassi appaiono prima. Lascia 0 per ordine alfabetico.',
       initialValue: 0,
+      group: 'settings',
     }),
   ],
 
@@ -234,10 +336,18 @@ export default defineType({
       category: 'category.name.it',
       media: 'mainImage',
       active: 'isActive',
+      featured: 'isFeatured',
+      isNew: 'isNew',
     },
-    prepare({ title, code, category, media, active }) {
+    prepare({ title, code, category, media, active, featured, isNew }) {
+      const badges = []
+      if (!active) badges.push('❌')
+      else if (featured) badges.push('⭐')
+      else badges.push('✅')
+      if (isNew) badges.push('🆕')
+
       return {
-        title: `${active ? '✅' : '❌'} ${title || code}`,
+        title: `${badges.join('')} ${title || code}`,
         subtitle: `${code} • ${category || 'Senza categoria'}`,
         media,
       }
@@ -246,14 +356,19 @@ export default defineType({
 
   orderings: [
     {
-      title: 'Ordine',
+      title: 'Ordine Personalizzato',
       name: 'orderAsc',
       by: [{ field: 'order', direction: 'asc' }],
     },
     {
-      title: 'Codice',
+      title: 'Codice (A-Z)',
       name: 'codeAsc',
       by: [{ field: 'code', direction: 'asc' }],
+    },
+    {
+      title: 'Nome (A-Z)',
+      name: 'nameAsc',
+      by: [{ field: 'name.it', direction: 'asc' }],
     },
   ],
 })

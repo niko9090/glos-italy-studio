@@ -8,42 +8,93 @@ export default defineType({
   title: 'Pagine',
   type: 'document',
   icon: () => '📄',
+
+  // Raggruppamento campi
+  groups: [
+    { name: 'info', title: '📋 Informazioni', default: true },
+    { name: 'content', title: '📝 Contenuti' },
+    { name: 'sections', title: '🧱 Sezioni' },
+    { name: 'seo', title: '🔍 SEO' },
+    { name: 'settings', title: '⚙️ Impostazioni' },
+  ],
+
   fields: [
-    // Identificazione
+    // === IDENTIFICAZIONE ===
     defineField({
       name: 'title',
-      title: 'Titolo Interno',
+      title: 'Nome Pagina',
       type: 'string',
-      description: 'Nome per identificare la pagina (non visibile sul sito)',
-      validation: Rule => Rule.required(),
+      description: 'Nome interno per identificare la pagina (visibile solo nel CMS)',
+      placeholder: 'Es: Homepage, Chi Siamo, Contatti',
+      validation: Rule => Rule.required().error('Il nome della pagina è obbligatorio'),
+      group: 'info',
     }),
+
     defineField({
       name: 'slug',
-      title: 'URL (Slug)',
+      title: 'URL della Pagina',
       type: 'slug',
+      description: 'L\'indirizzo web della pagina. Viene generato automaticamente dal nome. Per la homepage usa "home".',
       options: {
         source: 'title',
         maxLength: 96,
+        slugify: input => input.toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[àáâãäå]/g, 'a')
+          .replace(/[èéêë]/g, 'e')
+          .replace(/[ìíîï]/g, 'i')
+          .replace(/[òóôõö]/g, 'o')
+          .replace(/[ùúûü]/g, 'u')
+          .replace(/[^a-z0-9\-]/g, ''),
       },
-      validation: Rule => Rule.required(),
+      validation: Rule => Rule.required().error('L\'URL è obbligatorio - clicca "Generate"'),
+      group: 'info',
     }),
 
-    // Contenuto multilingua
+    // === CONTENUTO MULTILINGUA ===
     defineField({
       name: 'content',
-      title: 'Contenuto',
+      title: 'Contenuti della Pagina',
       type: 'object',
+      description: 'Titoli e sottotitoli visibili sul sito',
+      group: 'content',
       fields: [
         // Italiano
         defineField({
           name: 'it',
           title: '🇮🇹 Italiano',
           type: 'object',
+          options: { collapsible: true, collapsed: false },
           fields: [
-            { name: 'pageTitle', title: 'Titolo Pagina', type: 'string' },
-            { name: 'pageSubtitle', title: 'Sottotitolo', type: 'text', rows: 2 },
-            { name: 'metaTitle', title: 'SEO: Meta Title', type: 'string' },
-            { name: 'metaDescription', title: 'SEO: Meta Description', type: 'text', rows: 3 },
+            {
+              name: 'pageTitle',
+              title: 'Titolo Pagina',
+              type: 'string',
+              description: 'Il titolo principale visibile sulla pagina',
+              placeholder: 'Es: Benvenuti in GLOS Italy',
+            },
+            {
+              name: 'pageSubtitle',
+              title: 'Sottotitolo',
+              type: 'text',
+              rows: 2,
+              description: 'Testo introduttivo sotto il titolo',
+            },
+            {
+              name: 'metaTitle',
+              title: 'SEO: Titolo Browser',
+              type: 'string',
+              description: 'Titolo che appare nella scheda del browser (max 60 caratteri)',
+              validation: Rule => Rule.max(60).warning('Il titolo SEO dovrebbe essere massimo 60 caratteri'),
+            },
+            {
+              name: 'metaDescription',
+              title: 'SEO: Descrizione',
+              type: 'text',
+              rows: 3,
+              description: 'Descrizione per i motori di ricerca (max 160 caratteri)',
+              validation: Rule => Rule.max(160).warning('La descrizione SEO dovrebbe essere massimo 160 caratteri'),
+            },
           ],
         }),
         // Inglese
@@ -51,6 +102,7 @@ export default defineType({
           name: 'en',
           title: '🇬🇧 English',
           type: 'object',
+          options: { collapsible: true, collapsed: true },
           fields: [
             { name: 'pageTitle', title: 'Page Title', type: 'string' },
             { name: 'pageSubtitle', title: 'Subtitle', type: 'text', rows: 2 },
@@ -63,6 +115,7 @@ export default defineType({
           name: 'es',
           title: '🇪🇸 Español',
           type: 'object',
+          options: { collapsible: true, collapsed: true },
           fields: [
             { name: 'pageTitle', title: 'Título Página', type: 'string' },
             { name: 'pageSubtitle', title: 'Subtítulo', type: 'text', rows: 2 },
@@ -73,11 +126,13 @@ export default defineType({
       ],
     }),
 
-    // Sezioni della pagina
+    // === SEZIONI DELLA PAGINA ===
     defineField({
       name: 'sections',
-      title: 'Sezioni',
+      title: 'Sezioni della Pagina',
       type: 'array',
+      description: 'Trascina le sezioni per riordinarle. Clicca "Add item" per aggiungere una nuova sezione.',
+      group: 'sections',
       of: [
         { type: 'heroSection' },
         { type: 'statsSection' },
@@ -86,47 +141,58 @@ export default defineType({
         { type: 'gallerySection' },
         { type: 'ctaSection' },
         { type: 'contactSection' },
+        { type: 'testimonialsSection' },
       ],
     }),
 
-    // Immagine OG per social
+    // === SEO E SOCIAL ===
     defineField({
       name: 'ogImage',
-      title: 'Immagine Social (OG Image)',
+      title: 'Immagine per Social Media',
       type: 'image',
-      description: 'Immagine mostrata quando condividi su Facebook, LinkedIn, etc. (1200x630px)',
+      description: 'Immagine mostrata quando condividi la pagina su Facebook, LinkedIn, WhatsApp, ecc. Dimensioni consigliate: 1200x630 pixel',
       options: {
         hotspot: true,
       },
+      group: 'seo',
     }),
 
-    // Stato pubblicazione
+    // === IMPOSTAZIONI ===
     defineField({
       name: 'isPublished',
-      title: 'Pubblicata',
+      title: '✅ Pagina Visibile',
       type: 'boolean',
+      description: 'Se disattivato, la pagina non sarà accessibile sul sito',
       initialValue: true,
+      group: 'settings',
     }),
 
-    // Ordine nel menu
     defineField({
       name: 'menuOrder',
-      title: 'Ordine nel Menu',
+      title: '🔢 Ordine nel Menu',
       type: 'number',
+      description: 'Posizione della pagina nel menu di navigazione. Numeri più bassi appaiono prima.',
       initialValue: 0,
+      group: 'settings',
     }),
   ],
 
   preview: {
     select: {
       title: 'title',
-      subtitle: 'slug.current',
+      slug: 'slug.current',
       published: 'isPublished',
+      sectionsCount: 'sections',
+      media: 'ogImage',
     },
-    prepare({ title, subtitle, published }) {
+    prepare({ title, slug, published, sectionsCount, media }) {
+      const status = published ? '✅' : '⏸️'
+      const sections = sectionsCount?.length || 0
+
       return {
-        title: `${published ? '✅' : '⏸️'} ${title}`,
-        subtitle: `/${subtitle}`,
+        title: `${status} ${title}`,
+        subtitle: `/${slug} • ${sections} sezioni`,
+        media,
       }
     },
   },
@@ -136,6 +202,11 @@ export default defineType({
       title: 'Ordine Menu',
       name: 'menuOrderAsc',
       by: [{ field: 'menuOrder', direction: 'asc' }],
+    },
+    {
+      title: 'Nome (A-Z)',
+      name: 'titleAsc',
+      by: [{ field: 'title', direction: 'asc' }],
     },
   ],
 })

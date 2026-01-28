@@ -8,6 +8,7 @@ export default defineType({
   title: 'Navigazione',
   type: 'document',
   icon: () => '🧭',
+
   fields: [
     defineField({
       name: 'title',
@@ -15,12 +16,14 @@ export default defineType({
       type: 'string',
       initialValue: 'Menu Principale',
       readOnly: true,
+      description: 'Nome interno del menu (non modificabile)',
     }),
 
     defineField({
       name: 'items',
-      title: 'Voci Menu',
+      title: '📋 Voci del Menu',
       type: 'array',
+      description: 'Trascina le voci per riordinarle. Clicca su una voce per modificarla.',
       of: [
         {
           type: 'object',
@@ -29,42 +32,49 @@ export default defineType({
           fields: [
             {
               name: 'label',
-              title: 'Testo',
+              title: '🏷️ Testo del Link',
               type: 'object',
+              description: 'Il testo visibile nel menu',
               fields: [
-                { name: 'it', title: '🇮🇹', type: 'string' },
-                { name: 'en', title: '🇬🇧', type: 'string' },
-                { name: 'es', title: '🇪🇸', type: 'string' },
+                { name: 'it', title: '🇮🇹 Italiano', type: 'string', placeholder: 'Es: Prodotti' },
+                { name: 'en', title: '🇬🇧 English', type: 'string' },
+                { name: 'es', title: '🇪🇸 Español', type: 'string' },
               ],
             },
             {
               name: 'href',
-              title: 'Link',
+              title: '🔗 Destinazione (URL)',
               type: 'string',
-              description: 'Es: /blender-glos o https://example.com',
+              description: 'Pagina interna: /prodotti, /contatti | Pagina esterna: https://...',
+              placeholder: '/prodotti',
+              validation: Rule => Rule.required().error('L\'URL è obbligatorio'),
             },
             {
               name: 'target',
-              title: 'Apri in',
+              title: '🪟 Apertura',
               type: 'string',
+              description: 'Come aprire il link quando cliccato',
               options: {
                 list: [
-                  { title: 'Stessa finestra', value: '_self' },
-                  { title: 'Nuova finestra', value: '_blank' },
+                  { title: '📄 Stessa finestra (default)', value: '_self' },
+                  { title: '🆕 Nuova finestra/scheda', value: '_blank' },
                 ],
+                layout: 'radio',
               },
               initialValue: '_self',
             },
             {
               name: 'isActive',
-              title: 'Visibile',
+              title: '👁️ Visibile nel Menu',
               type: 'boolean',
+              description: 'Disattiva per nascondere temporaneamente senza eliminare',
               initialValue: true,
             },
             {
               name: 'children',
-              title: 'Sottomenu',
+              title: '📂 Sottomenu (dropdown)',
               type: 'array',
+              description: 'Voci che appariranno nel menu a tendina sotto questa voce',
               of: [
                 {
                   type: 'object',
@@ -74,16 +84,32 @@ export default defineType({
                       title: 'Testo',
                       type: 'object',
                       fields: [
-                        { name: 'it', title: '🇮🇹', type: 'string' },
+                        { name: 'it', title: '🇮🇹', type: 'string', placeholder: 'Es: Blender GLOS' },
                         { name: 'en', title: '🇬🇧', type: 'string' },
                         { name: 'es', title: '🇪🇸', type: 'string' },
                       ],
                     },
-                    { name: 'href', title: 'Link', type: 'string' },
-                    { name: 'isActive', title: 'Visibile', type: 'boolean', initialValue: true },
+                    {
+                      name: 'href',
+                      title: 'Destinazione',
+                      type: 'string',
+                      placeholder: '/prodotti/blender',
+                    },
+                    {
+                      name: 'isActive',
+                      title: 'Visibile',
+                      type: 'boolean',
+                      initialValue: true,
+                    },
                   ],
                   preview: {
-                    select: { title: 'label.it' },
+                    select: { title: 'label.it', href: 'href', active: 'isActive' },
+                    prepare({ title, href, active }) {
+                      return {
+                        title: `${active ? '✅' : '❌'} ${title || 'Senza nome'}`,
+                        subtitle: href,
+                      }
+                    },
                   },
                 },
               ],
@@ -94,10 +120,15 @@ export default defineType({
               title: 'label.it',
               href: 'href',
               active: 'isActive',
+              childrenCount: 'children',
             },
-            prepare({ title, href, active }) {
+            prepare({ title, href, active, childrenCount }) {
+              const hasChildren = childrenCount?.length > 0
+              const status = active ? '✅' : '❌'
+              const dropdown = hasChildren ? ` (📂 ${childrenCount.length})` : ''
+
               return {
-                title: `${active ? '✅' : '❌'} ${title}`,
+                title: `${status} ${title || 'Senza nome'}${dropdown}`,
                 subtitle: href,
               }
             },
@@ -108,10 +139,13 @@ export default defineType({
   ],
 
   preview: {
-    prepare() {
+    select: { items: 'items' },
+    prepare({ items }) {
+      const count = items?.length || 0
+      const activeCount = items?.filter((i: any) => i.isActive).length || 0
       return {
         title: '🧭 Menu Principale',
-        subtitle: 'Gestione navigazione',
+        subtitle: `${activeCount} di ${count} voci attive`,
       }
     },
   },
