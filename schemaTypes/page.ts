@@ -141,7 +141,6 @@ export default defineType({
         { type: 'gallerySection' },
         { type: 'ctaSection' },
         { type: 'contactSection' },
-        { type: 'testimonialsSection' },
       ],
     }),
 
