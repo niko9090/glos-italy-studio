@@ -130,7 +130,7 @@ export default defineConfig({
       name: 'editor',
       title: 'Modifica Pagine',
       previewUrl: {
-        draftMode: {
+        previewMode: {
           enable: `${FRONTEND_URL}/api/draft`,
         },
       },
