@@ -170,14 +170,14 @@ export default defineConfig({
       if (document._type === 'page') {
         const slug = (document as any).slug?.current
         if (slug) {
-          return `${process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.it'}/${slug}`
+          return `${process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'}/${slug}`
         }
       }
 
       if (document._type === 'product') {
         const slug = (document as any).slug?.current
         if (slug) {
-          return `${process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.it'}/prodotti/${slug}`
+          return `${process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'}/prodotti/${slug}`
         }
       }
 
