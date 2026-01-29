@@ -130,7 +130,7 @@ export default defineConfig({
       name: 'editor',
       title: 'Modifica Pagine',
       previewUrl: {
-        previewMode: {
+        draftMode: {
           enable: `${FRONTEND_URL}/api/draft`,
         },
       },
@@ -161,6 +161,7 @@ export default defineConfig({
       },
     }),
     structureTool({ structure, title: 'Gestione Contenuti' }),
+    visionTool(), // Query GROQ
     media(), // Gestione media avanzata
   ],
 
