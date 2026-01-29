@@ -1,40 +1,50 @@
 // Schema: Testimonial
-// Recensioni e testimonianze clienti
-
 import { defineType, defineField } from 'sanity'
 
 export default defineType({
   name: 'testimonial',
-  title: 'Testimonial',
+  title: 'Recensioni',
   type: 'document',
   icon: () => '💬',
+
   fields: [
     defineField({
       name: 'author',
-      title: 'Autore',
-      type: 'object',
-      fields: [
-        { name: 'name', title: 'Nome', type: 'string' },
-        { name: 'role', title: 'Ruolo', type: 'string' },
-        { name: 'company', title: 'Azienda', type: 'string' },
-        { name: 'image', title: 'Foto', type: 'image', options: { hotspot: true } },
-      ],
+      title: 'Nome Cliente',
+      type: 'string',
+      validation: Rule => Rule.required(),
     }),
 
     defineField({
-      name: 'content',
-      title: 'Testimonianza',
-      type: 'object',
-      fields: [
-        { name: 'it', title: '🇮🇹 Italiano', type: 'text', rows: 4 },
-        { name: 'en', title: '🇬🇧 English', type: 'text', rows: 4 },
-        { name: 'es', title: '🇪🇸 Español', type: 'text', rows: 4 },
-      ],
+      name: 'company',
+      title: 'Azienda',
+      type: 'string',
+    }),
+
+    defineField({
+      name: 'role',
+      title: 'Ruolo',
+      type: 'string',
+    }),
+
+    defineField({
+      name: 'avatar',
+      title: 'Foto',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+
+    defineField({
+      name: 'quote',
+      title: 'Recensione',
+      type: 'text',
+      rows: 4,
+      validation: Rule => Rule.required(),
     }),
 
     defineField({
       name: 'rating',
-      title: 'Valutazione',
+      title: 'Stelle',
       type: 'number',
       options: {
         list: [1, 2, 3, 4, 5],
@@ -44,30 +54,23 @@ export default defineType({
 
     defineField({
       name: 'isActive',
-      title: 'Visibile',
+      title: 'Visibile sul sito',
       type: 'boolean',
       initialValue: true,
-    }),
-
-    defineField({
-      name: 'order',
-      title: 'Ordine',
-      type: 'number',
-      initialValue: 0,
     }),
   ],
 
   preview: {
     select: {
-      name: 'author.name',
-      company: 'author.company',
+      title: 'author',
+      company: 'company',
       rating: 'rating',
-      media: 'author.image',
+      media: 'avatar',
     },
-    prepare({ name, company, rating, media }) {
+    prepare({ title, company, rating, media }) {
       const stars = '⭐'.repeat(rating || 0)
       return {
-        title: name || 'Senza nome',
+        title: title || 'Senza nome',
         subtitle: `${company || ''} ${stars}`,
         media,
       }
