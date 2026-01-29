@@ -134,26 +134,6 @@ export default defineConfig({
           enable: `${FRONTEND_URL}/api/draft`,
         },
       },
-      // Risolve URL in documenti per click-to-edit
-      resolve: {
-        mainDocuments: [
-          {
-            // Homepage
-            route: '/',
-            filter: `_type == "page" && slug.current == "home"`,
-          },
-          {
-            // Pagine dinamiche
-            route: '/:slug',
-            filter: `_type == "page" && slug.current == $slug`,
-          },
-          {
-            // Prodotti
-            route: '/prodotti/:slug',
-            filter: `_type == "product" && slug.current == $slug`,
-          },
-        ],
-      },
     }),
     structureTool({ structure, title: 'Gestione Contenuti' }),
     visionTool(), // Query GROQ
@@ -167,25 +147,6 @@ export default defineConfig({
   // Configurazione documento
   document: {
     // Azioni disponibili per ogni documento
-    productionUrl: async (prev, context) => {
-      const { document } = context
-
-      if (document._type === 'page') {
-        const slug = (document as any).slug?.current
-        if (slug) {
-          return `${process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'}/${slug}`
-        }
-      }
-
-      if (document._type === 'product') {
-        const slug = (document as any).slug?.current
-        if (slug) {
-          return `${process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'}/prodotti/${slug}`
-        }
-      }
-
-      return prev
-    },
   },
 
   // Configurazione form
