@@ -12,7 +12,7 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo',
-      type: 'string',
+      type: 'localeString',
     }),
 
     defineField({
@@ -24,7 +24,7 @@ export default defineType({
           type: 'image',
           options: { hotspot: true },
           fields: [
-            { name: 'caption', title: 'Didascalia', type: 'string' },
+            { name: 'caption', title: 'Didascalia', type: 'localeString' },
           ],
         },
       ],
@@ -32,7 +32,7 @@ export default defineType({
   ],
 
   preview: {
-    select: { title: 'title', images: 'images' },
+    select: { title: 'title.it', images: 'images' },
     prepare({ title, images }) {
       return { title: `🖼️ ${title || 'Galleria'} (${images?.length || 0})` }
     },

@@ -12,15 +12,13 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo',
-      type: 'string',
-      initialValue: 'Contattaci',
+      type: 'localeString',
     }),
 
     defineField({
       name: 'subtitle',
       title: 'Sottotitolo',
-      type: 'text',
-      rows: 2,
+      type: 'localeText',
     }),
 
     defineField({
@@ -46,7 +44,7 @@ export default defineType({
   ],
 
   preview: {
-    select: { title: 'title' },
+    select: { title: 'title.it' },
     prepare({ title }) {
       return { title: `📞 ${title || 'Contatti'}` }
     },

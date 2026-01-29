@@ -12,14 +12,13 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo',
-      type: 'string',
+      type: 'localeString',
     }),
 
     defineField({
       name: 'subtitle',
       title: 'Sottotitolo',
-      type: 'text',
-      rows: 2,
+      type: 'localeText',
     }),
 
     defineField({
@@ -37,11 +36,11 @@ export default defineType({
         {
           type: 'object',
           fields: [
-            { name: 'title', title: 'Titolo', type: 'string' },
-            { name: 'description', title: 'Descrizione', type: 'text', rows: 2 },
+            { name: 'title', title: 'Titolo', type: 'localeString' },
+            { name: 'description', title: 'Descrizione', type: 'localeText' },
           ],
           preview: {
-            select: { title: 'title' },
+            select: { title: 'title.it' },
           },
         },
       ],
@@ -49,7 +48,7 @@ export default defineType({
   ],
 
   preview: {
-    select: { title: 'title' },
+    select: { title: 'title.it' },
     prepare({ title }) {
       return { title: `✨ ${title || 'Caratteristiche'}` }
     },

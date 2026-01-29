@@ -11,6 +11,10 @@ import testimonial from './testimonial'
 import faq from './faq'
 import mediaItem from './mediaItem'
 
+// Tipi oggetto per multilingua
+import localeString from './objects/localeString'
+import localeText from './objects/localeText'
+
 // Schemi per le sezioni delle pagine
 import heroSection from './sections/heroSection'
 import statsSection from './sections/statsSection'
@@ -21,6 +25,10 @@ import ctaSection from './sections/ctaSection'
 import contactSection from './sections/contactSection'
 
 export const schemaTypes = [
+  // Tipi oggetto base
+  localeString,
+  localeText,
+
   // Documenti principali
   page,
   product,

@@ -18,12 +18,12 @@ export default defineType({
           type: 'object',
           fields: [
             { name: 'number', title: 'Numero', type: 'string', description: 'Es: 40+' },
-            { name: 'label', title: 'Etichetta', type: 'string', description: 'Es: Anni di Esperienza' },
+            { name: 'label', title: 'Etichetta', type: 'localeString' },
           ],
           preview: {
-            select: { number: 'number', label: 'label' },
+            select: { number: 'number', label: 'label.it' },
             prepare({ number, label }) {
-              return { title: `${number} - ${label}` }
+              return { title: `${number} - ${label || ''}` }
             },
           },
         },
