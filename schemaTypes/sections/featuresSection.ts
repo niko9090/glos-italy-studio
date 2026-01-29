@@ -6,6 +6,7 @@ export default defineType({
   title: 'Caratteristiche',
   type: 'object',
   icon: () => '✨',
+  description: 'Lista di caratteristiche o punti di forza con immagine laterale',
 
   fields: [
     defineField({

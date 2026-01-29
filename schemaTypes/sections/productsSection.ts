@@ -6,6 +6,7 @@ export default defineType({
   title: 'Sezione Prodotti',
   type: 'object',
   icon: () => '📦',
+  description: 'Griglia con i prodotti in evidenza del catalogo',
 
   fields: [
     defineField({

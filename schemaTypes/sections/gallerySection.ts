@@ -6,6 +6,7 @@ export default defineType({
   title: 'Galleria Immagini',
   type: 'object',
   icon: () => '🖼️',
+  description: 'Galleria fotografica con lightbox per vedere le immagini ingrandite',
 
   fields: [
     defineField({

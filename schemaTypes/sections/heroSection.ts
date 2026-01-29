@@ -6,6 +6,7 @@ export default defineType({
   title: 'Banner Principale',
   type: 'object',
   icon: () => '🎯',
+  description: 'Il grande banner in cima alla pagina con titolo, sottotitolo e immagine di sfondo',
 
   fields: [
     defineField({

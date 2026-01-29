@@ -127,6 +127,8 @@ export default defineConfig({
   plugins: [
     // Page Builder Visuale - Preview live tipo Wix
     presentationTool({
+      name: 'editor',
+      title: 'Modifica Pagine',
       previewUrl: {
         draftMode: {
           enable: `${FRONTEND_URL}/api/draft`,
@@ -150,10 +152,15 @@ export default defineConfig({
             route: '/prodotti/:slug',
             filter: `_type == "product" && slug.current == $slug`,
           },
+          {
+            // Rivenditori
+            route: '/rivenditori',
+            filter: `_type == "dealer"`,
+          },
         ],
       },
     }),
-    structureTool({ structure }),
+    structureTool({ structure, title: 'Gestione Contenuti' }),
     media(), // Gestione media avanzata
   ],
 

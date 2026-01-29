@@ -6,6 +6,7 @@ export default defineType({
   title: 'Statistiche',
   type: 'object',
   icon: () => '📊',
+  description: 'Mostra numeri e statistiche aziendali (es: 40+ anni, 500+ clienti)',
 
   fields: [
     defineField({

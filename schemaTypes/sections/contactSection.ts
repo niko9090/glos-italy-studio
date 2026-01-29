@@ -6,6 +6,7 @@ export default defineType({
   title: 'Sezione Contatti',
   type: 'object',
   icon: () => '📞',
+  description: 'Form di contatto con email, telefono e mappa',
 
   fields: [
     defineField({

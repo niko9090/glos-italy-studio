@@ -6,6 +6,7 @@ export default defineType({
   title: 'Invito all\'Azione',
   type: 'object',
   icon: () => '📢',
+  description: 'Banner colorato con pulsante per invitare il visitatore a contattarti',
 
   fields: [
     defineField({

@@ -21,12 +21,19 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          { title: 'Rivenditore', value: 'dealer' },
-          { title: 'Distributore', value: 'distributor' },
-          { title: 'Agente', value: 'agent' },
+          { title: 'Rivenditore', value: 'rivenditore' },
+          { title: 'Distributore', value: 'distributore' },
+          { title: 'Agente', value: 'agente' },
         ],
       },
-      initialValue: 'dealer',
+      initialValue: 'rivenditore',
+    }),
+
+    defineField({
+      name: 'logo',
+      title: 'Logo',
+      type: 'image',
+      options: { hotspot: true },
     }),
 
     defineField({
@@ -43,8 +50,9 @@ export default defineType({
 
     defineField({
       name: 'city',
-      title: 'Città',
+      title: 'Citta',
       type: 'string',
+      validation: Rule => Rule.required(),
     }),
 
     defineField({
@@ -55,10 +63,54 @@ export default defineType({
     }),
 
     defineField({
+      name: 'location',
+      title: 'Posizione sulla Mappa',
+      type: 'object',
+      description: 'Coordinate GPS. Cerca su Google Maps, clicca destro e copia le coordinate.',
+      fields: [
+        {
+          name: 'lat',
+          title: 'Latitudine',
+          type: 'number',
+          validation: Rule => Rule.min(-90).max(90),
+        },
+        {
+          name: 'lng',
+          title: 'Longitudine',
+          type: 'number',
+          validation: Rule => Rule.min(-180).max(180),
+        },
+      ],
+    }),
+
+    defineField({
+      name: 'regions',
+      title: 'Zone Coperte',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Regioni o province servite',
+    }),
+
+    defineField({
+      name: 'certifications',
+      title: 'Certificazioni',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        list: [
+          { title: 'Rivenditore Autorizzato', value: 'Autorizzato' },
+          { title: 'Centro Assistenza', value: 'Assistenza' },
+          { title: 'Premium Partner', value: 'Premium' },
+        ],
+      },
+    }),
+
+    defineField({
       name: 'isActive',
       title: 'Attivo',
       type: 'boolean',
       initialValue: true,
+      description: 'Disattiva per nascondere dalla mappa',
     }),
   ],
 
@@ -66,12 +118,16 @@ export default defineType({
     select: {
       title: 'name',
       city: 'city',
+      type: 'type',
       active: 'isActive',
+      media: 'logo',
     },
-    prepare({ title, city, active }) {
+    prepare({ title, city, type, active, media }) {
+      const typeLabel = type === 'distributore' ? '🏭' : type === 'agente' ? '👤' : '🏪'
       return {
         title: title,
-        subtitle: `${city || 'Senza città'} ${active ? '✅' : '❌'}`,
+        subtitle: `${typeLabel} ${city || ''} ${active ? '✅' : '❌'}`,
+        media,
       }
     },
   },
