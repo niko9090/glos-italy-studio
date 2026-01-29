@@ -152,11 +152,6 @@ export default defineConfig({
             route: '/prodotti/:slug',
             filter: `_type == "product" && slug.current == $slug`,
           },
-          {
-            // Rivenditori
-            route: '/rivenditori',
-            filter: `_type == "dealer"`,
-          },
         ],
       },
     }),
