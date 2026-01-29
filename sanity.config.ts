@@ -1,9 +1,13 @@
 // sanity.config.ts - Configurazione principale Sanity Studio
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
+import { presentationTool } from '@sanity/presentation'
 import { visionTool } from '@sanity/vision'
 import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './schemaTypes'
+
+// URL del frontend per preview
+const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
 
 // Struttura personalizzata del pannello admin
 const structure = (S: any) =>
@@ -121,8 +125,35 @@ export default defineConfig({
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
 
   plugins: [
+    // Page Builder Visuale - Preview live tipo Wix
+    presentationTool({
+      previewUrl: {
+        draftMode: {
+          enable: `${FRONTEND_URL}/api/draft`,
+        },
+      },
+      // Risolve URL in documenti per click-to-edit
+      resolve: {
+        mainDocuments: [
+          {
+            // Homepage
+            route: '/',
+            filter: `_type == "page" && slug.current == "home"`,
+          },
+          {
+            // Pagine dinamiche
+            route: '/:slug',
+            filter: `_type == "page" && slug.current == $slug`,
+          },
+          {
+            // Prodotti
+            route: '/prodotti/:slug',
+            filter: `_type == "product" && slug.current == $slug`,
+          },
+        ],
+      },
+    }),
     structureTool({ structure }),
-    visionTool(), // Per query GROQ
     media(), // Gestione media avanzata
   ],
 
