@@ -9,7 +9,7 @@ import { PageDashboard } from './components/tools/PageDashboard'
 import { DocumentsIcon } from '@sanity/icons'
 
 // URL del frontend per preview
-const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.it'
+const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
 // URL dello studio per CORS
 const STUDIO_URL = process.env.SANITY_STUDIO_URL || 'https://glositalystudio.vercel.app'
 
