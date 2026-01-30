@@ -1,5 +1,6 @@
-// Schema: Pagina
+// Schema: Pagina - Con editor sezioni migliorato
 import { defineType, defineField } from 'sanity'
+import { SectionArrayInput } from '../components/inputs/SectionArrayInput'
 
 export default defineType({
   name: 'page',
@@ -7,30 +8,43 @@ export default defineType({
   type: 'document',
   icon: () => '📄',
 
+  // Gruppi per organizzare i campi
+  groups: [
+    {
+      name: 'content',
+      title: 'Contenuto',
+      icon: () => '📝',
+      default: true,
+    },
+    {
+      name: 'seo',
+      title: 'SEO',
+      icon: () => '🔍',
+    },
+    {
+      name: 'settings',
+      title: 'Impostazioni',
+      icon: () => '⚙️',
+    },
+  ],
+
   fields: [
+    // === GRUPPO CONTENUTO ===
     defineField({
       name: 'title',
       title: 'Nome Pagina',
       type: 'string',
-      validation: Rule => Rule.required(),
-    }),
-
-    defineField({
-      name: 'slug',
-      title: 'URL',
-      type: 'slug',
-      description: 'Clicca "Generate" per creare automaticamente',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
-      validation: Rule => Rule.required(),
+      description: 'Il nome della pagina (visibile nel browser e nel menu)',
+      group: 'content',
+      validation: Rule => Rule.required().error('Il nome della pagina è obbligatorio'),
     }),
 
     defineField({
       name: 'sections',
       title: 'Sezioni della Pagina',
       type: 'array',
+      description: 'Costruisci la pagina aggiungendo e riordinando le sezioni',
+      group: 'content',
       of: [
         { type: 'heroSection' },
         { type: 'statsSection' },
@@ -40,13 +54,80 @@ export default defineType({
         { type: 'ctaSection' },
         { type: 'contactSection' },
       ],
+      components: {
+        input: SectionArrayInput,
+      },
     }),
 
+    // === GRUPPO SEO ===
+    defineField({
+      name: 'slug',
+      title: 'URL della Pagina',
+      type: 'slug',
+      description: 'L\'indirizzo web della pagina. Clicca "Generate" per crearlo automaticamente dal nome.',
+      group: 'seo',
+      options: {
+        source: 'title',
+        maxLength: 96,
+        slugify: (input: string) =>
+          input
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[àáâãäå]/g, 'a')
+            .replace(/[èéêë]/g, 'e')
+            .replace(/[ìíîï]/g, 'i')
+            .replace(/[òóôõö]/g, 'o')
+            .replace(/[ùúûü]/g, 'u')
+            .slice(0, 96),
+      },
+      validation: Rule => Rule.required().error('L\'URL è obbligatorio'),
+    }),
+
+    defineField({
+      name: 'seoTitle',
+      title: 'Titolo SEO',
+      type: 'string',
+      description: 'Titolo per i motori di ricerca (Google). Se vuoto, usa il nome pagina.',
+      group: 'seo',
+    }),
+
+    defineField({
+      name: 'seoDescription',
+      title: 'Descrizione SEO',
+      type: 'text',
+      description: 'Descrizione che appare nei risultati di Google (max 160 caratteri)',
+      group: 'seo',
+      rows: 3,
+      validation: Rule => Rule.max(160).warning('La descrizione SEO dovrebbe essere max 160 caratteri'),
+    }),
+
+    // === GRUPPO IMPOSTAZIONI ===
     defineField({
       name: 'isPublished',
       title: 'Pagina Attiva',
       type: 'boolean',
+      description: 'Se disattivata, la pagina non sarà visibile sul sito',
+      group: 'settings',
       initialValue: true,
+    }),
+
+    defineField({
+      name: 'showInNavigation',
+      title: 'Mostra nel Menu',
+      type: 'boolean',
+      description: 'Se attivo, la pagina apparirà nel menu di navigazione',
+      group: 'settings',
+      initialValue: false,
+    }),
+
+    defineField({
+      name: 'navigationOrder',
+      title: 'Ordine nel Menu',
+      type: 'number',
+      description: 'Numero per ordinare la pagina nel menu (1 = primo)',
+      group: 'settings',
+      initialValue: 99,
+      hidden: ({ parent }) => !parent?.showInNavigation,
     }),
   ],
 
@@ -55,12 +136,28 @@ export default defineType({
       title: 'title',
       slug: 'slug.current',
       published: 'isPublished',
+      sections: 'sections',
     },
-    prepare({ title, slug, published }) {
+    prepare({ title, slug, published, sections }) {
+      const sectionCount = sections?.length || 0
       return {
-        title: title,
-        subtitle: `/${slug || ''} ${published ? '✅' : '❌'}`,
+        title: title || 'Pagina senza nome',
+        subtitle: `/${slug || ''} • ${sectionCount} sezioni ${published ? '✅' : '❌ Bozza'}`,
       }
     },
   },
+
+  // Ordine dei campi nel pannello laterale
+  orderings: [
+    {
+      title: 'Nome A-Z',
+      name: 'titleAsc',
+      by: [{ field: 'title', direction: 'asc' }],
+    },
+    {
+      title: 'Ultima modifica',
+      name: 'updatedDesc',
+      by: [{ field: '_updatedAt', direction: 'desc' }],
+    },
+  ],
 })

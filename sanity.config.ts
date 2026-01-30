@@ -1,13 +1,27 @@
 // sanity.config.ts - Configurazione principale Sanity Studio
-import { defineConfig } from 'sanity'
+import { defineConfig, definePlugin } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { presentationTool } from '@sanity/presentation'
 import { visionTool } from '@sanity/vision'
 import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './schemaTypes'
+import { PageDashboard } from './components/tools/PageDashboard'
 
 // URL del frontend per preview
 const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
+
+// Plugin per la Dashboard Pagine
+const pageDashboardPlugin = definePlugin({
+  name: 'page-dashboard',
+  tools: [
+    {
+      name: 'page-dashboard',
+      title: 'Dashboard Pagine',
+      icon: () => '📄',
+      component: PageDashboard,
+    },
+  ],
+})
 
 // Struttura personalizzata del pannello admin
 const structure = (S: any) =>
@@ -125,6 +139,9 @@ export default defineConfig({
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
 
   plugins: [
+    // Dashboard Pagine - Vista panoramica
+    pageDashboardPlugin(),
+
     // Page Builder Visuale - Preview live tipo Wix
     presentationTool({
       name: 'editor',

@@ -10,31 +10,80 @@ export default defineType({
 
   fields: [
     defineField({
+      name: 'title',
+      title: 'Titolo Sezione',
+      type: 'localeString',
+      description: 'Titolo opzionale sopra le statistiche',
+    }),
+
+    defineField({
       name: 'items',
-      title: 'Numeri',
+      title: 'I Tuoi Numeri',
       type: 'array',
+      description: 'Aggiungi le statistiche da mostrare (consigliato: 3-4 numeri)',
       of: [
         {
           type: 'object',
+          title: 'Statistica',
           fields: [
-            { name: 'number', title: 'Numero', type: 'string', description: 'Es: 40+' },
-            { name: 'label', title: 'Etichetta', type: 'localeString' },
+            {
+              name: 'number',
+              title: 'Numero',
+              type: 'string',
+              description: 'Il valore numerico. Es: "40+", "500", "100%"',
+              validation: (Rule: any) => Rule.required().error('Inserisci un numero'),
+            },
+            {
+              name: 'label',
+              title: 'Descrizione',
+              type: 'localeString',
+              description: 'Cosa rappresenta questo numero. Es: "Anni di Esperienza", "Clienti Soddisfatti"',
+            },
+            {
+              name: 'icon',
+              title: 'Icona',
+              type: 'string',
+              description: 'Emoji opzionale. Es: 📅, 👥, ✅, 🏆',
+            },
           ],
           preview: {
-            select: { number: 'number', label: 'label.it' },
-            prepare({ number, label }) {
-              return { title: `${number} - ${label || ''}` }
+            select: { number: 'number', label: 'label.it', icon: 'icon' },
+            prepare({ number, label, icon }) {
+              return {
+                title: `${icon || '📊'} ${number}`,
+                subtitle: label || 'Senza etichetta',
+              }
             },
           },
         },
       ],
     }),
+
+    defineField({
+      name: 'backgroundColor',
+      title: 'Colore Sfondo',
+      type: 'string',
+      description: 'Scegli un colore di sfondo per questa sezione',
+      options: {
+        list: [
+          { title: 'Bianco', value: 'white' },
+          { title: 'Grigio Chiaro', value: 'gray' },
+          { title: 'Blu Scuro', value: 'dark' },
+          { title: 'Blu GLOS', value: 'primary' },
+        ],
+      },
+      initialValue: 'white',
+    }),
   ],
 
   preview: {
-    select: { items: 'items' },
-    prepare({ items }) {
-      return { title: `📊 Statistiche (${items?.length || 0})` }
+    select: { items: 'items', title: 'title.it' },
+    prepare({ items, title }) {
+      const count = items?.length || 0
+      return {
+        title: `📊 ${title || 'Statistiche'}`,
+        subtitle: `${count} ${count === 1 ? 'numero' : 'numeri'} da mostrare`,
+      }
     },
   },
 })
