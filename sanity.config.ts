@@ -9,7 +9,27 @@ import { PageDashboard } from './components/tools/PageDashboard'
 import { DocumentsIcon } from '@sanity/icons'
 
 // URL del frontend per preview
-const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
+const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.it'
+
+// Funzione per mappare documenti a URL di preview
+function resolveProductionUrl(doc: any): string | undefined {
+  if (!doc) return undefined
+
+  switch (doc._type) {
+    case 'page':
+      const slug = doc.slug?.current
+      if (!slug) return '/'
+      return slug === 'home' ? '/' : `/${slug}`
+    case 'product':
+      return doc.slug?.current ? `/prodotti/${doc.slug.current}` : '/prodotti'
+    case 'productCategory':
+      return doc.slug?.current ? `/categorie/${doc.slug.current}` : '/prodotti'
+    case 'dealer':
+      return '/rivenditori'
+    default:
+      return '/'
+  }
+}
 
 // Plugin per la Dashboard Pagine
 const pageDashboardPlugin = definePlugin({
@@ -143,13 +163,43 @@ export default defineConfig({
     // Dashboard Pagine - Vista panoramica
     pageDashboardPlugin(),
 
-    // Page Builder Visuale - Preview live tipo Wix
+    // Page Builder Visuale - Preview live
     presentationTool({
       name: 'editor',
       title: 'Modifica Pagine',
       previewUrl: {
-        previewMode: {
+        draftMode: {
           enable: `${FRONTEND_URL}/api/draft`,
+        },
+      },
+      resolve: {
+        mainDocuments: [
+          {
+            route: '/:slug',
+            filter: '_type == "page" && slug.current == $slug',
+          },
+          {
+            route: '/prodotti/:slug',
+            filter: '_type == "product" && slug.current == $slug',
+          },
+        ],
+        locations: {
+          page: (doc: any) => ({
+            locations: [
+              {
+                title: doc?.title || 'Pagina',
+                href: resolveProductionUrl(doc) || '/',
+              },
+            ],
+          }),
+          product: (doc: any) => ({
+            locations: [
+              {
+                title: doc?.name || 'Prodotto',
+                href: resolveProductionUrl(doc) || '/prodotti',
+              },
+            ],
+          }),
         },
       },
     }),
