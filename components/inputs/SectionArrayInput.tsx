@@ -139,8 +139,16 @@ function SortableSectionCard({
     description: '',
   }
 
-  // Estrai titolo dalla sezione
-  const sectionTitle = item.title?.it || item.title || config.label
+  // Estrai titolo dalla sezione (gestisce localeString)
+  const extractTitle = (title: any): string => {
+    if (!title) return config.label
+    if (typeof title === 'string') return title
+    if (typeof title === 'object') {
+      return title.it || title.en || title.es || config.label
+    }
+    return config.label
+  }
+  const sectionTitle = extractTitle(item.title)
 
   return (
     <div ref={setNodeRef} style={style}>

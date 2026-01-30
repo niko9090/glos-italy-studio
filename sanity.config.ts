@@ -6,6 +6,7 @@ import { visionTool } from '@sanity/vision'
 import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './schemaTypes'
 import { PageDashboard } from './components/tools/PageDashboard'
+import { DocumentsIcon } from '@sanity/icons'
 
 // URL del frontend per preview
 const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
@@ -17,7 +18,7 @@ const pageDashboardPlugin = definePlugin({
     {
       name: 'page-dashboard',
       title: 'Dashboard Pagine',
-      icon: () => '📄',
+      icon: DocumentsIcon,
       component: PageDashboard,
     },
   ],

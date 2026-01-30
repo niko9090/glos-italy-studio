@@ -1,11 +1,12 @@
 // Sezione: Galleria
 import { defineType, defineField } from 'sanity'
+import { ImagesIcon } from '@sanity/icons'
 
 export default defineType({
   name: 'gallerySection',
   title: 'Galleria Immagini',
   type: 'object',
-  icon: () => '🖼️',
+  icon: ImagesIcon,
   description: 'Galleria fotografica con lightbox per vedere le immagini ingrandite',
 
   // Gruppi per organizzare i campi

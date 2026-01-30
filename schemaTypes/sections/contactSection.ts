@@ -1,11 +1,12 @@
 // Sezione: Contatti
 import { defineType, defineField } from 'sanity'
+import { EnvelopeIcon } from '@sanity/icons'
 
 export default defineType({
   name: 'contactSection',
   title: 'Sezione Contatti',
   type: 'object',
-  icon: () => '📞',
+  icon: EnvelopeIcon,
   description: 'Form di contatto con email, telefono e mappa',
 
   // Gruppi per organizzare i campi

@@ -1,11 +1,12 @@
 // Sezione: Prodotti
 import { defineType, defineField } from 'sanity'
+import { PackageIcon } from '@sanity/icons'
 
 export default defineType({
   name: 'productsSection',
   title: 'Sezione Prodotti',
   type: 'object',
-  icon: () => '📦',
+  icon: PackageIcon,
   description: 'Griglia con i prodotti in evidenza del catalogo',
 
   // Gruppi per organizzare i campi

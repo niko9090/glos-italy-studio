@@ -1,12 +1,13 @@
 // Schema: Pagina - Con editor sezioni migliorato
 import { defineType, defineField } from 'sanity'
+import { DocumentIcon } from '@sanity/icons'
 import { SectionArrayInput } from '../components/inputs/SectionArrayInput'
 
 export default defineType({
   name: 'page',
   title: 'Pagine',
   type: 'document',
-  icon: () => '📄',
+  icon: DocumentIcon,
 
   // Gruppi per organizzare i campi
   groups: [

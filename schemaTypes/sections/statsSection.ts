@@ -1,11 +1,12 @@
 // Sezione: Statistiche
 import { defineType, defineField } from 'sanity'
+import { BarChartIcon } from '@sanity/icons'
 
 export default defineType({
   name: 'statsSection',
   title: 'Statistiche',
   type: 'object',
-  icon: () => '📊',
+  icon: BarChartIcon,
   description: 'Mostra numeri e statistiche aziendali (es: 40+ anni, 500+ clienti)',
 
   fields: [

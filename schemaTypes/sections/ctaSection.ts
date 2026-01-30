@@ -1,11 +1,12 @@
 // Sezione: Call to Action
 import { defineType, defineField } from 'sanity'
+import { BellIcon } from '@sanity/icons'
 
 export default defineType({
   name: 'ctaSection',
   title: 'Invito all\'Azione',
   type: 'object',
-  icon: () => '📢',
+  icon: BellIcon,
   description: 'Banner colorato con pulsante per invitare il visitatore a contattarti',
 
   // Gruppi per organizzare i campi

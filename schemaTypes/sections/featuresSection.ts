@@ -1,11 +1,12 @@
 // Sezione: Caratteristiche
 import { defineType, defineField } from 'sanity'
+import { BulbOutlineIcon } from '@sanity/icons'
 
 export default defineType({
   name: 'featuresSection',
   title: 'Caratteristiche',
   type: 'object',
-  icon: () => '✨',
+  icon: BulbOutlineIcon,
   description: 'Lista di caratteristiche o punti di forza con immagine laterale',
 
   // Gruppi per organizzare i campi

@@ -1,11 +1,12 @@
 // Sezione: Hero (Banner principale)
 import { defineType, defineField } from 'sanity'
+import { HomeIcon } from '@sanity/icons'
 
 export default defineType({
   name: 'heroSection',
   title: 'Banner Principale',
   type: 'object',
-  icon: () => '🎯',
+  icon: HomeIcon,
   description: 'Il grande banner in cima alla pagina con titolo, sottotitolo e immagine di sfondo',
 
   // Gruppi per organizzare i campi
