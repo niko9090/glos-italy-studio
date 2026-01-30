@@ -1,5 +1,5 @@
 // Sezione: Statistiche
-import { defineType, defineField } from 'sanity'
+import { defineType, defineField, defineArrayMember } from 'sanity'
 import { BarChartIcon } from '@sanity/icons'
 
 export default defineType({
@@ -23,29 +23,29 @@ export default defineType({
       type: 'array',
       description: 'Aggiungi le statistiche da mostrare (consigliato: 3-4 numeri)',
       of: [
-        {
+        defineArrayMember({
           type: 'object',
           title: 'Statistica',
           fields: [
-            {
+            defineField({
               name: 'number',
               title: 'Numero',
               type: 'string',
               description: 'Il valore numerico. Es: "40+", "500", "100%"',
-              validation: (Rule: any) => Rule.required().error('Inserisci un numero'),
-            },
-            {
+              validation: Rule => Rule.required().error('Inserisci un numero'),
+            }),
+            defineField({
               name: 'label',
               title: 'Descrizione',
               type: 'localeString',
               description: 'Cosa rappresenta questo numero. Es: "Anni di Esperienza", "Clienti Soddisfatti"',
-            },
-            {
+            }),
+            defineField({
               name: 'icon',
               title: 'Icona',
               type: 'string',
               description: 'Emoji opzionale. Es: 📅, 👥, ✅, 🏆',
-            },
+            }),
           ],
           preview: {
             select: { number: 'number', label: 'label.it', icon: 'icon' },
@@ -56,7 +56,7 @@ export default defineType({
               }
             },
           },
-        },
+        }),
       ],
     }),
 

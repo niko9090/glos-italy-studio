@@ -1,5 +1,5 @@
 // Sezione: Caratteristiche
-import { defineType, defineField } from 'sanity'
+import { defineType, defineField, defineArrayMember } from 'sanity'
 import { BulbOutlineIcon } from '@sanity/icons'
 
 export default defineType({
@@ -32,7 +32,7 @@ export default defineType({
       name: 'title',
       title: 'Titolo Sezione',
       type: 'localeString',
-      description: 'Es: "Perché Scegliere GLOS", "I Nostri Punti di Forza"',
+      description: 'Es: "Perche Scegliere GLOS", "I Nostri Punti di Forza"',
       group: 'content',
     }),
 
@@ -52,29 +52,29 @@ export default defineType({
       description: 'Aggiungi i punti di forza o le caratteristiche (consigliato: 3-6 punti)',
       group: 'features',
       of: [
-        {
+        defineArrayMember({
           type: 'object',
           title: 'Caratteristica',
           fields: [
-            {
+            defineField({
               name: 'icon',
               title: 'Icona',
               type: 'string',
               description: 'Emoji per questa caratteristica. Es: ✅, 🛡️, ⚡, 🎯',
-            },
-            {
+            }),
+            defineField({
               name: 'title',
               title: 'Titolo',
               type: 'localeString',
-              description: 'Nome della caratteristica. Es: "Qualità Garantita"',
-              validation: (Rule: any) => Rule.required(),
-            },
-            {
+              description: 'Nome della caratteristica. Es: "Qualita Garantita"',
+              validation: Rule => Rule.required(),
+            }),
+            defineField({
               name: 'description',
               title: 'Descrizione',
               type: 'localeText',
               description: 'Spiega questa caratteristica in 1-2 frasi',
-            },
+            }),
           ],
           preview: {
             select: { title: 'title.it', icon: 'icon' },
@@ -84,7 +84,7 @@ export default defineType({
               }
             },
           },
-        },
+        }),
       ],
     }),
 

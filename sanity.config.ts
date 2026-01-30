@@ -1,7 +1,7 @@
 // sanity.config.ts - Configurazione principale Sanity Studio
 import { defineConfig, definePlugin } from 'sanity'
 import { structureTool } from 'sanity/structure'
-import { presentationTool } from '@sanity/presentation'
+import { presentationTool, defineLocations } from 'sanity/presentation'
 import { visionTool } from '@sanity/vision'
 import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './schemaTypes'
@@ -9,9 +9,52 @@ import { PageDashboard } from './components/tools/PageDashboard'
 import { DocumentsIcon } from '@sanity/icons'
 
 // URL del frontend per preview
-const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
+const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.it'
 // URL dello studio per CORS
 const STUDIO_URL = process.env.SANITY_STUDIO_URL || 'https://glositalystudio.vercel.app'
+
+// Risolve le locations per il visual editing (dove i documenti appaiono nel frontend)
+const resolve = {
+  locations: {
+    // Pagine - mostrate al loro URL
+    page: defineLocations({
+      select: { title: 'title', slug: 'slug.current' },
+      resolve: (doc) => ({
+        locations: doc?.slug
+          ? [
+              {
+                title: doc?.title || 'Pagina',
+                href: doc.slug === 'home' ? '/' : `/${doc.slug}`,
+              },
+            ]
+          : [],
+      }),
+    }),
+    // Prodotti
+    product: defineLocations({
+      select: { name: 'name', slug: 'slug.current' },
+      resolve: (doc) => ({
+        locations: doc?.slug
+          ? [
+              {
+                title: doc?.name || 'Prodotto',
+                href: `/prodotti/${doc.slug}`,
+              },
+            ]
+          : [],
+      }),
+    }),
+    // Impostazioni sito - mostrate ovunque
+    siteSettings: defineLocations({
+      resolve: () => ({
+        locations: [
+          { title: 'Homepage', href: '/' },
+          { title: 'Tutte le pagine', href: '/' },
+        ],
+      }),
+    }),
+  },
+}
 
 // Plugin per la Dashboard Pagine
 const pageDashboardPlugin = definePlugin({
@@ -158,6 +201,8 @@ export default defineConfig({
           disable: '/api/draft-mode/disable',
         },
       },
+      // Risolve dove appaiono i documenti nel frontend
+      resolve,
     }),
     structureTool({ structure, title: 'Gestione Contenuti' }),
     visionTool(), // Query GROQ
