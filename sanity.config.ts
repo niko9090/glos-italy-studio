@@ -10,6 +10,8 @@ import { DocumentsIcon } from '@sanity/icons'
 
 // URL del frontend per preview
 const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
+// URL dello studio per CORS
+const STUDIO_URL = process.env.SANITY_STUDIO_URL || 'https://glositalystudio.vercel.app'
 
 // Plugin per la Dashboard Pagine
 const pageDashboardPlugin = definePlugin({
@@ -143,11 +145,19 @@ export default defineConfig({
     // Dashboard Pagine - Vista panoramica
     pageDashboardPlugin(),
 
-    // Page Builder Visuale - Preview live
+    // Page Builder Visuale - Preview live con Visual Editing
     presentationTool({
       name: 'editor',
       title: 'Modifica Pagine',
-      previewUrl: `${FRONTEND_URL}/api/draft`,
+      previewUrl: {
+        // URL iniziale del frontend
+        origin: FRONTEND_URL,
+        // Endpoint per abilitare/disabilitare draft mode
+        previewMode: {
+          enable: '/api/draft-mode/enable',
+          disable: '/api/draft-mode/disable',
+        },
+      },
     }),
     structureTool({ structure, title: 'Gestione Contenuti' }),
     visionTool(), // Query GROQ
