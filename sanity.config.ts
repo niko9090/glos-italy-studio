@@ -8,28 +8,8 @@ import { schemaTypes } from './schemaTypes'
 import { PageDashboard } from './components/tools/PageDashboard'
 import { DocumentsIcon } from '@sanity/icons'
 
-// URL del frontend per preview (deve essere il dominio Vercel per funzionare)
+// URL del frontend per preview
 const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
-
-// Funzione per mappare documenti a URL di preview
-function resolveProductionUrl(doc: any): string | undefined {
-  if (!doc) return undefined
-
-  switch (doc._type) {
-    case 'page':
-      const slug = doc.slug?.current
-      if (!slug) return '/'
-      return slug === 'home' ? '/' : `/${slug}`
-    case 'product':
-      return doc.slug?.current ? `/prodotti/${doc.slug.current}` : '/prodotti'
-    case 'productCategory':
-      return doc.slug?.current ? `/categorie/${doc.slug.current}` : '/prodotti'
-    case 'dealer':
-      return '/rivenditori'
-    default:
-      return '/'
-  }
-}
 
 // Plugin per la Dashboard Pagine
 const pageDashboardPlugin = definePlugin({
@@ -163,43 +143,147 @@ export default defineConfig({
     // Dashboard Pagine - Vista panoramica
     pageDashboardPlugin(),
 
-    // Page Builder Visuale - Preview live
+    // Page Builder Visuale - Preview live con Presentation Tool v1.12+
     presentationTool({
       name: 'editor',
       title: 'Modifica Pagine',
+      // Configurazione previewUrl per @sanity/presentation v1.12+
       previewUrl: {
+        // Usa previewMode (NON draftMode deprecato)
         previewMode: {
           enable: `${FRONTEND_URL}/api/draft`,
         },
       },
       resolve: {
+        // Mapping delle route ai documenti Sanity
         mainDocuments: [
+          {
+            route: '/',
+            filter: '_type == "page" && slug.current == "home"',
+          },
           {
             route: '/:slug',
             filter: '_type == "page" && slug.current == $slug',
           },
           {
+            route: '/prodotti',
+            filter: '_type == "page" && slug.current == "prodotti"',
+          },
+          {
             route: '/prodotti/:slug',
             filter: '_type == "product" && slug.current == $slug',
           },
+          {
+            route: '/categorie/:slug',
+            filter: '_type == "productCategory" && slug.current == $slug',
+          },
+          {
+            route: '/rivenditori',
+            filter: '_type == "page" && slug.current == "rivenditori"',
+          },
         ],
+        // Configurazione locations per ogni tipo di documento
         locations: {
-          page: (doc: any) => ({
-            locations: [
-              {
-                title: doc?.title || 'Pagina',
-                href: resolveProductionUrl(doc) || '/',
-              },
-            ],
-          }),
-          product: (doc: any) => ({
-            locations: [
-              {
-                title: doc?.name || 'Prodotto',
-                href: resolveProductionUrl(doc) || '/prodotti',
-              },
-            ],
-          }),
+          // Pagine
+          page: {
+            select: {
+              title: 'title',
+              slug: 'slug.current',
+            },
+            resolve: (doc) => ({
+              locations: [
+                {
+                  title: doc?.title || 'Pagina',
+                  href: doc?.slug === 'home' ? '/' : `/${doc?.slug || ''}`,
+                },
+              ],
+            }),
+          },
+          // Prodotti
+          product: {
+            select: {
+              title: 'name',
+              slug: 'slug.current',
+            },
+            resolve: (doc) => ({
+              locations: [
+                {
+                  title: doc?.title || 'Prodotto',
+                  href: `/prodotti/${doc?.slug || ''}`,
+                },
+                // Mostra anche nella lista prodotti
+                {
+                  title: 'Lista Prodotti',
+                  href: '/prodotti',
+                },
+              ],
+            }),
+          },
+          // Categorie prodotti
+          productCategory: {
+            select: {
+              title: 'name',
+              slug: 'slug.current',
+            },
+            resolve: (doc) => ({
+              locations: [
+                {
+                  title: doc?.title || 'Categoria',
+                  href: `/categorie/${doc?.slug || ''}`,
+                },
+              ],
+            }),
+          },
+          // Rivenditori
+          dealer: {
+            select: {
+              title: 'name',
+            },
+            resolve: (doc) => ({
+              locations: [
+                {
+                  title: doc?.title || 'Rivenditore',
+                  href: '/rivenditori',
+                },
+              ],
+            }),
+          },
+          // Testimonianze
+          testimonial: {
+            select: {
+              title: 'author',
+            },
+            resolve: (doc) => ({
+              locations: [
+                {
+                  title: `Testimonianza: ${doc?.title || 'Anonimo'}`,
+                  href: '/',
+                },
+              ],
+            }),
+          },
+          // Impostazioni Sito
+          siteSettings: {
+            resolve: () => ({
+              locations: [
+                {
+                  title: 'Homepage',
+                  href: '/',
+                },
+              ],
+            }),
+          },
+          // Navigazione
+          navigation: {
+            resolve: () => ({
+              locations: [
+                {
+                  title: 'Homepage',
+                  href: '/',
+                },
+              ],
+            }),
+          },
         },
       },
     }),
