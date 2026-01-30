@@ -38,6 +38,14 @@ export default defineType({
     }),
 
     defineField({
+      name: 'description',
+      title: 'Descrizione Pagina',
+      type: 'localeText',
+      description: 'Breve descrizione della pagina (opzionale)',
+      group: 'content',
+    }),
+
+    defineField({
       name: 'sections',
       title: 'Sezioni della Pagina',
       type: 'array',
