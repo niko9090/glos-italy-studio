@@ -8,8 +8,8 @@ import { schemaTypes } from './schemaTypes'
 import { PageDashboard } from './components/tools/PageDashboard'
 import { DocumentsIcon } from '@sanity/icons'
 
-// URL del frontend per preview
-const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.it'
+// URL del frontend per preview (deve essere il dominio Vercel per funzionare)
+const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
 
 // Funzione per mappare documenti a URL di preview
 function resolveProductionUrl(doc: any): string | undefined {
@@ -168,7 +168,7 @@ export default defineConfig({
       name: 'editor',
       title: 'Modifica Pagine',
       previewUrl: {
-        draftMode: {
+        previewMode: {
           enable: `${FRONTEND_URL}/api/draft`,
         },
       },
