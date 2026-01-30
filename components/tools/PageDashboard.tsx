@@ -30,10 +30,17 @@ interface Page {
   _type: string
   _updatedAt: string
   _createdAt: string
-  title: string
+  title: string | { it?: string; en?: string; es?: string }
   slug?: { current: string }
   isPublished: boolean
   sectionCount?: number
+}
+
+// Helper per estrarre il titolo dalla struttura multilingua
+function getTitle(title: Page['title']): string {
+  if (!title) return 'Senza titolo'
+  if (typeof title === 'string') return title
+  return title.it || title.en || title.es || 'Senza titolo'
 }
 
 export function PageDashboard() {
@@ -77,10 +84,9 @@ export function PageDashboard() {
   const filteredPages = pages.filter((page) => {
     if (!searchQuery) return true
     const query = searchQuery.toLowerCase()
-    return (
-      (page.title && page.title.toLowerCase().includes(query)) ||
-      (page.slug?.current && page.slug.current.toLowerCase().includes(query))
-    )
+    const title = getTitle(page.title).toLowerCase()
+    const slug = page.slug?.current?.toLowerCase() || ''
+    return title.includes(query) || slug.includes(query)
   })
 
   // Statistiche
@@ -121,7 +127,7 @@ export function PageDashboard() {
 
       const newPage = {
         _type: 'page',
-        title: `${page.title || 'Pagina'} (Copia)`,
+        title: `${getTitle(page.title)} (Copia)`,
         slug: { current: `${page.slug?.current || 'pagina'}-copia-${Date.now()}` },
         isPublished: false,
         sections: fullPage?.sections || [],
@@ -136,7 +142,7 @@ export function PageDashboard() {
 
   // Elimina pagina
   const handleDelete = async (page: Page) => {
-    if (!window.confirm(`Eliminare la pagina "${page.title}"?`)) return
+    if (!window.confirm(`Eliminare la pagina "${getTitle(page.title)}"?`)) return
 
     try {
       await client.delete(page._id)
@@ -254,7 +260,7 @@ export function PageDashboard() {
                 <Flex align="center" gap={3} wrap="wrap">
                   {/* Info */}
                   <Box flex={1} style={{ minWidth: 200 }}>
-                    <Text weight="semibold">{page.title || 'Senza titolo'}</Text>
+                    <Text weight="semibold">{getTitle(page.title)}</Text>
                     <Text size={1} muted>/{page.slug?.current || ''}</Text>
                   </Box>
 
