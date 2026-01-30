@@ -89,11 +89,11 @@ export function PageDashboard() {
     return title.includes(query) || slug.includes(query)
   })
 
-  // Statistiche
+  // Statistiche (isPublished undefined = pubblicata di default)
   const stats = {
     total: pages.length,
-    published: pages.filter((p) => p.isPublished).length,
-    drafts: pages.filter((p) => !p.isPublished).length,
+    published: pages.filter((p) => p.isPublished !== false).length,
+    drafts: pages.filter((p) => p.isPublished === false).length,
   }
 
   // Formatta data
@@ -109,10 +109,11 @@ export function PageDashboard() {
     }
   }
 
-  // Toggle pubblicazione
+  // Toggle pubblicazione (undefined = pubblicata, quindi toggle a false)
   const handleTogglePublish = async (page: Page) => {
     try {
-      await client.patch(page._id).set({ isPublished: !page.isPublished }).commit()
+      const newValue = page.isPublished === false ? true : false
+      await client.patch(page._id).set({ isPublished: newValue }).commit()
       loadPages()
     } catch (err) {
       console.error('Errore aggiornamento:', err)
@@ -254,7 +255,7 @@ export function PageDashboard() {
                 radius={2}
                 shadow={1}
                 style={{
-                  borderLeft: `4px solid ${page.isPublished ? '#10b981' : '#f59e0b'}`,
+                  borderLeft: `4px solid ${page.isPublished !== false ? '#10b981' : '#f59e0b'}`,
                 }}
               >
                 <Flex align="center" gap={3} wrap="wrap">
@@ -265,8 +266,8 @@ export function PageDashboard() {
                   </Box>
 
                   {/* Badge */}
-                  <Badge tone={page.isPublished ? 'positive' : 'caution'}>
-                    {page.isPublished ? 'Online' : 'Bozza'}
+                  <Badge tone={page.isPublished !== false ? 'positive' : 'caution'}>
+                    {page.isPublished !== false ? 'Online' : 'Bozza'}
                   </Badge>
 
                   <Badge mode="outline">
@@ -280,9 +281,9 @@ export function PageDashboard() {
                   {/* Azioni */}
                   <Flex gap={1}>
                     <Button
-                      icon={page.isPublished ? EyeClosedIcon : EyeOpenIcon}
+                      icon={page.isPublished !== false ? EyeClosedIcon : EyeOpenIcon}
                       mode="ghost"
-                      title={page.isPublished ? 'Nascondi' : 'Pubblica'}
+                      title={page.isPublished !== false ? 'Nascondi' : 'Pubblica'}
                       onClick={() => handleTogglePublish(page)}
                     />
                     <Button
