@@ -13,18 +13,15 @@ export default defineType({
     {
       name: 'content',
       title: 'Contenuto',
-      icon: () => '📝',
       default: true,
     },
     {
       name: 'seo',
       title: 'SEO',
-      icon: () => '🔍',
     },
     {
       name: 'settings',
       title: 'Impostazioni',
-      icon: () => '⚙️',
     },
   ],
 

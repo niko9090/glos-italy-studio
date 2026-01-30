@@ -13,18 +13,15 @@ export default defineType({
     {
       name: 'content',
       title: 'Testi',
-      icon: () => '📝',
       default: true,
     },
     {
       name: 'images',
       title: 'Immagini',
-      icon: () => '🖼️',
     },
     {
       name: 'display',
       title: 'Visualizzazione',
-      icon: () => '🎨',
     },
   ],
 

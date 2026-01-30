@@ -13,18 +13,15 @@ export default defineType({
     {
       name: 'content',
       title: 'Testi',
-      icon: () => '📝',
       default: true,
     },
     {
       name: 'action',
       title: 'Pulsante',
-      icon: () => '👆',
     },
     {
       name: 'media',
       title: 'Immagine',
-      icon: () => '🖼️',
     },
   ],
 
