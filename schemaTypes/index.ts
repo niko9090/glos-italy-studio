@@ -31,6 +31,17 @@ import testimonialsSection from './sections/testimonialsSection'
 import faqSection from './sections/faqSection'
 import logoCloudSection from './sections/logoCloudSection'
 import richTextSection from './sections/richTextSection'
+// Sezioni avanzate
+import carouselSection from './sections/carouselSection'
+import videoSection from './sections/videoSection'
+import timelineSection from './sections/timelineSection'
+import teamSection from './sections/teamSection'
+import tabsSection from './sections/tabsSection'
+import bannerSection from './sections/bannerSection'
+import iconBoxesSection from './sections/iconBoxesSection'
+import beforeAfterSection from './sections/beforeAfterSection'
+import downloadSection from './sections/downloadSection'
+import embedSection from './sections/embedSection'
 
 export const schemaTypes = [
   // Tipi oggetto base
@@ -64,4 +75,15 @@ export const schemaTypes = [
   faqSection,
   logoCloudSection,
   richTextSection,
+  // Sezioni avanzate
+  carouselSection,
+  videoSection,
+  timelineSection,
+  teamSection,
+  tabsSection,
+  bannerSection,
+  iconBoxesSection,
+  beforeAfterSection,
+  downloadSection,
+  embedSection,
 ]

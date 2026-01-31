@@ -56,23 +56,37 @@ export default defineType({
       of: [
         // === SEZIONI PRINCIPALI ===
         { type: 'heroSection', title: '🎯 Banner Principale' },
+        { type: 'carouselSection', title: '🎠 Carosello' },
+        { type: 'bannerSection', title: '🏷️ Banner/Annuncio' },
+
+        // === TESTO & MEDIA ===
         { type: 'textImageSection', title: '📝 Testo + Immagine' },
         { type: 'richTextSection', title: '✍️ Testo Libero' },
+        { type: 'videoSection', title: '🎬 Video' },
+        { type: 'gallerySection', title: '🖼️ Galleria' },
+        { type: 'beforeAfterSection', title: '🔄 Prima/Dopo' },
 
-        // === CONTENUTI ===
+        // === CONTENUTI STRUTTURATI ===
         { type: 'statsSection', title: '📊 Statistiche' },
         { type: 'productsSection', title: '📦 Prodotti' },
         { type: 'featuresSection', title: '✨ Caratteristiche' },
-        { type: 'gallerySection', title: '🖼️ Galleria' },
+        { type: 'iconBoxesSection', title: '🎯 Box con Icone' },
+        { type: 'tabsSection', title: '📑 Schede (Tabs)' },
+        { type: 'timelineSection', title: '📅 Timeline' },
 
         // === SOCIAL PROOF ===
         { type: 'testimonialsSection', title: '💬 Testimonianze' },
         { type: 'logoCloudSection', title: '🏢 Loghi Partner' },
+        { type: 'teamSection', title: '👥 Team' },
 
         // === FAQ & CONTATTI ===
         { type: 'faqSection', title: '❓ FAQ Domande' },
         { type: 'ctaSection', title: '📢 Invito all\'Azione' },
         { type: 'contactSection', title: '📞 Contatti' },
+
+        // === UTILITY ===
+        { type: 'downloadSection', title: '📥 Download/Risorse' },
+        { type: 'embedSection', title: '🔗 Embed Esterno' },
       ],
     }),
 
