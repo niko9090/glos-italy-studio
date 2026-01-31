@@ -25,6 +25,12 @@ import featuresSection from './sections/featuresSection'
 import gallerySection from './sections/gallerySection'
 import ctaSection from './sections/ctaSection'
 import contactSection from './sections/contactSection'
+// Nuove sezioni
+import textImageSection from './sections/textImageSection'
+import testimonialsSection from './sections/testimonialsSection'
+import faqSection from './sections/faqSection'
+import logoCloudSection from './sections/logoCloudSection'
+import richTextSection from './sections/richTextSection'
 
 export const schemaTypes = [
   // Tipi oggetto base
@@ -52,4 +58,10 @@ export const schemaTypes = [
   gallerySection,
   ctaSection,
   contactSection,
+  // Nuove sezioni
+  textImageSection,
+  testimonialsSection,
+  faqSection,
+  logoCloudSection,
+  richTextSection,
 ]

@@ -54,11 +54,23 @@ export default defineType({
         sortable: true,
       },
       of: [
+        // === SEZIONI PRINCIPALI ===
         { type: 'heroSection', title: '🎯 Banner Principale' },
+        { type: 'textImageSection', title: '📝 Testo + Immagine' },
+        { type: 'richTextSection', title: '✍️ Testo Libero' },
+
+        // === CONTENUTI ===
         { type: 'statsSection', title: '📊 Statistiche' },
         { type: 'productsSection', title: '📦 Prodotti' },
         { type: 'featuresSection', title: '✨ Caratteristiche' },
         { type: 'gallerySection', title: '🖼️ Galleria' },
+
+        // === SOCIAL PROOF ===
+        { type: 'testimonialsSection', title: '💬 Testimonianze' },
+        { type: 'logoCloudSection', title: '🏢 Loghi Partner' },
+
+        // === FAQ & CONTATTI ===
+        { type: 'faqSection', title: '❓ FAQ Domande' },
         { type: 'ctaSection', title: '📢 Invito all\'Azione' },
         { type: 'contactSection', title: '📞 Contatti' },
       ],

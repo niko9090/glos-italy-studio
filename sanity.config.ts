@@ -6,8 +6,9 @@ import { visionTool } from '@sanity/vision'
 import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './schemaTypes'
 import { PageDashboard } from './components/tools/PageDashboard'
-import { DocumentsIcon } from '@sanity/icons'
+import { DocumentsIcon, TranslateIcon } from '@sanity/icons'
 import { cleanPastePlugin } from './plugins/cleanPaste'
+import { TranslateAction } from './actions/translateAction'
 
 // URL del frontend per preview
 const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
@@ -220,6 +221,14 @@ export default defineConfig({
   // Configurazione documento
   document: {
     // Azioni disponibili per ogni documento
+    actions: (prev, context) => {
+      // Aggiungi l'azione Traduci per documenti con campi multilingua
+      const translateableTypes = ['page', 'product', 'siteSettings', 'navigation']
+      if (translateableTypes.includes(context.schemaType)) {
+        return [...prev, TranslateAction]
+      }
+      return prev
+    },
   },
 
   // Configurazione form
