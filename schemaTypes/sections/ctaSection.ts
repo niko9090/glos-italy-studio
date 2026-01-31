@@ -40,8 +40,8 @@ export default defineType({
     defineField({
       name: 'subtitle',
       title: 'Sottotitolo',
-      type: 'localeText',
-      description: 'Testo di supporto. Es: "Contattaci oggi per una consulenza gratuita"',
+      type: 'localeRichText',
+      description: 'Testo di supporto - puoi usare grassetto, colori, ecc.',
       group: 'content',
     }),
 

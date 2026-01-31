@@ -39,8 +39,8 @@ export default defineType({
     defineField({
       name: 'subtitle',
       title: 'Sottotitolo',
-      type: 'localeText',
-      description: 'Testo descrittivo sotto il titolo (2-3 frasi)',
+      type: 'localeRichText',
+      description: 'Testo descrittivo sotto il titolo - puoi usare grassetto, colori, ecc.',
       group: 'content',
     }),
 

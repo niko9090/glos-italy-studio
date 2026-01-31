@@ -14,6 +14,8 @@ import mediaItem from './mediaItem'
 // Tipi oggetto per multilingua
 import localeString from './objects/localeString'
 import localeText from './objects/localeText'
+import localeRichText from './objects/localeRichText'
+import richText from './objects/richText'
 
 // Schemi per le sezioni delle pagine
 import heroSection from './sections/heroSection'
@@ -28,6 +30,8 @@ export const schemaTypes = [
   // Tipi oggetto base
   localeString,
   localeText,
+  localeRichText,
+  richText,
 
   // Documenti principali
   page,

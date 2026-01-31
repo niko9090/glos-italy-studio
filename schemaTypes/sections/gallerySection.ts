@@ -39,8 +39,8 @@ export default defineType({
     defineField({
       name: 'subtitle',
       title: 'Sottotitolo',
-      type: 'localeText',
-      description: 'Breve descrizione della galleria',
+      type: 'localeRichText',
+      description: 'Breve descrizione - puoi usare grassetto, colori, ecc.',
       group: 'content',
     }),
 

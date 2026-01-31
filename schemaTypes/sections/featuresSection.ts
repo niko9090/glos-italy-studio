@@ -39,8 +39,8 @@ export default defineType({
     defineField({
       name: 'subtitle',
       title: 'Sottotitolo',
-      type: 'localeText',
-      description: 'Breve introduzione alla lista di caratteristiche',
+      type: 'localeRichText',
+      description: 'Breve introduzione - puoi usare grassetto, colori, ecc.',
       group: 'content',
     }),
 
