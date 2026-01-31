@@ -1,5 +1,35 @@
 // Tipo: Rich Text Multilingua con formattazione ULTRA COMPLETA
 import { defineType, defineArrayMember } from 'sanity'
+import {
+  TextColorPreview,
+  HighlightPreview,
+  FontSizePreview,
+  FontFamilyPreview,
+  FontWeightPreview,
+  GradientPreview,
+  TextShadowPreview,
+  TextOutlinePreview,
+  AnimationPreview,
+  InlineIconPreview,
+  ButtonStylePreview,
+  InlineBorderPreview,
+  LetterSpacingPreview,
+  LineHeightPreview,
+  TextTransformPreview,
+  TextDecorationPreview,
+  LinkPreview,
+  StrongPreview,
+  EmPreview,
+  UnderlinePreview,
+  StrikeThroughPreview,
+  CodePreview,
+  SupPreview,
+  SubPreview,
+  MarkPreview,
+  SmallTextPreview,
+  AbbrPreview,
+  KbdPreview,
+} from '../../components/portableText/PreviewComponents'
 
 // Lingue supportate
 const supportedLanguages = [
@@ -447,19 +477,19 @@ const richTextBlock = defineArrayMember({
 
   // MARKS - Decoratori e Annotazioni
   marks: {
-    // Decoratori base (toggle on/off)
+    // Decoratori base (toggle on/off) con preview
     decorators: [
-      { title: 'Grassetto', value: 'strong' },
-      { title: 'Corsivo', value: 'em' },
-      { title: 'Sottolineato', value: 'underline' },
-      { title: 'Barrato', value: 'strike-through' },
-      { title: 'Codice Inline', value: 'code' },
-      { title: 'Apice (superscript)', value: 'sup' },
-      { title: 'Pedice (subscript)', value: 'sub' },
-      { title: 'Testo Marcato', value: 'mark' },
-      { title: 'Testo Piccolo', value: 'small-text' },
-      { title: 'Abbreviazione', value: 'abbr' },
-      { title: 'Keyboard', value: 'kbd' },
+      { title: 'Grassetto', value: 'strong', component: StrongPreview },
+      { title: 'Corsivo', value: 'em', component: EmPreview },
+      { title: 'Sottolineato', value: 'underline', component: UnderlinePreview },
+      { title: 'Barrato', value: 'strike-through', component: StrikeThroughPreview },
+      { title: 'Codice Inline', value: 'code', component: CodePreview },
+      { title: 'Apice (superscript)', value: 'sup', component: SupPreview },
+      { title: 'Pedice (subscript)', value: 'sub', component: SubPreview },
+      { title: 'Testo Marcato', value: 'mark', component: MarkPreview },
+      { title: 'Testo Piccolo', value: 'small-text', component: SmallTextPreview },
+      { title: 'Abbreviazione', value: 'abbr', component: AbbrPreview },
+      { title: 'Keyboard', value: 'kbd', component: KbdPreview },
     ],
 
     // Annotazioni (con opzioni)
@@ -469,6 +499,7 @@ const richTextBlock = defineArrayMember({
         name: 'link',
         type: 'object',
         title: '🔗 Link',
+        components: { annotation: LinkPreview },
         fields: [
           {
             name: 'href',
@@ -493,6 +524,7 @@ const richTextBlock = defineArrayMember({
         name: 'inlineIcon',
         type: 'object',
         title: '🎯 Icona',
+        components: { annotation: InlineIconPreview },
         fields: [
           {
             name: 'icon',
@@ -528,6 +560,7 @@ const richTextBlock = defineArrayMember({
         name: 'textColor',
         type: 'object',
         title: '🎨 Colore Testo',
+        components: { annotation: TextColorPreview },
         fields: [
           {
             name: 'color',
@@ -543,6 +576,7 @@ const richTextBlock = defineArrayMember({
         name: 'highlight',
         type: 'object',
         title: '🖍️ Evidenzia',
+        components: { annotation: HighlightPreview },
         fields: [
           {
             name: 'color',
@@ -559,6 +593,7 @@ const richTextBlock = defineArrayMember({
         name: 'fontSize',
         type: 'object',
         title: '📏 Dimensione Font',
+        components: { annotation: FontSizePreview },
         fields: [
           {
             name: 'size',
@@ -574,6 +609,7 @@ const richTextBlock = defineArrayMember({
         name: 'fontFamily',
         type: 'object',
         title: '🔤 Font',
+        components: { annotation: FontFamilyPreview },
         fields: [
           {
             name: 'family',
@@ -589,6 +625,7 @@ const richTextBlock = defineArrayMember({
         name: 'fontWeight',
         type: 'object',
         title: '💪 Spessore Font',
+        components: { annotation: FontWeightPreview },
         fields: [
           {
             name: 'weight',
@@ -604,6 +641,7 @@ const richTextBlock = defineArrayMember({
         name: 'letterSpacing',
         type: 'object',
         title: '↔️ Spaziatura Lettere',
+        components: { annotation: LetterSpacingPreview },
         fields: [
           {
             name: 'spacing',
@@ -619,6 +657,7 @@ const richTextBlock = defineArrayMember({
         name: 'lineHeight',
         type: 'object',
         title: '↕️ Altezza Riga',
+        components: { annotation: LineHeightPreview },
         fields: [
           {
             name: 'height',
@@ -656,6 +695,7 @@ const richTextBlock = defineArrayMember({
         name: 'textTransform',
         type: 'object',
         title: '🔠 Trasformazione',
+        components: { annotation: TextTransformPreview },
         fields: [
           {
             name: 'transform',
@@ -671,6 +711,7 @@ const richTextBlock = defineArrayMember({
         name: 'textDecoration',
         type: 'object',
         title: '〰️ Decorazione',
+        components: { annotation: TextDecorationPreview },
         fields: [
           {
             name: 'decoration',
@@ -692,6 +733,7 @@ const richTextBlock = defineArrayMember({
         name: 'textShadow',
         type: 'object',
         title: '👥 Ombra Testo',
+        components: { annotation: TextShadowPreview },
         fields: [
           {
             name: 'shadow',
@@ -713,6 +755,7 @@ const richTextBlock = defineArrayMember({
         name: 'textGradient',
         type: 'object',
         title: '🌈 Gradiente Testo',
+        components: { annotation: GradientPreview },
         fields: [
           {
             name: 'gradient',
@@ -728,6 +771,7 @@ const richTextBlock = defineArrayMember({
         name: 'textAnimation',
         type: 'object',
         title: '✨ Animazione',
+        components: { annotation: AnimationPreview },
         fields: [
           {
             name: 'animation',
@@ -784,6 +828,7 @@ const richTextBlock = defineArrayMember({
         name: 'textOutline',
         type: 'object',
         title: '⭕ Contorno Testo',
+        components: { annotation: TextOutlinePreview },
         fields: [
           {
             name: 'width',
@@ -845,6 +890,7 @@ const richTextBlock = defineArrayMember({
         name: 'buttonStyle',
         type: 'object',
         title: '🔘 Stile Bottone',
+        components: { annotation: ButtonStylePreview },
         fields: [
           {
             name: 'variant',
@@ -910,6 +956,7 @@ const richTextBlock = defineArrayMember({
         name: 'inlineBorder',
         type: 'object',
         title: '🔲 Bordo Inline',
+        components: { annotation: InlineBorderPreview },
         fields: [
           {
             name: 'style',
