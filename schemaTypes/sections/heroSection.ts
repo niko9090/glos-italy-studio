@@ -171,6 +171,7 @@ export default defineType({
       name: 'backgroundGradient',
       title: 'Gradiente Sfondo',
       type: 'string',
+      description: 'Seleziona il tipo di gradiente per lo sfondo',
       group: 'media',
       options: {
         list: [
@@ -181,7 +182,9 @@ export default defineType({
           { title: 'Nero → Grigio', value: 'black-gray' },
           { title: 'Radiale Blu', value: 'radial-blue' },
         ],
+        layout: 'radio',
       },
+      initialValue: 'blue-dark',
       hidden: ({ parent }) => parent?.backgroundType !== 'gradient',
     }),
 
