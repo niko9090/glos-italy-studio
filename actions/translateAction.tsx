@@ -75,19 +75,22 @@ function findTranslatableFields(obj: any, path: string[] = []): Array<{ path: st
     const itValue = obj.it
 
     if (typeof itValue === 'string' && itValue.trim()) {
-      fields.push({ path, type: 'string', value: itValue })
+      fields.push({ path: [...path], type: 'string', value: itValue })
     } else if (Array.isArray(itValue) && itValue[0]?._type === 'block') {
-      fields.push({ path, type: 'richText', value: itValue })
+      fields.push({ path: [...path], type: 'richText', value: itValue })
     }
   }
 
   // Recursively search nested objects and arrays
   for (const [key, value] of Object.entries(obj)) {
-    if (key.startsWith('_')) continue // Skip internal fields
+    // Skip internal fields and empty keys
+    if (key.startsWith('_') || !key) continue
 
     if (Array.isArray(value)) {
       value.forEach((item, index) => {
-        fields.push(...findTranslatableFields(item, [...path, key, String(index)]))
+        // Use _key if available for array items, otherwise use index
+        const itemKey = item?._key || `[${index}]`
+        fields.push(...findTranslatableFields(item, [...path, `${key}[_key=="${item?._key || index}"]`]))
       })
     } else if (typeof value === 'object' && value !== null) {
       fields.push(...findTranslatableFields(value, [...path, key]))
@@ -124,16 +127,33 @@ export function TranslateAction(props: any) {
 
       for (const field of translatableFields) {
         for (const lang of targetLangs) {
-          if (field.type === 'string') {
-            const translated = await translateText(field.value, 'it', lang)
-            patches.push({
-              set: { [[...field.path, lang].join('.')]: translated }
-            })
-          } else if (field.type === 'richText') {
-            const translated = await translateBlocks(field.value, 'it', lang)
-            patches.push({
-              set: { [[...field.path, lang].join('.')]: translated }
-            })
+          try {
+            // Build the path properly
+            const pathStr = [...field.path, lang].join('.')
+
+            // Skip invalid paths
+            if (!pathStr || pathStr.includes('..') || pathStr.startsWith('.') || pathStr.endsWith('.')) {
+              console.warn('Skipping invalid path:', pathStr)
+              continue
+            }
+
+            if (field.type === 'string') {
+              const translated = await translateText(field.value, 'it', lang)
+              if (translated) {
+                patches.push({
+                  set: { [pathStr]: translated }
+                })
+              }
+            } else if (field.type === 'richText') {
+              const translated = await translateBlocks(field.value, 'it', lang)
+              if (translated) {
+                patches.push({
+                  set: { [pathStr]: translated }
+                })
+              }
+            }
+          } catch (err) {
+            console.error('Error translating field:', field.path, err)
           }
 
           completedCount++
