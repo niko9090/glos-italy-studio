@@ -31,10 +31,9 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo',
-      type: 'localeString',
-      description: 'Frase d\'impatto. Es: "Pronto a migliorare la tua produzione?"',
+      type: 'localeRichText',
+      description: 'Frase d\'impatto - puoi usare grassetto, colori, ecc.',
       group: 'content',
-      validation: Rule => Rule.required().error('Il titolo è obbligatorio'),
     }),
 
     defineField({

@@ -31,8 +31,8 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo Sezione',
-      type: 'localeString',
-      description: 'Es: "Perche Scegliere GLOS", "I Nostri Punti di Forza"',
+      type: 'localeRichText',
+      description: 'Es: "Perche Scegliere GLOS" - puoi usare grassetto, colori, ecc.',
       group: 'content',
     }),
 

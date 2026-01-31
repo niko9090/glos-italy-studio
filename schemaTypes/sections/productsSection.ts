@@ -31,8 +31,8 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo Sezione',
-      type: 'localeString',
-      description: 'Es: "I Nostri Prodotti", "Soluzioni per la Pasticceria"',
+      type: 'localeRichText',
+      description: 'Es: "I Nostri Prodotti" - puoi usare grassetto, colori, ecc.',
       group: 'content',
     }),
 

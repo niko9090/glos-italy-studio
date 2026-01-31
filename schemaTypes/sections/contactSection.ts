@@ -31,8 +31,8 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo Sezione',
-      type: 'localeString',
-      description: 'Es: "Contattaci", "Parliamo del tuo progetto"',
+      type: 'localeRichText',
+      description: 'Es: "Contattaci" - puoi usare grassetto, colori, ecc.',
       group: 'content',
     }),
 

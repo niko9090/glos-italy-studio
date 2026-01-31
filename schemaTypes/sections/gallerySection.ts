@@ -31,8 +31,8 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo Galleria',
-      type: 'localeString',
-      description: 'Es: "La Nostra Galleria", "I Nostri Lavori", "Foto Prodotti"',
+      type: 'localeRichText',
+      description: 'Es: "La Nostra Galleria" - puoi usare grassetto, colori, ecc.',
       group: 'content',
     }),
 

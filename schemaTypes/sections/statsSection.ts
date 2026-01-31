@@ -13,8 +13,8 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo Sezione',
-      type: 'localeString',
-      description: 'Titolo opzionale sopra le statistiche',
+      type: 'localeRichText',
+      description: 'Titolo opzionale - puoi usare grassetto, colori, ecc.',
     }),
 
     defineField({

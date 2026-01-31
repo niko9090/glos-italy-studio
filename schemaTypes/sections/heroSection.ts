@@ -31,8 +31,8 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo Principale',
-      type: 'localeString',
-      description: 'Il grande titolo che appare nel banner (es: "Soluzioni per la Pasticceria")',
+      type: 'localeRichText',
+      description: 'Il grande titolo che appare nel banner - puoi usare grassetto, colori, ecc.',
       group: 'content',
     }),
 
