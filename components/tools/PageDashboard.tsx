@@ -30,7 +30,7 @@ import {
   CheckmarkCircleIcon,
   CloseCircleIcon,
 } from '@sanity/icons'
-import { useClient, useRouter } from 'sanity'
+import { useClient } from 'sanity'
 
 interface Page {
   _id: string
@@ -56,7 +56,6 @@ const FRONTEND_URL = 'https://glositaly.vercel.app'
 
 export function PageDashboard() {
   const client = useClient({ apiVersion: '2024-01-01' })
-  const router = useRouter()
 
   const [pages, setPages] = useState<Page[]>([])
   const [loading, setLoading] = useState(true)
@@ -156,14 +155,15 @@ export function PageDashboard() {
     return slug === 'home' ? FRONTEND_URL : `${FRONTEND_URL}/${slug}`
   }
 
-  // Modifica pagina
+  // Modifica pagina (apre in Gestione Contenuti)
   const handleEdit = (page: Page) => {
-    router.navigateIntent('edit', { id: page._id, type: 'page' })
+    // Naviga alla pagina di edit nel structure tool
+    window.location.href = `/structure/page;${page._id}`
   }
 
   // Crea nuova pagina
   const handleCreate = () => {
-    router.navigateIntent('create', { type: 'page' })
+    window.location.href = `/structure/page;template=page`
   }
 
   // Toggle pubblicazione

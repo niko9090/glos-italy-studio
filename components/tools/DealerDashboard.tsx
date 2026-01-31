@@ -27,7 +27,7 @@ import {
   LinkIcon,
   PlayIcon,
 } from '@sanity/icons'
-import { useClient, useRouter } from 'sanity'
+import { useClient } from 'sanity'
 
 interface Dealer {
   _id: string
@@ -48,7 +48,6 @@ interface Dealer {
 
 export function DealerDashboard() {
   const client = useClient({ apiVersion: '2024-01-01' })
-  const router = useRouter()
 
   const [dealers, setDealers] = useState<Dealer[]>([])
   const [loading, setLoading] = useState(true)
@@ -174,12 +173,12 @@ export function DealerDashboard() {
 
   // Vai a modifica
   const handleEdit = (dealer: Dealer) => {
-    router.navigateIntent('edit', { id: dealer._id, type: 'dealer' })
+    window.location.href = `/structure/dealer;${dealer._id}`
   }
 
   // Crea nuovo
   const handleCreate = () => {
-    router.navigateIntent('create', { type: 'dealer' })
+    window.location.href = `/structure/dealer;template=dealer`
   }
 
   // Tipo icona
