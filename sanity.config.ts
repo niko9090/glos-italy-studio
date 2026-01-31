@@ -7,6 +7,7 @@ import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './schemaTypes'
 import { PageDashboard } from './components/tools/PageDashboard'
 import { DocumentsIcon } from '@sanity/icons'
+import { cleanPastePlugin } from './plugins/cleanPaste'
 
 // URL del frontend per preview
 const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
@@ -185,6 +186,9 @@ export default defineConfig({
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
 
   plugins: [
+    // Plugin per pulire automaticamente il testo incollato da HTML
+    cleanPastePlugin(),
+
     // Dashboard Pagine - Vista panoramica
     pageDashboardPlugin(),
 
