@@ -4,7 +4,7 @@ import { NavbarProps } from 'sanity'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.1.7'
+const SITE_VERSION = '1.2.0'
 
 export function CustomNavbar(props: NavbarProps) {
   return (
