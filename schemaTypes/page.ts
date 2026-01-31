@@ -55,38 +55,38 @@ export default defineType({
       },
       of: [
         // === SEZIONI PRINCIPALI ===
-        { type: 'heroSection', title: '🎯 Banner Principale' },
-        { type: 'carouselSection', title: '🎠 Carosello' },
-        { type: 'bannerSection', title: '🏷️ Banner/Annuncio' },
+        { type: 'heroSection' },
+        { type: 'carouselSection' },
+        { type: 'bannerSection' },
 
         // === TESTO & MEDIA ===
-        { type: 'textImageSection', title: '📝 Testo + Immagine' },
-        { type: 'richTextSection', title: '✍️ Testo Libero' },
-        { type: 'videoSection', title: '🎬 Video' },
-        { type: 'gallerySection', title: '🖼️ Galleria' },
-        { type: 'beforeAfterSection', title: '🔄 Prima/Dopo' },
+        { type: 'textImageSection' },
+        { type: 'richTextSection' },
+        { type: 'videoSection' },
+        { type: 'gallerySection' },
+        { type: 'beforeAfterSection' },
 
         // === CONTENUTI STRUTTURATI ===
-        { type: 'statsSection', title: '📊 Statistiche' },
-        { type: 'productsSection', title: '📦 Prodotti' },
-        { type: 'featuresSection', title: '✨ Caratteristiche' },
-        { type: 'iconBoxesSection', title: '🎯 Box con Icone' },
-        { type: 'tabsSection', title: '📑 Schede (Tabs)' },
-        { type: 'timelineSection', title: '📅 Timeline' },
+        { type: 'statsSection' },
+        { type: 'productsSection' },
+        { type: 'featuresSection' },
+        { type: 'iconBoxesSection' },
+        { type: 'tabsSection' },
+        { type: 'timelineSection' },
 
         // === SOCIAL PROOF ===
-        { type: 'testimonialsSection', title: '💬 Testimonianze' },
-        { type: 'logoCloudSection', title: '🏢 Loghi Partner' },
-        { type: 'teamSection', title: '👥 Team' },
+        { type: 'testimonialsSection' },
+        { type: 'logoCloudSection' },
+        { type: 'teamSection' },
 
         // === FAQ & CONTATTI ===
-        { type: 'faqSection', title: '❓ FAQ Domande' },
-        { type: 'ctaSection', title: '📢 Invito all\'Azione' },
-        { type: 'contactSection', title: '📞 Contatti' },
+        { type: 'faqSection' },
+        { type: 'ctaSection' },
+        { type: 'contactSection' },
 
         // === UTILITY ===
-        { type: 'downloadSection', title: '📥 Download/Risorse' },
-        { type: 'embedSection', title: '🔗 Embed Esterno' },
+        { type: 'downloadSection' },
+        { type: 'embedSection' },
       ],
     }),
 
