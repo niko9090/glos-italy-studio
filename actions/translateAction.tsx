@@ -39,13 +39,14 @@ async function translateText(text: string, from: string, to: string): Promise<st
   return text // Return original if translation fails
 }
 
-// Translate Portable Text blocks
+// Translate Portable Text blocks (including styledBlock)
 async function translateBlocks(blocks: any[], from: string, to: string): Promise<any[]> {
   if (!blocks || !Array.isArray(blocks)) return blocks
 
   const result = []
   for (const block of blocks) {
     if (block._type === 'block' && block.children) {
+      // Standard block with children (spans)
       const translatedChildren = []
       for (const child of block.children) {
         if (child._type === 'span' && child.text) {
@@ -56,6 +57,16 @@ async function translateBlocks(blocks: any[], from: string, to: string): Promise
         }
       }
       result.push({ ...block, children: translatedChildren })
+    } else if (block._type === 'styledBlock') {
+      // Styled block: translate nested content array recursively
+      if (block.content && Array.isArray(block.content) && block.content.length > 0) {
+        console.log('🎨 Traducendo blocco stilizzato...')
+        const translatedContent = await translateBlocks(block.content, from, to)
+        result.push({ ...block, content: translatedContent })
+      } else {
+        // Keep empty styledBlock as-is
+        result.push(block)
+      }
     } else {
       result.push(block)
     }
@@ -78,8 +89,12 @@ function findTranslatableFields(
 
     if (typeof itValue === 'string' && itValue.trim()) {
       fields.push({ path: [...path], type: 'string', value: itValue })
-    } else if (Array.isArray(itValue) && itValue.length > 0 && itValue[0]?._type === 'block') {
-      fields.push({ path: [...path], type: 'richText', value: itValue })
+    } else if (Array.isArray(itValue) && itValue.length > 0) {
+      // Check if it's a rich text array (contains block or styledBlock)
+      const firstItemType = itValue[0]?._type
+      if (firstItemType === 'block' || firstItemType === 'styledBlock') {
+        fields.push({ path: [...path], type: 'richText', value: itValue })
+      }
     }
 
     // Don't recurse into locale object keys (it, en, es)
