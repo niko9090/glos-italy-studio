@@ -1,8 +1,8 @@
 // Document Action: Traduci Automaticamente
 import { TranslateIcon } from '@sanity/icons'
 import { useState, useCallback } from 'react'
-import { useDocumentOperation, useEditState } from 'sanity'
-import { useToast, Dialog, Box, Stack, Text, Button, Checkbox, Flex, Card, Spinner } from '@sanity/ui'
+import { useDocumentOperation } from 'sanity'
+import { useToast, Box, Stack, Text, Button, Checkbox, Flex, Card, Spinner } from '@sanity/ui'
 
 // Languages configuration
 const LANGUAGES = [
@@ -24,9 +24,8 @@ async function translateText(text: string, from: string, to: string): Promise<st
     if (response.ok) {
       const data = await response.json()
       if (data.responseStatus === 200 && data.responseData?.translatedText) {
-        // MyMemory returns uppercase sometimes, normalize it
         let translated = data.responseData.translatedText
-        // If original was lowercase, keep lowercase (unless it's a title)
+        // If original was lowercase, keep lowercase
         if (text === text.toLowerCase()) {
           translated = translated.toLowerCase()
         }
@@ -34,7 +33,7 @@ async function translateText(text: string, from: string, to: string): Promise<st
       }
     }
   } catch (error) {
-    console.error('Translation error:', error)
+    console.error('Translation API error:', error)
   }
 
   return text // Return original if translation fails
@@ -65,32 +64,42 @@ async function translateBlocks(blocks: any[], from: string, to: string): Promise
 }
 
 // Find all translatable fields in document
-function findTranslatableFields(obj: any, path: string[] = []): Array<{ path: string[]; type: 'string' | 'text' | 'richText'; value: any }> {
-  const fields: Array<{ path: string[]; type: 'string' | 'text' | 'richText'; value: any }> = []
+function findTranslatableFields(
+  obj: any,
+  path: string[] = []
+): Array<{ path: string[]; type: 'string' | 'richText'; value: any }> {
+  const fields: Array<{ path: string[]; type: 'string' | 'richText'; value: any }> = []
 
   if (!obj || typeof obj !== 'object') return fields
 
-  // Check if this is a locale field (has it, en, es keys)
-  if (obj.it !== undefined) {
+  // Check if this is a locale field (has it key with content)
+  if ('it' in obj && obj.it !== undefined && obj.it !== null) {
     const itValue = obj.it
 
     if (typeof itValue === 'string' && itValue.trim()) {
       fields.push({ path: [...path], type: 'string', value: itValue })
-    } else if (Array.isArray(itValue) && itValue[0]?._type === 'block') {
+    } else if (Array.isArray(itValue) && itValue.length > 0 && itValue[0]?._type === 'block') {
       fields.push({ path: [...path], type: 'richText', value: itValue })
     }
+
+    // Don't recurse into locale object keys (it, en, es)
+    return fields
   }
 
   // Recursively search nested objects and arrays
   for (const [key, value] of Object.entries(obj)) {
-    // Skip internal fields and empty keys
+    // Skip internal fields
     if (key.startsWith('_') || !key) continue
 
     if (Array.isArray(value)) {
       value.forEach((item, index) => {
-        // Use _key if available for array items, otherwise use index
-        const itemKey = item?._key || `[${index}]`
-        fields.push(...findTranslatableFields(item, [...path, `${key}[_key=="${item?._key || index}"]`]))
+        if (item && typeof item === 'object') {
+          // Use _key for Sanity arrays, fall back to index
+          const arraySelector = item._key
+            ? `${key}[_key=="${item._key}"]`
+            : `${key}[${index}]`
+          fields.push(...findTranslatableFields(item, [...path, arraySelector]))
+        }
       })
     } else if (typeof value === 'object' && value !== null) {
       fields.push(...findTranslatableFields(value, [...path, key]))
@@ -106,7 +115,7 @@ export function TranslateAction(props: any) {
   const [isOpen, setIsOpen] = useState(false)
   const [isTranslating, setIsTranslating] = useState(false)
   const [targetLangs, setTargetLangs] = useState<string[]>(['en', 'es'])
-  const [progress, setProgress] = useState({ current: 0, total: 0 })
+  const [progress, setProgress] = useState({ current: 0, total: 0, status: '' })
   const toast = useToast()
   const { patch } = useDocumentOperation(id, type)
 
@@ -116,75 +125,99 @@ export function TranslateAction(props: any) {
     if (!doc) return
 
     setIsTranslating(true)
+    setProgress({ current: 0, total: 0, status: 'Analizzando documento...' })
 
     try {
       // Find all translatable fields
       const translatableFields = findTranslatableFields(doc)
-      setProgress({ current: 0, total: translatableFields.length * targetLangs.length })
+
+      console.log('📝 Campi trovati:', translatableFields.length)
+      console.log('📋 Dettagli campi:', translatableFields.map(f => ({
+        path: f.path.join('.'),
+        type: f.type,
+        preview: f.type === 'string' ? f.value.substring(0, 50) : '[Rich Text]'
+      })))
+
+      if (translatableFields.length === 0) {
+        toast.push({
+          status: 'warning',
+          title: 'Nessun campo da tradurre',
+          description: 'Non sono stati trovati campi con contenuto italiano',
+        })
+        setIsOpen(false)
+        setIsTranslating(false)
+        return
+      }
+
+      const totalOperations = translatableFields.length * targetLangs.length
+      setProgress({ current: 0, total: totalOperations, status: 'Traducendo...' })
 
       let completedCount = 0
-      const patches: any[] = []
+      const allPatches: Record<string, any> = {}
 
       for (const field of translatableFields) {
         for (const lang of targetLangs) {
           try {
-            // Build the path properly
-            const pathStr = [...field.path, lang].join('.')
+            // Build the path: join with dots, then append language
+            const basePath = field.path.join('.')
+            const fullPath = basePath ? `${basePath}.${lang}` : lang
 
-            // Skip invalid paths
-            if (!pathStr || pathStr.includes('..') || pathStr.startsWith('.') || pathStr.endsWith('.')) {
-              console.warn('Skipping invalid path:', pathStr)
-              continue
+            console.log(`🔄 Traducendo: ${fullPath}`)
+
+            let translated: any
+            if (field.type === 'string') {
+              translated = await translateText(field.value, 'it', lang)
+            } else if (field.type === 'richText') {
+              translated = await translateBlocks(field.value, 'it', lang)
             }
 
-            if (field.type === 'string') {
-              const translated = await translateText(field.value, 'it', lang)
-              if (translated) {
-                patches.push({
-                  set: { [pathStr]: translated }
-                })
-              }
-            } else if (field.type === 'richText') {
-              const translated = await translateBlocks(field.value, 'it', lang)
-              if (translated) {
-                patches.push({
-                  set: { [pathStr]: translated }
-                })
-              }
+            if (translated) {
+              allPatches[fullPath] = translated
+              console.log(`✅ Tradotto: ${fullPath}`)
             }
           } catch (err) {
-            console.error('Error translating field:', field.path, err)
+            console.error('❌ Errore traduzione:', field.path.join('.'), err)
           }
 
           completedCount++
-          setProgress({ current: completedCount, total: translatableFields.length * targetLangs.length })
+          setProgress({
+            current: completedCount,
+            total: totalOperations,
+            status: `Tradotto ${completedCount}/${totalOperations}`
+          })
         }
       }
 
-      // Apply all patches
-      if (patches.length > 0) {
-        for (const p of patches) {
-          patch.execute([p])
-        }
-      }
+      // Apply all patches at once
+      if (Object.keys(allPatches).length > 0) {
+        console.log('💾 Applicando patches:', allPatches)
 
-      toast.push({
-        status: 'success',
-        title: 'Traduzione completata!',
-        description: `${translatableFields.length} campi tradotti in ${targetLangs.map(l => l.toUpperCase()).join(', ')}`,
-      })
+        patch.execute([{ set: allPatches }])
+
+        toast.push({
+          status: 'success',
+          title: 'Traduzione completata!',
+          description: `${Object.keys(allPatches).length} campi tradotti. Salva il documento per confermare.`,
+        })
+      } else {
+        toast.push({
+          status: 'warning',
+          title: 'Nessuna traduzione applicata',
+          description: 'Le traduzioni non sono state generate correttamente',
+        })
+      }
 
       setIsOpen(false)
     } catch (error) {
-      console.error('Translation error:', error)
+      console.error('❌ Errore generale:', error)
       toast.push({
         status: 'error',
         title: 'Errore di traduzione',
-        description: 'Si è verificato un errore durante la traduzione',
+        description: String(error),
       })
     } finally {
       setIsTranslating(false)
-      setProgress({ current: 0, total: 0 })
+      setProgress({ current: 0, total: 0, status: '' })
     }
   }, [doc, targetLangs, patch, toast])
 
@@ -227,14 +260,21 @@ export function TranslateAction(props: any) {
               </Stack>
             </Card>
 
-            {isTranslating && progress.total > 0 && (
+            {isTranslating && (
               <Card padding={3} radius={2} tone="primary">
-                <Flex align="center" gap={3}>
-                  <Spinner />
-                  <Text>
-                    Traduzione in corso... {progress.current}/{progress.total}
-                  </Text>
-                </Flex>
+                <Stack space={2}>
+                  <Flex align="center" gap={3}>
+                    <Spinner />
+                    <Text weight="semibold">
+                      {progress.status || 'Elaborazione...'}
+                    </Text>
+                  </Flex>
+                  {progress.total > 0 && (
+                    <Text size={1} muted>
+                      Progresso: {progress.current}/{progress.total}
+                    </Text>
+                  )}
+                </Stack>
               </Card>
             )}
 
