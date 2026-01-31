@@ -6,7 +6,7 @@ import { Flex, Badge } from '@sanity/ui'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.0.0'
+const SITE_VERSION = '2026.01.31'
 
 // Vercel fornisce automaticamente l'hash del commit durante il build
 // Se disponibile, mostra quello, altrimenti usa SITE_VERSION
