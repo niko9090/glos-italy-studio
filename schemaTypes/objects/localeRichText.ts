@@ -30,6 +30,7 @@ import {
   AbbrPreview,
   KbdPreview,
 } from '../../components/portableText/PreviewComponents'
+import IconPicker from '../../components/inputs/IconPicker'
 
 // Lingue supportate
 const supportedLanguages = [
@@ -530,7 +531,7 @@ const richTextBlock = defineArrayMember({
             name: 'icon',
             type: 'string',
             title: 'Icona',
-            options: { list: icons },
+            components: { input: IconPicker },
           },
           {
             name: 'color',
