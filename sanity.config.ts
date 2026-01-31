@@ -1,65 +1,52 @@
-// sanity.config.ts - Configurazione principale Sanity Studio
+// sanity.config.ts - Configurazione principale Sanity Studio (v1.2.0)
 import { defineConfig, definePlugin } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { presentationTool, defineLocations } from 'sanity/presentation'
-import { visionTool } from '@sanity/vision'
 import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './schemaTypes'
 import { PageDashboard } from './components/tools/PageDashboard'
+import { DealerDashboard } from './components/tools/DealerDashboard'
 import { CustomNavbar } from './components/studio/CustomNavbar'
-import { DocumentsIcon, TranslateIcon } from '@sanity/icons'
+import { DocumentsIcon, UsersIcon } from '@sanity/icons'
 import { cleanPastePlugin } from './plugins/cleanPaste'
 import { TranslateAction } from './actions/translateAction'
 
 // URL del frontend per preview
 const FRONTEND_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://glositaly.vercel.app'
-// URL dello studio per CORS
-const STUDIO_URL = process.env.SANITY_STUDIO_URL || 'https://glositalystudio.vercel.app'
 
-// Risolve le locations per il visual editing (dove i documenti appaiono nel frontend)
+// Risolve le locations per il visual editing
 const resolve = {
   locations: {
-    // Pagine - mostrate al loro URL
     page: defineLocations({
       select: { title: 'title', slug: 'slug.current' },
       resolve: (doc) => ({
         locations: doc?.slug
-          ? [
-              {
-                title: doc?.title || 'Pagina',
-                href: doc.slug === 'home' ? '/' : `/${doc.slug}`,
-              },
-            ]
+          ? [{ title: doc?.title || 'Pagina', href: doc.slug === 'home' ? '/' : `/${doc.slug}` }]
           : [],
       }),
     }),
-    // Prodotti
     product: defineLocations({
       select: { name: 'name', slug: 'slug.current' },
       resolve: (doc) => ({
         locations: doc?.slug
-          ? [
-              {
-                title: doc?.name || 'Prodotto',
-                href: `/prodotti/${doc.slug}`,
-              },
-            ]
+          ? [{ title: doc?.name || 'Prodotto', href: `/prodotti/${doc.slug}` }]
           : [],
       }),
     }),
-    // Impostazioni sito - mostrate ovunque
+    dealer: defineLocations({
+      resolve: () => ({
+        locations: [{ title: 'Rivenditori', href: '/rivenditori' }],
+      }),
+    }),
     siteSettings: defineLocations({
       resolve: () => ({
-        locations: [
-          { title: 'Homepage', href: '/' },
-          { title: 'Tutte le pagine', href: '/' },
-        ],
+        locations: [{ title: 'Homepage', href: '/' }],
       }),
     }),
   },
 }
 
-// Plugin per la Dashboard Pagine
+// Plugin Dashboard Pagine
 const pageDashboardPlugin = definePlugin({
   name: 'page-dashboard',
   tools: [
@@ -72,93 +59,79 @@ const pageDashboardPlugin = definePlugin({
   ],
 })
 
-// Struttura personalizzata del pannello admin
+// Plugin Dashboard Rivenditori
+const dealerDashboardPlugin = definePlugin({
+  name: 'dealer-dashboard',
+  tools: [
+    {
+      name: 'dealer-dashboard',
+      title: 'Dashboard Rivenditori',
+      icon: UsersIcon,
+      component: DealerDashboard,
+    },
+  ],
+})
+
+// Struttura personalizzata del pannello admin (semplificata)
 const structure = (S: any) =>
   S.list()
     .title('GLOS Italy CMS')
     .items([
-      // Pagine
+      // === PAGINE ===
       S.listItem()
         .title('Pagine')
         .icon(() => '📄')
         .child(
-          S.documentTypeList('page')
-            .title('Tutte le Pagine')
+          S.documentTypeList('page').title('Tutte le Pagine')
         ),
 
       S.divider(),
 
-      // Prodotti
+      // === CATALOGO ===
       S.listItem()
-        .title('Catalogo')
-        .icon(() => '📦')
+        .title('Prodotti')
+        .icon(() => '🏷️')
         .child(
-          S.list()
-            .title('Catalogo Prodotti')
-            .items([
-              S.listItem()
-                .title('Prodotti')
-                .icon(() => '🏷️')
-                .child(
-                  S.documentTypeList('product')
-                    .title('Tutti i Prodotti')
-                ),
-              S.listItem()
-                .title('Categorie')
-                .icon(() => '📂')
-                .child(
-                  S.documentTypeList('productCategory')
-                    .title('Categorie')
-                ),
-            ])
+          S.documentTypeList('product').title('Tutti i Prodotti')
         ),
 
-      // Rivenditori
+      S.listItem()
+        .title('Categorie Prodotti')
+        .icon(() => '📂')
+        .child(
+          S.documentTypeList('productCategory').title('Categorie')
+        ),
+
+      S.divider(),
+
+      // === RIVENDITORI ===
       S.listItem()
         .title('Rivenditori')
         .icon(() => '🏪')
         .child(
-          S.documentTypeList('dealer')
-            .title('Rete Vendita')
+          S.documentTypeList('dealer').title('Rete Vendita')
         ),
 
       S.divider(),
 
-      // Contenuti Extra
+      // === CONTENUTI EXTRA (appiattiti) ===
       S.listItem()
-        .title('Contenuti')
-        .icon(() => '📝')
+        .title('Testimonianze')
+        .icon(() => '💬')
         .child(
-          S.list()
-            .title('Contenuti Extra')
-            .items([
-              S.listItem()
-                .title('Testimonianze')
-                .icon(() => '💬')
-                .child(
-                  S.documentTypeList('testimonial')
-                    .title('Testimonianze')
-                ),
-              S.listItem()
-                .title('FAQ')
-                .icon(() => '❓')
-                .child(
-                  S.documentTypeList('faq')
-                    .title('Domande Frequenti')
-                ),
-              S.listItem()
-                .title('Media')
-                .icon(() => '🖼️')
-                .child(
-                  S.documentTypeList('mediaItem')
-                    .title('Libreria Media')
-                ),
-            ])
+          S.documentTypeList('testimonial').title('Testimonianze Clienti')
+        ),
+
+      S.listItem()
+        .title('FAQ')
+        .icon(() => '❓')
+        .child(
+          S.documentTypeList('faq').title('Domande Frequenti')
         ),
 
       S.divider(),
 
-      // Configurazione
+      // === CONFIGURAZIONE ===
       S.listItem()
         .title('Impostazioni Sito')
         .icon(() => '⚙️')
@@ -170,7 +143,7 @@ const structure = (S: any) =>
         ),
 
       S.listItem()
-        .title('Navigazione')
+        .title('Menu Navigazione')
         .icon(() => '🧭')
         .child(
           S.document()
@@ -195,43 +168,45 @@ export default defineConfig({
   },
 
   plugins: [
-    // Plugin per pulire automaticamente il testo incollato da HTML
+    // Pulizia testo incollato
     cleanPastePlugin(),
 
-    // Dashboard Pagine - Vista panoramica
+    // Dashboard personalizzate
     pageDashboardPlugin(),
+    dealerDashboardPlugin(),
 
-    // Page Builder Visuale - Preview live con Visual Editing
+    // Editor Visuale con Preview Live
     presentationTool({
       name: 'editor',
-      title: 'Modifica Pagine',
+      title: 'Editor Visuale',
       previewUrl: {
-        // URL iniziale del frontend
         origin: FRONTEND_URL,
-        // Endpoint per abilitare/disabilitare draft mode
         previewMode: {
           enable: '/api/draft-mode/enable',
           disable: '/api/draft-mode/disable',
         },
       },
-      // Risolve dove appaiono i documenti nel frontend
       resolve,
     }),
-    structureTool({ structure, title: 'Gestione Contenuti' }),
-    visionTool(), // Query GROQ
-    media(), // Gestione media avanzata
+
+    // Gestione Contenuti (struttura ad albero)
+    structureTool({ structure, title: 'Contenuti' }),
+
+    // Gestione Media Avanzata
+    media(),
+
+    // Vision Tool rimosso - era per sviluppatori (query GROQ)
+    // Se serve per debug, decommentare: visionTool(),
   ],
 
   schema: {
     types: schemaTypes,
   },
 
-  // Configurazione documento
+  // Azioni documento
   document: {
-    // Azioni disponibili per ogni documento
     actions: (prev, context) => {
-      // Aggiungi l'azione Traduci per documenti con campi multilingua
-      const translateableTypes = ['page', 'product', 'siteSettings', 'navigation']
+      const translateableTypes = ['page', 'product', 'siteSettings', 'navigation', 'dealer']
       if (translateableTypes.includes(context.schemaType)) {
         return [...prev, TranslateAction]
       }
@@ -239,11 +214,7 @@ export default defineConfig({
     },
   },
 
-  // Configurazione form
   form: {
-    // Componenti personalizzati per i campi
-    components: {
-      // Puoi aggiungere componenti custom qui
-    },
+    components: {},
   },
 })
