@@ -6,6 +6,7 @@ import { visionTool } from '@sanity/vision'
 import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './schemaTypes'
 import { PageDashboard } from './components/tools/PageDashboard'
+import { CustomNavbar } from './components/studio/CustomNavbar'
 import { DocumentsIcon, TranslateIcon } from '@sanity/icons'
 import { cleanPastePlugin } from './plugins/cleanPaste'
 import { TranslateAction } from './actions/translateAction'
@@ -185,6 +186,13 @@ export default defineConfig({
 
   projectId: process.env.SANITY_STUDIO_PROJECT_ID || '97oreljh',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
+
+  // Componenti Studio personalizzati
+  studio: {
+    components: {
+      navbar: CustomNavbar,
+    },
+  },
 
   plugins: [
     // Plugin per pulire automaticamente il testo incollato da HTML
