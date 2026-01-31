@@ -1,7 +1,6 @@
-// Schema: Pagina - Con editor sezioni migliorato
+// Schema: Pagina
 import { defineType, defineField } from 'sanity'
 import { DocumentIcon } from '@sanity/icons'
-import { SectionArrayInput } from '../components/inputs/SectionArrayInput'
 
 export default defineType({
   name: 'page',
@@ -60,9 +59,6 @@ export default defineType({
         { type: 'ctaSection' },
         { type: 'contactSection' },
       ],
-      components: {
-        input: SectionArrayInput,
-      },
     }),
 
     // === GRUPPO SEO ===
