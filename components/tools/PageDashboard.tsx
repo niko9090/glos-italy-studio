@@ -13,9 +13,6 @@ import {
   Badge,
   Spinner,
   Select,
-  MenuButton,
-  Menu,
-  MenuItem,
 } from '@sanity/ui'
 import {
   AddIcon,
@@ -26,7 +23,6 @@ import {
   EyeOpenIcon,
   EyeClosedIcon,
   LaunchIcon,
-  SortIcon,
   CheckmarkCircleIcon,
   CloseCircleIcon,
 } from '@sanity/icons'
