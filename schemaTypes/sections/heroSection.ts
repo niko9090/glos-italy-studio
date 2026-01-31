@@ -201,6 +201,7 @@ export default defineType({
           { title: 'Grigio Scuro', value: 'gray-dark' },
         ],
       },
+      initialValue: 'primary',
       hidden: ({ parent }) => parent?.backgroundType !== 'solid',
     }),
 
