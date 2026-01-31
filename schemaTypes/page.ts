@@ -168,12 +168,22 @@ export default defineType({
       slug: 'slug.current',
       published: 'isPublished',
       sections: 'sections',
+      updatedAt: '_updatedAt',
     },
-    prepare({ title, slug, published, sections }) {
+    prepare({ title, slug, published, sections, updatedAt }) {
       const sectionCount = sections?.length || 0
+      const dateStr = updatedAt
+        ? new Date(updatedAt).toLocaleDateString('it-IT', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        : ''
       return {
         title: title || 'Pagina senza nome',
-        subtitle: `/${slug || ''} • ${sectionCount} sezioni ${published ? '✅' : '❌ Bozza'}`,
+        subtitle: `/${slug || ''} • ${sectionCount} sezioni ${published ? '✅' : '❌'} • Aggiornato: ${dateStr}`,
       }
     },
   },
