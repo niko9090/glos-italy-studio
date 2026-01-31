@@ -1,5 +1,6 @@
 // Tipo: Rich Text con formattazione completa (singola lingua)
 import { defineType, defineArrayMember } from 'sanity'
+import { CleanPasteInput } from '../../components/CleanPasteInput'
 
 // Colori disponibili per il testo
 const textColors = [
@@ -35,6 +36,9 @@ export default defineType({
   name: 'richText',
   title: 'Testo Formattato',
   type: 'array',
+  components: {
+    input: CleanPasteInput,
+  },
   of: [
     defineArrayMember({
       type: 'block',

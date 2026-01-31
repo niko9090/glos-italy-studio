@@ -1,5 +1,6 @@
 // Tipo: Rich Text Multilingua con formattazione completa
 import { defineType, defineArrayMember } from 'sanity'
+import { CleanPasteInput } from '../../components/CleanPasteInput'
 
 // Lingue supportate
 const supportedLanguages = [
@@ -175,5 +176,8 @@ export default defineType({
     title: lang.title,
     type: 'array',
     of: [richTextBlock],
+    components: {
+      input: CleanPasteInput,
+    },
   })),
 })
