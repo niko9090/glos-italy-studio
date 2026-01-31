@@ -44,23 +44,47 @@ export default defineType({
     defineField({
       name: 'shortDescription',
       title: 'Descrizione Breve',
-      type: 'text',
-      rows: 2,
+      type: 'richText',
+      description: 'Breve descrizione - puoi usare grassetto, colori, ecc.',
     }),
 
     defineField({
-      name: 'description',
+      name: 'fullDescription',
       title: 'Descrizione Completa',
-      type: 'text',
-      rows: 5,
+      type: 'richText',
+      description: 'Descrizione dettagliata - puoi usare grassetto, colori, ecc.',
     }),
 
     defineField({
-      name: 'specs',
+      name: 'specifications',
       title: 'Specifiche Tecniche',
-      type: 'text',
-      rows: 5,
-      description: 'Una specifica per riga',
+      type: 'array',
+      description: 'Aggiungi le specifiche del prodotto',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'label',
+              title: 'Nome',
+              type: 'string',
+              description: 'Es: Peso, Dimensioni, Materiale',
+            },
+            {
+              name: 'value',
+              title: 'Valore',
+              type: 'string',
+              description: 'Es: 500g, 30x20cm, Acciaio inox',
+            },
+          ],
+          preview: {
+            select: { label: 'label', value: 'value' },
+            prepare({ label, value }) {
+              return { title: `${label}: ${value}` }
+            },
+          },
+        },
+      ],
     }),
 
     defineField({

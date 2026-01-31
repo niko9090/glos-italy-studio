@@ -58,8 +58,8 @@ export default defineType({
     defineField({
       name: 'address',
       title: 'Indirizzo Completo',
-      type: 'text',
-      rows: 2,
+      type: 'string',
+      description: 'Via, numero civico, CAP',
     }),
 
     defineField({
