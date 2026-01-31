@@ -1,4 +1,4 @@
-// Tipo: Rich Text Multilingua con formattazione COMPLETA e effetti
+// Tipo: Rich Text Multilingua con formattazione ULTRA COMPLETA
 import { defineType, defineArrayMember } from 'sanity'
 
 // Lingue supportate
@@ -31,16 +31,21 @@ const textColors = [
   { title: '🟡 Giallo', value: 'yellow' },
   { title: '🟢 Verde', value: 'green' },
   { title: '🟢 Verde Scuro', value: 'green-dark' },
+  { title: '🟢 Verde Lime', value: 'lime' },
   { title: '🩵 Ciano', value: 'cyan' },
+  { title: '🔵 Blu Cielo', value: 'sky' },
   { title: '🟣 Viola', value: 'purple' },
   { title: '💜 Viola Scuro', value: 'purple-dark' },
   { title: '🩷 Rosa', value: 'pink' },
+  { title: '💗 Rosa Acceso', value: 'pink-hot' },
   { title: '🤎 Marrone', value: 'brown' },
 
   // Speciali
   { title: '🪙 Oro', value: 'gold' },
   { title: '🥈 Argento', value: 'silver' },
   { title: '🥉 Bronzo', value: 'bronze' },
+  { title: '💎 Diamante', value: 'diamond' },
+  { title: '🌈 Arcobaleno', value: 'rainbow' },
 ]
 
 // ============================================
@@ -57,6 +62,8 @@ const highlightColors = [
   { title: '🔴 Rosso Chiaro', value: 'lightred' },
   { title: '🩵 Ciano Chiaro', value: 'lightcyan' },
   { title: '🟤 Beige', value: 'beige' },
+  { title: '💛 Giallo Oro', value: 'gold-light' },
+  { title: '💜 Viola Chiaro', value: 'violet-light' },
 ]
 
 // ============================================
@@ -143,10 +150,13 @@ const textShadows = [
   { title: 'Neon Verde', value: 'neon-green' },
   { title: 'Neon Rosa', value: 'neon-pink' },
   { title: 'Neon Oro', value: 'neon-gold' },
+  { title: 'Neon Rosso', value: 'neon-red' },
+  { title: 'Neon Viola', value: 'neon-purple' },
   { title: 'Glow Bianco', value: 'glow-white' },
   { title: 'Ombra Lunga', value: 'long' },
   { title: 'Ombra 3D', value: '3d' },
   { title: 'Retro', value: 'retro' },
+  { title: 'Inciso', value: 'inset' },
 ]
 
 // ============================================
@@ -166,6 +176,10 @@ const textGradients = [
   { title: '🍭 Candy (Rosa → Viola → Blu)', value: 'candy' },
   { title: '⚡ Elettrico (Giallo → Verde)', value: 'electric' },
   { title: '🖤 Dark Mode (Grigio → Nero)', value: 'dark' },
+  { title: '❄️ Ghiaccio (Bianco → Azzurro)', value: 'ice' },
+  { title: '🍊 Agrumi (Arancio → Giallo)', value: 'citrus' },
+  { title: '🍇 Uva (Viola → Blu)', value: 'grape' },
+  { title: '🌸 Sakura (Rosa → Bianco)', value: 'sakura' },
 ]
 
 // ============================================
@@ -190,6 +204,8 @@ const textAnimations = [
   { title: '🌟 Glitter', value: 'glitter' },
   { title: '🔥 Shake', value: 'shake' },
   { title: '👻 Float', value: 'float' },
+  { title: '💥 Pop', value: 'pop' },
+  { title: '🎯 Focus', value: 'focus' },
 ]
 
 // ============================================
@@ -218,6 +234,100 @@ const textTransforms = [
 ]
 
 // ============================================
+// ICONE DISPONIBILI
+// ============================================
+const icons = [
+  // Frecce
+  { title: '→ Freccia Destra', value: 'arrow-right' },
+  { title: '← Freccia Sinistra', value: 'arrow-left' },
+  { title: '↑ Freccia Su', value: 'arrow-up' },
+  { title: '↓ Freccia Giù', value: 'arrow-down' },
+  { title: '↗ Freccia Diagonale', value: 'arrow-diagonal' },
+  { title: '➜ Freccia Piena', value: 'arrow-filled' },
+  { title: '▶ Triangolo Destra', value: 'triangle-right' },
+  { title: '◀ Triangolo Sinistra', value: 'triangle-left' },
+
+  // Check e status
+  { title: '✓ Check', value: 'check' },
+  { title: '✔ Check Pieno', value: 'check-filled' },
+  { title: '✗ X', value: 'x' },
+  { title: '✘ X Piena', value: 'x-filled' },
+  { title: '⚠ Warning', value: 'warning' },
+  { title: '⛔ Stop', value: 'stop' },
+  { title: 'ℹ Info', value: 'info' },
+  { title: '❓ Domanda', value: 'question' },
+  { title: '❗ Esclamazione', value: 'exclamation' },
+
+  // Stelle e rating
+  { title: '★ Stella Piena', value: 'star' },
+  { title: '☆ Stella Vuota', value: 'star-empty' },
+  { title: '✦ Stella 4 punte', value: 'star-4' },
+  { title: '✧ Stella Brillante', value: 'star-sparkle' },
+
+  // Cuori
+  { title: '♥ Cuore Pieno', value: 'heart' },
+  { title: '♡ Cuore Vuoto', value: 'heart-empty' },
+  { title: '💖 Cuore Brillante', value: 'heart-sparkle' },
+
+  // Forme
+  { title: '● Cerchio Pieno', value: 'circle' },
+  { title: '○ Cerchio Vuoto', value: 'circle-empty' },
+  { title: '■ Quadrato Pieno', value: 'square' },
+  { title: '□ Quadrato Vuoto', value: 'square-empty' },
+  { title: '◆ Diamante', value: 'diamond' },
+  { title: '◇ Diamante Vuoto', value: 'diamond-empty' },
+
+  // Business
+  { title: '📞 Telefono', value: 'phone' },
+  { title: '✉ Email', value: 'email' },
+  { title: '📍 Location', value: 'location' },
+  { title: '🌐 Web', value: 'web' },
+  { title: '💼 Business', value: 'business' },
+  { title: '📅 Calendario', value: 'calendar' },
+  { title: '⏰ Orologio', value: 'clock' },
+  { title: '💰 Soldi', value: 'money' },
+  { title: '🎯 Target', value: 'target' },
+  { title: '🏆 Trofeo', value: 'trophy' },
+
+  // Tech
+  { title: '⚡ Fulmine', value: 'lightning' },
+  { title: '🔧 Ingranaggio', value: 'gear' },
+  { title: '🔒 Lucchetto', value: 'lock' },
+  { title: '🔓 Lucchetto Aperto', value: 'unlock' },
+  { title: '🔔 Notifica', value: 'bell' },
+  { title: '💡 Idea', value: 'bulb' },
+  { title: '🚀 Rocket', value: 'rocket' },
+  { title: '⚙️ Settings', value: 'settings' },
+
+  // Social
+  { title: '👍 Like', value: 'like' },
+  { title: '👎 Dislike', value: 'dislike' },
+  { title: '👤 Utente', value: 'user' },
+  { title: '👥 Gruppo', value: 'users' },
+  { title: '💬 Chat', value: 'chat' },
+  { title: '📣 Megafono', value: 'megaphone' },
+
+  // Natura
+  { title: '☀ Sole', value: 'sun' },
+  { title: '🌙 Luna', value: 'moon' },
+  { title: '🌟 Stella Brillante', value: 'star-bright' },
+  { title: '🔥 Fuoco', value: 'fire' },
+  { title: '💧 Goccia', value: 'drop' },
+  { title: '🌿 Foglia', value: 'leaf' },
+  { title: '🌸 Fiore', value: 'flower' },
+
+  // Simboli speciali
+  { title: '© Copyright', value: 'copyright' },
+  { title: '® Registered', value: 'registered' },
+  { title: '™ Trademark', value: 'trademark' },
+  { title: '∞ Infinito', value: 'infinity' },
+  { title: '§ Sezione', value: 'section' },
+  { title: '¶ Paragrafo', value: 'paragraph' },
+  { title: '† Croce', value: 'dagger' },
+  { title: '‡ Doppia Croce', value: 'double-dagger' },
+]
+
+// ============================================
 // EFFETTI BLOCCO - Sfondo
 // ============================================
 const blockBackgrounds = [
@@ -231,6 +341,10 @@ const blockBackgrounds = [
   { title: 'Verde', value: 'green' },
   { title: 'Rosso', value: 'red' },
   { title: 'Giallo', value: 'yellow' },
+  { title: 'Arancione', value: 'orange' },
+  { title: 'Viola', value: 'purple' },
+  { title: 'Rosa', value: 'pink' },
+  { title: 'Ciano', value: 'cyan' },
   { title: 'Gradiente Orizzontale', value: 'gradient-h' },
   { title: 'Gradiente Verticale', value: 'gradient-v' },
   { title: 'Gradiente Diagonale', value: 'gradient-d' },
@@ -266,6 +380,7 @@ const blockShadows = [
   { title: 'Molto Forte', value: 'xl' },
   { title: 'Interna', value: 'inner' },
   { title: 'Colorata', value: 'colored' },
+  { title: 'Neon', value: 'neon' },
 ]
 
 // ============================================
@@ -277,6 +392,7 @@ const blockPaddings = [
   { title: 'Medio (16px)', value: 'md' },
   { title: 'Grande (24px)', value: 'lg' },
   { title: 'Extra Grande (32px)', value: 'xl' },
+  { title: 'Enorme (48px)', value: '2xl' },
 ]
 
 // ============================================
@@ -290,6 +406,7 @@ const richTextBlock = defineArrayMember({
     { title: 'Normale', value: 'normal' },
     { title: 'Lead (Intro grande)', value: 'lead' },
     { title: 'Titolo Hero', value: 'hero' },
+    { title: 'Titolo Display', value: 'display' },
     { title: 'Titolo 1', value: 'h1' },
     { title: 'Titolo 2', value: 'h2' },
     { title: 'Titolo 3', value: 'h3' },
@@ -299,19 +416,33 @@ const richTextBlock = defineArrayMember({
     { title: 'Sottotitolo', value: 'subtitle' },
     { title: 'Citazione', value: 'blockquote' },
     { title: 'Citazione Grande', value: 'blockquote-large' },
-    { title: 'Callout', value: 'callout' },
+    { title: 'Callout Info', value: 'callout' },
+    { title: 'Callout Success', value: 'callout-success' },
+    { title: 'Callout Warning', value: 'callout-warning' },
+    { title: 'Callout Error', value: 'callout-error' },
     { title: 'Caption (Didascalia)', value: 'caption' },
     { title: 'Piccolo', value: 'small' },
     { title: 'Codice', value: 'code-block' },
   ],
 
-  // LISTE
+  // LISTE - Estese
   lists: [
-    { title: 'Elenco Puntato', value: 'bullet' },
-    { title: 'Elenco Numerato', value: 'number' },
-    { title: 'Checklist', value: 'check' },
-    { title: 'Frecce', value: 'arrow' },
-    { title: 'Stelle', value: 'star' },
+    { title: '• Elenco Puntato', value: 'bullet' },
+    { title: '1. Elenco Numerato', value: 'number' },
+    { title: '✓ Checklist Verde', value: 'check' },
+    { title: '✗ Checklist Rosso', value: 'check-red' },
+    { title: '→ Frecce Blu', value: 'arrow' },
+    { title: '➜ Frecce Verdi', value: 'arrow-green' },
+    { title: '★ Stelle Gialle', value: 'star' },
+    { title: '★ Stelle Blu', value: 'star-blue' },
+    { title: '♥ Cuori Rossi', value: 'heart' },
+    { title: '● Pallini Blu', value: 'dot-blue' },
+    { title: '● Pallini Verdi', value: 'dot-green' },
+    { title: '● Pallini Rossi', value: 'dot-red' },
+    { title: '◆ Diamanti', value: 'diamond' },
+    { title: '⚡ Fulmini', value: 'lightning' },
+    { title: '🔥 Fuochi', value: 'fire' },
+    { title: '🚀 Rockets', value: 'rocket' },
   ],
 
   // MARKS - Decoratori e Annotazioni
@@ -353,6 +484,41 @@ const richTextBlock = defineArrayMember({
             type: 'boolean',
             title: 'Apri in nuova scheda',
             initialValue: false,
+          },
+        ],
+      },
+
+      // ========== ICONA INLINE ==========
+      {
+        name: 'inlineIcon',
+        type: 'object',
+        title: '🎯 Icona',
+        fields: [
+          {
+            name: 'icon',
+            type: 'string',
+            title: 'Icona',
+            options: { list: icons },
+          },
+          {
+            name: 'color',
+            type: 'string',
+            title: 'Colore Icona',
+            options: { list: textColors },
+          },
+          {
+            name: 'size',
+            type: 'string',
+            title: 'Dimensione',
+            options: {
+              list: [
+                { title: 'Piccola', value: 'sm' },
+                { title: 'Normale', value: 'base' },
+                { title: 'Grande', value: 'lg' },
+                { title: 'Extra Grande', value: 'xl' },
+              ],
+            },
+            initialValue: 'base',
           },
         ],
       },
@@ -598,6 +764,18 @@ const richTextBlock = defineArrayMember({
             },
             initialValue: '0',
           },
+          {
+            name: 'repeat',
+            type: 'string',
+            title: 'Ripetizione',
+            options: {
+              list: [
+                { title: 'Una volta', value: 'once' },
+                { title: 'Infinito', value: 'infinite' },
+              ],
+            },
+            initialValue: 'once',
+          },
         ],
       },
 
@@ -640,15 +818,61 @@ const richTextBlock = defineArrayMember({
             title: 'Stile',
             options: {
               list: [
-                { title: 'Default', value: 'default' },
+                { title: 'Default (Grigio)', value: 'default' },
                 { title: 'Primary (Blu)', value: 'primary' },
                 { title: 'Success (Verde)', value: 'success' },
                 { title: 'Warning (Arancio)', value: 'warning' },
                 { title: 'Danger (Rosso)', value: 'danger' },
                 { title: 'Info (Ciano)', value: 'info' },
+                { title: 'Purple (Viola)', value: 'purple' },
+                { title: 'Pink (Rosa)', value: 'pink' },
                 { title: 'Outline', value: 'outline' },
+                { title: 'Gradient', value: 'gradient' },
               ],
             },
+          },
+          {
+            name: 'rounded',
+            type: 'boolean',
+            title: 'Arrotondato (Pillola)',
+            initialValue: false,
+          },
+        ],
+      },
+
+      // ========== BUTTON STYLE ==========
+      {
+        name: 'buttonStyle',
+        type: 'object',
+        title: '🔘 Stile Bottone',
+        fields: [
+          {
+            name: 'variant',
+            type: 'string',
+            title: 'Stile',
+            options: {
+              list: [
+                { title: 'Primario', value: 'primary' },
+                { title: 'Secondario', value: 'secondary' },
+                { title: 'Outline', value: 'outline' },
+                { title: 'Ghost', value: 'ghost' },
+                { title: 'Success', value: 'success' },
+                { title: 'Danger', value: 'danger' },
+              ],
+            },
+          },
+          {
+            name: 'size',
+            type: 'string',
+            title: 'Dimensione',
+            options: {
+              list: [
+                { title: 'Piccolo', value: 'sm' },
+                { title: 'Normale', value: 'md' },
+                { title: 'Grande', value: 'lg' },
+              ],
+            },
+            initialValue: 'md',
           },
         ],
       },
@@ -680,6 +904,39 @@ const richTextBlock = defineArrayMember({
           },
         ],
       },
+
+      // ========== BORDO INLINE ==========
+      {
+        name: 'inlineBorder',
+        type: 'object',
+        title: '🔲 Bordo Inline',
+        fields: [
+          {
+            name: 'style',
+            type: 'string',
+            title: 'Stile',
+            options: {
+              list: [
+                { title: 'Solido', value: 'solid' },
+                { title: 'Tratteggiato', value: 'dashed' },
+                { title: 'Punteggiato', value: 'dotted' },
+              ],
+            },
+          },
+          {
+            name: 'color',
+            type: 'string',
+            title: 'Colore',
+            options: { list: textColors },
+          },
+          {
+            name: 'rounded',
+            type: 'boolean',
+            title: 'Arrotondato',
+            initialValue: true,
+          },
+        ],
+      },
     ],
   },
 })
@@ -708,7 +965,7 @@ const blockWithEffects = defineArrayMember({
     {
       name: 'backgroundGradient',
       type: 'object',
-      title: 'Gradiente Sfondo',
+      title: 'Gradiente Sfondo Personalizzato',
       fields: [
         {
           name: 'from',
@@ -772,6 +1029,19 @@ const blockWithEffects = defineArrayMember({
       title: 'Animazione Blocco',
       options: { list: textAnimations },
       initialValue: 'none',
+    },
+    {
+      name: 'textAlign',
+      type: 'string',
+      title: 'Allineamento Testo',
+      options: {
+        list: [
+          { title: 'Sinistra', value: 'left' },
+          { title: 'Centro', value: 'center' },
+          { title: 'Destra', value: 'right' },
+        ],
+      },
+      initialValue: 'left',
     },
   ],
   preview: {
