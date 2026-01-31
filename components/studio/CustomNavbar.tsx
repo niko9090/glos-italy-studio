@@ -4,7 +4,7 @@ import { NavbarProps } from 'sanity'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.1.3'
+const SITE_VERSION = '1.1.4'
 
 export function CustomNavbar(props: NavbarProps) {
   return (
@@ -12,20 +12,21 @@ export function CustomNavbar(props: NavbarProps) {
       {/* Renderizza il navbar default */}
       {props.renderDefault(props)}
 
-      {/* Badge versione - posizionato fisso in alto a destra */}
+      {/* Badge versione - in alto accanto al logo, non copre menu */}
       <span
         style={{
           position: 'fixed',
-          top: '10px',
-          right: '16px',
-          zIndex: 99999,
+          top: '13px',
+          left: '180px',
+          zIndex: 10,
           backgroundColor: '#0047AB',
           color: 'white',
-          padding: '4px 10px',
+          padding: '2px 8px',
           borderRadius: '4px',
-          fontSize: '12px',
-          fontWeight: 'bold',
+          fontSize: '11px',
+          fontWeight: '600',
           fontFamily: 'system-ui, sans-serif',
+          pointerEvents: 'none',
         }}
       >
         v{SITE_VERSION}
