@@ -1,6 +1,7 @@
 // Sezione: Call to Action
 import { defineType, defineField } from 'sanity'
 import { BellIcon } from '@sanity/icons'
+import { getPlainText } from '../../lib/previewHelpers'
 
 export default defineType({
   name: 'ctaSection',
@@ -109,6 +110,7 @@ export default defineType({
   preview: {
     select: { title: 'title.it', buttonText: 'buttonText.it', bg: 'backgroundColor' },
     prepare({ title, buttonText, bg }) {
+      const titleText = getPlainText(title)
       const bgEmoji: Record<string, string> = {
         blue: '🔵',
         dark: '⚫',
@@ -117,7 +119,7 @@ export default defineType({
         red: '🔴',
       }
       return {
-        title: `📢 ${title || 'CTA'}`,
+        title: `📢 ${titleText || 'CTA'}`,
         subtitle: `${bgEmoji[bg] || '🔵'} Pulsante: "${buttonText || 'Contattaci'}"`,
       }
     },

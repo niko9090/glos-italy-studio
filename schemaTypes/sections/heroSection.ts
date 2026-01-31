@@ -1,6 +1,7 @@
 // Sezione: Hero (Banner principale)
 import { defineType, defineField } from 'sanity'
 import { HomeIcon } from '@sanity/icons'
+import { getPlainText, truncate } from '../../lib/previewHelpers'
 
 export default defineType({
   name: 'heroSection',
@@ -85,9 +86,11 @@ export default defineType({
   preview: {
     select: { title: 'title.it', subtitle: 'subtitle.it' },
     prepare({ title, subtitle }) {
+      const titleText = getPlainText(title)
+      const subtitleText = getPlainText(subtitle)
       return {
-        title: `🎯 ${title || 'Banner Principale'}`,
-        subtitle: subtitle ? subtitle.substring(0, 50) + '...' : 'Banner senza descrizione',
+        title: `🎯 ${titleText || 'Banner Principale'}`,
+        subtitle: subtitleText ? truncate(subtitleText, 50) : 'Banner senza descrizione',
       }
     },
   },

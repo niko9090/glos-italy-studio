@@ -1,6 +1,7 @@
 // Sezione: Statistiche
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { BarChartIcon } from '@sanity/icons'
+import { getPlainText } from '../../lib/previewHelpers'
 
 export default defineType({
   name: 'statsSection',
@@ -80,9 +81,10 @@ export default defineType({
   preview: {
     select: { items: 'items', title: 'title.it' },
     prepare({ items, title }) {
+      const titleText = getPlainText(title)
       const count = items?.length || 0
       return {
-        title: `📊 ${title || 'Statistiche'}`,
+        title: `📊 ${titleText || 'Statistiche'}`,
         subtitle: `${count} ${count === 1 ? 'numero' : 'numeri'} da mostrare`,
       }
     },

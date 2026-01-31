@@ -1,6 +1,7 @@
 // Sezione: Prodotti
 import { defineType, defineField } from 'sanity'
 import { PackageIcon } from '@sanity/icons'
+import { getPlainText } from '../../lib/previewHelpers'
 
 export default defineType({
   name: 'productsSection',
@@ -109,8 +110,9 @@ export default defineType({
   preview: {
     select: { title: 'title.it', limit: 'limit', featured: 'showFeatured' },
     prepare({ title, limit, featured }) {
+      const titleText = getPlainText(title)
       return {
-        title: `📦 ${title || 'Prodotti'}`,
+        title: `📦 ${titleText || 'Prodotti'}`,
         subtitle: `${limit || 6} prodotti ${featured ? '(solo in evidenza)' : ''}`,
       }
     },

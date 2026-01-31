@@ -1,6 +1,7 @@
 // Sezione: Galleria
 import { defineType, defineField } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
+import { getPlainText } from '../../lib/previewHelpers'
 
 export default defineType({
   name: 'gallerySection',
@@ -114,9 +115,10 @@ export default defineType({
   preview: {
     select: { title: 'title.it', images: 'images' },
     prepare({ title, images }) {
+      const titleText = getPlainText(title)
       const count = images?.length || 0
       return {
-        title: `🖼️ ${title || 'Galleria'}`,
+        title: `🖼️ ${titleText || 'Galleria'}`,
         subtitle: `${count} ${count === 1 ? 'immagine' : 'immagini'}`,
       }
     },

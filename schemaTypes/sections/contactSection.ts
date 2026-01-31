@@ -1,6 +1,7 @@
 // Sezione: Contatti
 import { defineType, defineField } from 'sanity'
 import { EnvelopeIcon } from '@sanity/icons'
+import { getPlainText } from '../../lib/previewHelpers'
 
 export default defineType({
   name: 'contactSection',
@@ -129,13 +130,14 @@ export default defineType({
       showInfo: 'showContactInfo'
     },
     prepare({ title, showForm, showMap, showInfo }) {
+      const titleText = getPlainText(title)
       const elements = []
       if (showForm) elements.push('Form')
       if (showMap) elements.push('Mappa')
       if (showInfo) elements.push('Info')
 
       return {
-        title: `📞 ${title || 'Contatti'}`,
+        title: `📞 ${titleText || 'Contatti'}`,
         subtitle: elements.length > 0 ? elements.join(' + ') : 'Nessun elemento attivo',
       }
     },

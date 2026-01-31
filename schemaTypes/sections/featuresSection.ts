@@ -1,6 +1,7 @@
 // Sezione: Caratteristiche
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { BulbOutlineIcon } from '@sanity/icons'
+import { getPlainText } from '../../lib/previewHelpers'
 
 export default defineType({
   name: 'featuresSection',
@@ -117,9 +118,10 @@ export default defineType({
   preview: {
     select: { title: 'title.it', items: 'items' },
     prepare({ title, items }) {
+      const titleText = getPlainText(title)
       const count = items?.length || 0
       return {
-        title: `✨ ${title || 'Caratteristiche'}`,
+        title: `✨ ${titleText || 'Caratteristiche'}`,
         subtitle: `${count} ${count === 1 ? 'punto' : 'punti'} di forza`,
       }
     },
