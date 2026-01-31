@@ -8,6 +8,23 @@ export default defineType({
   icon: () => '⚙️',
 
   fields: [
+    // VERSIONE
+    defineField({
+      name: 'siteVersion',
+      title: '📦 Versione Sito',
+      type: 'string',
+      description: 'Inserisci la versione attuale del sito (es. "1.0.5" o l\'hash Vercel "5Sw9kvVZn")',
+      validation: Rule => Rule.required().error('Inserisci la versione del sito'),
+    }),
+
+    defineField({
+      name: 'lastUpdateNote',
+      title: '📝 Note Ultimo Aggiornamento',
+      type: 'text',
+      description: 'Descrivi brevemente cosa è stato modificato in questa versione',
+      rows: 2,
+    }),
+
     // AZIENDA
     defineField({
       name: 'companyName',
@@ -69,10 +86,14 @@ export default defineType({
   ],
 
   preview: {
-    prepare() {
+    select: {
+      version: 'siteVersion',
+      note: 'lastUpdateNote',
+    },
+    prepare({ version, note }) {
       return {
         title: 'Impostazioni Sito',
-        subtitle: 'Clicca per modificare',
+        subtitle: version ? `Versione: ${version}${note ? ' • ' + note.substring(0, 30) + '...' : ''}` : 'Clicca per configurare',
       }
     },
   },
