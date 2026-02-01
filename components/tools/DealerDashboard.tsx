@@ -60,6 +60,8 @@ interface NewDealerForm {
   email: string
   phone: string
   address: string
+  website: string
+  youtubeVideo: string
   isActive: boolean
 }
 
@@ -71,6 +73,8 @@ const initialFormState: NewDealerForm = {
   email: '',
   phone: '',
   address: '',
+  website: '',
+  youtubeVideo: '',
   isActive: true,
 }
 
@@ -221,6 +225,8 @@ export function DealerDashboard() {
       email: dealer.email || '',
       phone: dealer.phone || '',
       address: dealer.address || '',
+      website: dealer.website || '',
+      youtubeVideo: dealer.youtubeVideo || '',
       isActive: dealer.isActive ?? true,
     })
     setIsEditModalOpen(true)
@@ -258,6 +264,8 @@ export function DealerDashboard() {
           email: editDealerForm.email.trim() || null,
           phone: editDealerForm.phone.trim() || null,
           address: editDealerForm.address.trim() || null,
+          website: editDealerForm.website.trim() || null,
+          youtubeVideo: editDealerForm.youtubeVideo.trim() || null,
           isActive: editDealerForm.isActive,
         })
         .commit()
@@ -308,6 +316,8 @@ export function DealerDashboard() {
         email: newDealerForm.email.trim() || undefined,
         phone: newDealerForm.phone.trim() || undefined,
         address: newDealerForm.address.trim() || undefined,
+        website: newDealerForm.website.trim() || undefined,
+        youtubeVideo: newDealerForm.youtubeVideo.trim() || undefined,
         isActive: newDealerForm.isActive,
         isFeatured: false,
       }
@@ -708,6 +718,29 @@ export function DealerDashboard() {
                 </Box>
               </Grid>
 
+              {/* Sito Web */}
+              <Box>
+                <Label style={{ marginBottom: 8, display: 'block' }}>Sito Web</Label>
+                <TextInput
+                  value={newDealerForm.website}
+                  onChange={(e) => handleFormChange('website', e.currentTarget.value)}
+                  placeholder="https://www.esempio.it"
+                />
+              </Box>
+
+              {/* Video YouTube */}
+              <Box>
+                <Label style={{ marginBottom: 8, display: 'block' }}>🎬 Video YouTube</Label>
+                <TextInput
+                  value={newDealerForm.youtubeVideo}
+                  onChange={(e) => handleFormChange('youtubeVideo', e.currentTarget.value)}
+                  placeholder="https://www.youtube.com/watch?v=xxxxx"
+                />
+                <Text size={1} muted style={{ marginTop: 4 }}>
+                  Link completo al video YouTube del rivenditore
+                </Text>
+              </Box>
+
               {/* Attivo */}
               <Flex align="center" gap={3}>
                 <Checkbox
@@ -841,6 +874,29 @@ export function DealerDashboard() {
                 </Box>
               </Grid>
 
+              {/* Sito Web */}
+              <Box>
+                <Label style={{ marginBottom: 8, display: 'block' }}>Sito Web</Label>
+                <TextInput
+                  value={editDealerForm.website}
+                  onChange={(e) => handleEditFormChange('website', e.currentTarget.value)}
+                  placeholder="https://www.esempio.it"
+                />
+              </Box>
+
+              {/* Video YouTube */}
+              <Box>
+                <Label style={{ marginBottom: 8, display: 'block' }}>🎬 Video YouTube</Label>
+                <TextInput
+                  value={editDealerForm.youtubeVideo}
+                  onChange={(e) => handleEditFormChange('youtubeVideo', e.currentTarget.value)}
+                  placeholder="https://www.youtube.com/watch?v=xxxxx"
+                />
+                <Text size={1} muted style={{ marginTop: 4 }}>
+                  Link completo al video YouTube del rivenditore
+                </Text>
+              </Box>
+
               {/* Attivo */}
               <Flex align="center" gap={3}>
                 <Checkbox
@@ -869,8 +925,7 @@ export function DealerDashboard() {
               </Flex>
 
               <Text size={1} muted>
-                * Campi obbligatori. Per modifiche avanzate (foto, video, coordinate) usa l'editor completo.
-              </Text>
+                * Campi obbligatori</Text>
             </Stack>
           </Box>
         </Dialog>
