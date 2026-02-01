@@ -32,7 +32,6 @@ import {
   CheckmarkIcon,
 } from '@sanity/icons'
 import { useClient } from 'sanity'
-import { uuid } from '@sanity/uuid'
 
 interface Dealer {
   _id: string
@@ -307,7 +306,6 @@ export function DealerDashboard() {
     setIsSaving(true)
     try {
       const newDealer = {
-        _id: `drafts.${uuid()}`,
         _type: 'dealer',
         name: newDealerForm.name.trim(),
         type: newDealerForm.type,
@@ -322,11 +320,8 @@ export function DealerDashboard() {
         isFeatured: false,
       }
 
+      // Crea e pubblica direttamente (senza prefisso drafts.)
       await client.create(newDealer)
-
-      // Pubblica immediatamente
-      const docId = newDealer._id.replace('drafts.', '')
-      await client.patch(newDealer._id).set({}).commit()
 
       handleCloseModal()
       loadDealers()
