@@ -2,6 +2,7 @@
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { EnvelopeIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
+import { iconOptions } from '../shared/iconOptions'
 
 export default defineType({
   name: 'contactSection',
@@ -324,7 +325,9 @@ export default defineType({
               name: 'icon',
               title: 'Icona Custom',
               type: 'string',
-              description: 'Emoji alternativa all\'icona default',
+              options: {
+                list: iconOptions,
+              },
             }),
           ],
           preview: {

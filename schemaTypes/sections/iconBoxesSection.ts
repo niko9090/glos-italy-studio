@@ -1,5 +1,6 @@
 // Icon Boxes Section - Griglia di box con icone
 import { defineType, defineField } from 'sanity'
+import { iconOptions } from '../shared/iconOptions'
 
 export default defineType({
   name: 'iconBoxesSection',
@@ -40,7 +41,9 @@ export default defineType({
               name: 'icon',
               title: 'Icona',
               type: 'string',
-              description: 'Emoji o nome icona (es: ✨, 🚀, 💡)',
+              options: {
+                list: iconOptions,
+              },
               validation: (Rule) => Rule.required(),
             }),
             defineField({

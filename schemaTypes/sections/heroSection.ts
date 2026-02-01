@@ -2,6 +2,7 @@
 import { defineType, defineField } from 'sanity'
 import { HomeIcon } from '@sanity/icons'
 import { getPlainText, truncate } from '../../lib/previewHelpers'
+import { iconOptionsCompact } from '../shared/iconOptions'
 
 export default defineType({
   name: 'heroSection',
@@ -87,7 +88,9 @@ export default defineType({
             name: 'icon',
             title: 'Icona',
             type: 'string',
-            description: 'Nome icona o emoji. Es: arrow-right, download, 🚀',
+            options: {
+              list: iconOptionsCompact,
+            },
           }),
           defineField({
             name: 'iconPosition',

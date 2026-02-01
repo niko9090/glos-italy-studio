@@ -1,5 +1,6 @@
 // Banner Section - Annunci, promozioni, avvisi
 import { defineType, defineField } from 'sanity'
+import { iconOptions } from '../shared/iconOptions'
 
 export default defineType({
   name: 'bannerSection',
@@ -43,7 +44,9 @@ export default defineType({
       title: 'Icona',
       type: 'string',
       group: 'content',
-      description: 'Emoji o nome icona da mostrare',
+      options: {
+        list: iconOptions,
+      },
     }),
     // Style
     defineField({

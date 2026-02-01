@@ -150,21 +150,23 @@ export default defineType({
 
     defineField({
       name: 'location',
-      title: 'Posizione sulla Mappa',
+      title: 'Coordinate Mappa (Opzionali)',
       type: 'object',
       group: 'location',
-      description: 'Coordinate GPS. Cerca su Google Maps, clicca destro e copia le coordinate.',
+      description: '⚡ AUTOMATICO: Se compili Città + Indirizzo, la posizione viene calcolata automaticamente! Inserisci le coordinate solo se vuoi una posizione precisa diversa.',
       fields: [
         {
           name: 'lat',
           title: 'Latitudine',
           type: 'number',
+          description: 'Lascia vuoto per geocoding automatico',
           validation: Rule => Rule.min(-90).max(90),
         },
         {
           name: 'lng',
           title: 'Longitudine',
           type: 'number',
+          description: 'Lascia vuoto per geocoding automatico',
           validation: Rule => Rule.min(-180).max(180),
         },
       ],

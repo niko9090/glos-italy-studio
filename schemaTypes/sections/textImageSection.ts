@@ -2,6 +2,7 @@
 import { defineType, defineField } from 'sanity'
 import { ImageIcon } from '@sanity/icons'
 import { getPlainText, truncate } from '../../lib/previewHelpers'
+import { iconOptionsCompact } from '../shared/iconOptions'
 
 export default defineType({
   name: 'textImageSection',
@@ -81,7 +82,9 @@ export default defineType({
             name: 'icon',
             title: 'Icona',
             type: 'string',
-            description: 'Icona da mostrare nel pulsante',
+            options: {
+              list: iconOptionsCompact,
+            },
           }),
         ],
         preview: {

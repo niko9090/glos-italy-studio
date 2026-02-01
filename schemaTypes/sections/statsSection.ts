@@ -2,6 +2,7 @@
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { BarChartIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
+import { iconOptions } from '../shared/iconOptions'
 
 export default defineType({
   name: 'statsSection',
@@ -87,7 +88,9 @@ export default defineType({
               name: 'icon',
               title: 'Icona',
               type: 'string',
-              description: 'Emoji o nome icona. Es: 📅, 👥, ✅, 🏆',
+              options: {
+                list: iconOptions,
+              },
             }),
             defineField({
               name: 'iconImage',

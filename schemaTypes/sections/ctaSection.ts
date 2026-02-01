@@ -2,6 +2,7 @@
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { BellIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
+import { iconOptionsCompact } from '../shared/iconOptions'
 
 export default defineType({
   name: 'ctaSection',
@@ -66,7 +67,9 @@ export default defineType({
             name: 'icon',
             title: 'Icona',
             type: 'string',
-            description: 'Emoji o simbolo',
+            options: {
+              list: iconOptionsCompact,
+            },
           }),
           defineField({
             name: 'text',
@@ -142,7 +145,9 @@ export default defineType({
               name: 'icon',
               title: 'Icona',
               type: 'string',
-              description: 'Emoji o nome icona. Es: →, 📞, ✉️',
+              options: {
+                list: iconOptionsCompact,
+              },
             }),
             defineField({
               name: 'iconPosition',

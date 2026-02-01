@@ -1,5 +1,6 @@
 // Tabs Section - Contenuti a schede
 import { defineType, defineField } from 'sanity'
+import { iconOptions } from '../shared/iconOptions'
 
 export default defineType({
   name: 'tabsSection',
@@ -46,7 +47,9 @@ export default defineType({
               name: 'icon',
               title: 'Icona',
               type: 'string',
-              description: 'Emoji o nome icona',
+              options: {
+                list: iconOptions,
+              },
             }),
             defineField({
               name: 'content',
@@ -68,7 +71,7 @@ export default defineType({
                   type: 'object',
                   fields: [
                     { name: 'text', title: 'Testo', type: 'localeString' },
-                    { name: 'icon', title: 'Icona', type: 'string' },
+                    { name: 'icon', title: 'Icona', type: 'string', options: { list: iconOptions } },
                   ],
                   preview: {
                     select: { text: 'text.it' },

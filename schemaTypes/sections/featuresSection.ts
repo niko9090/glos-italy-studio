@@ -2,6 +2,7 @@
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { BulbOutlineIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
+import { iconOptions } from '../shared/iconOptions'
 
 export default defineType({
   name: 'featuresSection',
@@ -67,9 +68,11 @@ export default defineType({
           fields: [
             defineField({
               name: 'icon',
-              title: 'Icona (Emoji)',
+              title: 'Icona',
               type: 'string',
-              description: 'Emoji per questa caratteristica. Es: ✅, 🛡️, ⚡, 🎯',
+              options: {
+                list: iconOptions,
+              },
             }),
             defineField({
               name: 'iconImage',

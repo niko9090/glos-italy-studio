@@ -1,5 +1,6 @@
 // Timeline Section - Storia aziendale, processi, step
 import { defineType, defineField } from 'sanity'
+import { iconOptions } from '../shared/iconOptions'
 
 export default defineType({
   name: 'timelineSection',
@@ -64,7 +65,9 @@ export default defineType({
               name: 'icon',
               title: 'Icona',
               type: 'string',
-              description: 'Emoji o icona per questo evento',
+              options: {
+                list: iconOptions,
+              },
             }),
             defineField({
               name: 'highlighted',
