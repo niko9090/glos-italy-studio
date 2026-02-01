@@ -41,6 +41,7 @@ interface Dealer {
   type: string
   city: string
   country?: string
+  address?: string
   email?: string
   phone?: string
   website?: string
@@ -89,6 +90,11 @@ export function DealerDashboard() {
   const [newDealerForm, setNewDealerForm] = useState<NewDealerForm>(initialFormState)
   const [isSaving, setIsSaving] = useState(false)
 
+  // Modal modifica rivenditore
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [editingDealer, setEditingDealer] = useState<Dealer | null>(null)
+  const [editDealerForm, setEditDealerForm] = useState<NewDealerForm>(initialFormState)
+
   // Carica i rivenditori
   const loadDealers = useCallback(async () => {
     setLoading(true)
@@ -101,6 +107,7 @@ export function DealerDashboard() {
         type,
         city,
         country,
+        address,
         email,
         phone,
         website,
@@ -203,9 +210,66 @@ export function DealerDashboard() {
     }
   }
 
-  // Vai a modifica
+  // Apri modal modifica rivenditore
   const handleEdit = (dealer: Dealer) => {
-    window.location.href = `/structure/dealer;${dealer._id}`
+    setEditingDealer(dealer)
+    setEditDealerForm({
+      name: dealer.name || '',
+      type: dealer.type || 'rivenditore',
+      city: dealer.city || '',
+      country: dealer.country || 'Italia',
+      email: dealer.email || '',
+      phone: dealer.phone || '',
+      address: dealer.address || '',
+      isActive: dealer.isActive ?? true,
+    })
+    setIsEditModalOpen(true)
+  }
+
+  // Chiudi modal modifica
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false)
+    setEditingDealer(null)
+    setEditDealerForm(initialFormState)
+  }
+
+  // Aggiorna campo form modifica
+  const handleEditFormChange = (field: keyof NewDealerForm, value: string | boolean) => {
+    setEditDealerForm(prev => ({ ...prev, [field]: value }))
+  }
+
+  // Salva modifiche rivenditore
+  const handleSaveEditDealer = async () => {
+    if (!editingDealer) return
+    if (!editDealerForm.name.trim() || !editDealerForm.city.trim()) {
+      alert('Nome e Città sono obbligatori')
+      return
+    }
+
+    setIsSaving(true)
+    try {
+      await client
+        .patch(editingDealer._id)
+        .set({
+          name: editDealerForm.name.trim(),
+          type: editDealerForm.type,
+          city: editDealerForm.city.trim(),
+          country: editDealerForm.country,
+          email: editDealerForm.email.trim() || null,
+          phone: editDealerForm.phone.trim() || null,
+          address: editDealerForm.address.trim() || null,
+          isActive: editDealerForm.isActive,
+        })
+        .commit()
+
+      handleCloseEditModal()
+      loadDealers()
+    } catch (err) {
+      console.error('Errore aggiornamento rivenditore:', err)
+      alert('Errore durante il salvataggio. Riprova.')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   // Apri modal nuovo rivenditore
@@ -673,6 +737,139 @@ export function DealerDashboard() {
 
               <Text size={1} muted>
                 * Campi obbligatori. Dopo la creazione potrai aggiungere altri dettagli.
+              </Text>
+            </Stack>
+          </Box>
+        </Dialog>
+      )}
+
+      {/* Modal Modifica Rivenditore */}
+      {isEditModalOpen && editingDealer && (
+        <Dialog
+          id="edit-dealer-dialog"
+          header={`Modifica: ${editingDealer.name}`}
+          onClose={handleCloseEditModal}
+          zOffset={1000}
+          width={1}
+        >
+          <Box padding={4}>
+            <Stack space={4}>
+              {/* Nome */}
+              <Box>
+                <Label style={{ marginBottom: 8, display: 'block' }}>Nome Azienda *</Label>
+                <TextInput
+                  value={editDealerForm.name}
+                  onChange={(e) => handleEditFormChange('name', e.currentTarget.value)}
+                  placeholder="Es: Colorificio Rossi"
+                />
+              </Box>
+
+              {/* Tipo */}
+              <Box>
+                <Label style={{ marginBottom: 8, display: 'block' }}>Tipo</Label>
+                <Select
+                  value={editDealerForm.type}
+                  onChange={(e) => handleEditFormChange('type', e.currentTarget.value)}
+                >
+                  <option value="rivenditore">🏪 Rivenditore</option>
+                  <option value="distributore">🏭 Distributore</option>
+                  <option value="agente">👤 Agente</option>
+                </Select>
+              </Box>
+
+              {/* Città e Paese */}
+              <Grid columns={2} gap={3}>
+                <Box>
+                  <Label style={{ marginBottom: 8, display: 'block' }}>Città *</Label>
+                  <TextInput
+                    value={editDealerForm.city}
+                    onChange={(e) => handleEditFormChange('city', e.currentTarget.value)}
+                    placeholder="Es: Milano"
+                  />
+                </Box>
+                <Box>
+                  <Label style={{ marginBottom: 8, display: 'block' }}>Paese</Label>
+                  <Select
+                    value={editDealerForm.country}
+                    onChange={(e) => handleEditFormChange('country', e.currentTarget.value)}
+                  >
+                    <option value="Italia">🇮🇹 Italia</option>
+                    <option value="Francia">🇫🇷 Francia</option>
+                    <option value="Germania">🇩🇪 Germania</option>
+                    <option value="Spagna">🇪🇸 Spagna</option>
+                    <option value="Svizzera">🇨🇭 Svizzera</option>
+                    <option value="Austria">🇦🇹 Austria</option>
+                    <option value="Regno Unito">🇬🇧 Regno Unito</option>
+                    <option value="Paesi Bassi">🇳🇱 Paesi Bassi</option>
+                    <option value="Belgio">🇧🇪 Belgio</option>
+                    <option value="Polonia">🇵🇱 Polonia</option>
+                    <option value="Portogallo">🇵🇹 Portogallo</option>
+                    <option value="Grecia">🇬🇷 Grecia</option>
+                    <option value="Altro">🌍 Altro</option>
+                  </Select>
+                </Box>
+              </Grid>
+
+              {/* Indirizzo */}
+              <Box>
+                <Label style={{ marginBottom: 8, display: 'block' }}>Indirizzo</Label>
+                <TextInput
+                  value={editDealerForm.address}
+                  onChange={(e) => handleEditFormChange('address', e.currentTarget.value)}
+                  placeholder="Via, numero civico, CAP"
+                />
+              </Box>
+
+              {/* Email e Telefono */}
+              <Grid columns={2} gap={3}>
+                <Box>
+                  <Label style={{ marginBottom: 8, display: 'block' }}>Email</Label>
+                  <TextInput
+                    type="email"
+                    value={editDealerForm.email}
+                    onChange={(e) => handleEditFormChange('email', e.currentTarget.value)}
+                    placeholder="email@esempio.it"
+                  />
+                </Box>
+                <Box>
+                  <Label style={{ marginBottom: 8, display: 'block' }}>Telefono</Label>
+                  <TextInput
+                    value={editDealerForm.phone}
+                    onChange={(e) => handleEditFormChange('phone', e.currentTarget.value)}
+                    placeholder="+39 02 1234567"
+                  />
+                </Box>
+              </Grid>
+
+              {/* Attivo */}
+              <Flex align="center" gap={3}>
+                <Checkbox
+                  id="editIsActive"
+                  checked={editDealerForm.isActive}
+                  onChange={(e) => handleEditFormChange('isActive', e.currentTarget.checked)}
+                />
+                <Label htmlFor="editIsActive">Attivo (visibile sul sito)</Label>
+              </Flex>
+
+              {/* Azioni */}
+              <Flex gap={3} justify="flex-end" marginTop={3}>
+                <Button
+                  text="Annulla"
+                  mode="ghost"
+                  onClick={handleCloseEditModal}
+                  disabled={isSaving}
+                />
+                <Button
+                  text={isSaving ? 'Salvataggio...' : 'Salva Modifiche'}
+                  tone="primary"
+                  icon={isSaving ? Spinner : CheckmarkIcon}
+                  onClick={handleSaveEditDealer}
+                  disabled={isSaving || !editDealerForm.name.trim() || !editDealerForm.city.trim()}
+                />
+              </Flex>
+
+              <Text size={1} muted>
+                * Campi obbligatori. Per modifiche avanzate (foto, video, coordinate) usa l'editor completo.
               </Text>
             </Stack>
           </Box>
