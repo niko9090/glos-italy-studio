@@ -15,6 +15,8 @@ import {
   Select,
   Switch,
   Dialog,
+  Label,
+  Checkbox,
 } from '@sanity/ui'
 import {
   SearchIcon,
@@ -26,8 +28,11 @@ import {
   StarIcon,
   LinkIcon,
   PlayIcon,
+  CloseIcon,
+  CheckmarkIcon,
 } from '@sanity/icons'
 import { useClient } from 'sanity'
+import { uuid } from '@sanity/uuid'
 
 interface Dealer {
   _id: string
@@ -46,6 +51,28 @@ interface Dealer {
   location?: { lat: number; lng: number }
 }
 
+interface NewDealerForm {
+  name: string
+  type: string
+  city: string
+  country: string
+  email: string
+  phone: string
+  address: string
+  isActive: boolean
+}
+
+const initialFormState: NewDealerForm = {
+  name: '',
+  type: 'rivenditore',
+  city: '',
+  country: 'Italia',
+  email: '',
+  phone: '',
+  address: '',
+  isActive: true,
+}
+
 export function DealerDashboard() {
   const client = useClient({ apiVersion: '2024-01-01' })
 
@@ -56,6 +83,11 @@ export function DealerDashboard() {
   const [filterType, setFilterType] = useState<string>('all')
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [filterCountry, setFilterCountry] = useState<string>('all')
+
+  // Modal nuovo rivenditore
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newDealerForm, setNewDealerForm] = useState<NewDealerForm>(initialFormState)
+  const [isSaving, setIsSaving] = useState(false)
 
   // Carica i rivenditori
   const loadDealers = useCallback(async () => {
@@ -176,9 +208,60 @@ export function DealerDashboard() {
     window.location.href = `/structure/dealer;${dealer._id}`
   }
 
-  // Crea nuovo
+  // Apri modal nuovo rivenditore
   const handleCreate = () => {
-    window.location.href = `/structure/dealer;template=dealer`
+    setNewDealerForm(initialFormState)
+    setIsModalOpen(true)
+  }
+
+  // Chiudi modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setNewDealerForm(initialFormState)
+  }
+
+  // Aggiorna campo form
+  const handleFormChange = (field: keyof NewDealerForm, value: string | boolean) => {
+    setNewDealerForm(prev => ({ ...prev, [field]: value }))
+  }
+
+  // Salva nuovo rivenditore
+  const handleSaveNewDealer = async () => {
+    if (!newDealerForm.name.trim() || !newDealerForm.city.trim()) {
+      alert('Nome e Città sono obbligatori')
+      return
+    }
+
+    setIsSaving(true)
+    try {
+      const newDealer = {
+        _id: `drafts.${uuid()}`,
+        _type: 'dealer',
+        name: newDealerForm.name.trim(),
+        type: newDealerForm.type,
+        city: newDealerForm.city.trim(),
+        country: newDealerForm.country,
+        email: newDealerForm.email.trim() || undefined,
+        phone: newDealerForm.phone.trim() || undefined,
+        address: newDealerForm.address.trim() || undefined,
+        isActive: newDealerForm.isActive,
+        isFeatured: false,
+      }
+
+      await client.create(newDealer)
+
+      // Pubblica immediatamente
+      const docId = newDealer._id.replace('drafts.', '')
+      await client.patch(newDealer._id).set({}).commit()
+
+      handleCloseModal()
+      loadDealers()
+    } catch (err) {
+      console.error('Errore creazione rivenditore:', err)
+      alert('Errore durante la creazione. Riprova.')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   // Tipo icona
@@ -462,6 +545,139 @@ export function DealerDashboard() {
           </Text>
         )}
       </Stack>
+
+      {/* Modal Nuovo Rivenditore */}
+      {isModalOpen && (
+        <Dialog
+          id="new-dealer-dialog"
+          header="Nuovo Rivenditore"
+          onClose={handleCloseModal}
+          zOffset={1000}
+          width={1}
+        >
+          <Box padding={4}>
+            <Stack space={4}>
+              {/* Nome */}
+              <Box>
+                <Label style={{ marginBottom: 8, display: 'block' }}>Nome Azienda *</Label>
+                <TextInput
+                  value={newDealerForm.name}
+                  onChange={(e) => handleFormChange('name', e.currentTarget.value)}
+                  placeholder="Es: Colorificio Rossi"
+                />
+              </Box>
+
+              {/* Tipo */}
+              <Box>
+                <Label style={{ marginBottom: 8, display: 'block' }}>Tipo</Label>
+                <Select
+                  value={newDealerForm.type}
+                  onChange={(e) => handleFormChange('type', e.currentTarget.value)}
+                >
+                  <option value="rivenditore">🏪 Rivenditore</option>
+                  <option value="distributore">🏭 Distributore</option>
+                  <option value="agente">👤 Agente</option>
+                </Select>
+              </Box>
+
+              {/* Città e Paese */}
+              <Grid columns={2} gap={3}>
+                <Box>
+                  <Label style={{ marginBottom: 8, display: 'block' }}>Città *</Label>
+                  <TextInput
+                    value={newDealerForm.city}
+                    onChange={(e) => handleFormChange('city', e.currentTarget.value)}
+                    placeholder="Es: Milano"
+                  />
+                </Box>
+                <Box>
+                  <Label style={{ marginBottom: 8, display: 'block' }}>Paese</Label>
+                  <Select
+                    value={newDealerForm.country}
+                    onChange={(e) => handleFormChange('country', e.currentTarget.value)}
+                  >
+                    <option value="Italia">🇮🇹 Italia</option>
+                    <option value="Francia">🇫🇷 Francia</option>
+                    <option value="Germania">🇩🇪 Germania</option>
+                    <option value="Spagna">🇪🇸 Spagna</option>
+                    <option value="Svizzera">🇨🇭 Svizzera</option>
+                    <option value="Austria">🇦🇹 Austria</option>
+                    <option value="Regno Unito">🇬🇧 Regno Unito</option>
+                    <option value="Paesi Bassi">🇳🇱 Paesi Bassi</option>
+                    <option value="Belgio">🇧🇪 Belgio</option>
+                    <option value="Polonia">🇵🇱 Polonia</option>
+                    <option value="Portogallo">🇵🇹 Portogallo</option>
+                    <option value="Grecia">🇬🇷 Grecia</option>
+                    <option value="Altro">🌍 Altro</option>
+                  </Select>
+                </Box>
+              </Grid>
+
+              {/* Indirizzo */}
+              <Box>
+                <Label style={{ marginBottom: 8, display: 'block' }}>Indirizzo</Label>
+                <TextInput
+                  value={newDealerForm.address}
+                  onChange={(e) => handleFormChange('address', e.currentTarget.value)}
+                  placeholder="Via, numero civico, CAP"
+                />
+              </Box>
+
+              {/* Email e Telefono */}
+              <Grid columns={2} gap={3}>
+                <Box>
+                  <Label style={{ marginBottom: 8, display: 'block' }}>Email</Label>
+                  <TextInput
+                    type="email"
+                    value={newDealerForm.email}
+                    onChange={(e) => handleFormChange('email', e.currentTarget.value)}
+                    placeholder="email@esempio.it"
+                  />
+                </Box>
+                <Box>
+                  <Label style={{ marginBottom: 8, display: 'block' }}>Telefono</Label>
+                  <TextInput
+                    value={newDealerForm.phone}
+                    onChange={(e) => handleFormChange('phone', e.currentTarget.value)}
+                    placeholder="+39 02 1234567"
+                  />
+                </Box>
+              </Grid>
+
+              {/* Attivo */}
+              <Flex align="center" gap={3}>
+                <Checkbox
+                  id="isActive"
+                  checked={newDealerForm.isActive}
+                  onChange={(e) => handleFormChange('isActive', e.currentTarget.checked)}
+                />
+                <Label htmlFor="isActive">Attivo (visibile sul sito)</Label>
+              </Flex>
+
+              {/* Azioni */}
+              <Flex gap={3} justify="flex-end" marginTop={3}>
+                <Button
+                  text="Annulla"
+                  mode="ghost"
+                  onClick={handleCloseModal}
+                  disabled={isSaving}
+                />
+                <Button
+                  text={isSaving ? 'Salvataggio...' : 'Crea Rivenditore'}
+                  tone="primary"
+                  icon={isSaving ? Spinner : CheckmarkIcon}
+                  onClick={handleSaveNewDealer}
+                  disabled={isSaving || !newDealerForm.name.trim() || !newDealerForm.city.trim()}
+                />
+              </Flex>
+
+              <Text size={1} muted>
+                * Campi obbligatori. Dopo la creazione potrai aggiungere altri dettagli.
+              </Text>
+            </Stack>
+          </Box>
+        </Dialog>
+      )}
     </Box>
   )
 }
