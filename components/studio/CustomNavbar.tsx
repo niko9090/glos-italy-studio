@@ -5,12 +5,19 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.5.0'
+const SITE_VERSION = '1.6.0'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '1.6.0': [
+    '📄 Dashboard Pagine v3: vista unificata',
+    '🔗 No piu duplicati (draft+published in una riga)',
+    '🏷️ Badge stato: Pubblicata, Solo Bozza, Modifiche Pendenti',
+    '⚡ Pulsanti pubblica/scarta modifiche',
+    '🚨 Rilevamento URL duplicati',
+  ],
   '1.5.0': [
     '📐 Spaziatura granulare sezioni (padding/margini)',
     '📏 Larghezza contenitore personalizzabile',
