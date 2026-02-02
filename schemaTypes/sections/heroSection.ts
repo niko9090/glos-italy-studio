@@ -440,6 +440,25 @@ export default defineType({
       initialValue: true,
     }),
 
+    defineField({
+      name: 'parallaxIntensity',
+      title: 'Intensità Parallax',
+      type: 'string',
+      group: 'style',
+      description: 'Quanto è visibile l\'effetto parallax',
+      options: {
+        list: [
+          { title: 'Sottile (15%)', value: 'subtle' },
+          { title: 'Normale (20%)', value: 'normal' },
+          { title: 'Forte (30%)', value: 'strong' },
+        ],
+        layout: 'radio',
+        direction: 'horizontal',
+      },
+      initialValue: 'subtle',
+      hidden: ({ parent }) => !parent?.parallax,
+    }),
+
     // === AVANZATO ===
     defineField({
       name: 'showScrollIndicator',
