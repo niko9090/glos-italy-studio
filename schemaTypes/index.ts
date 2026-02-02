@@ -16,6 +16,7 @@ import localeString from './objects/localeString'
 import localeText from './objects/localeText'
 import localeRichText from './objects/localeRichText'
 import richText from './objects/richText'
+import accessibleImage from './objects/accessibleImage'
 
 // Schemi per le sezioni delle pagine
 import heroSection from './sections/heroSection'
@@ -52,6 +53,7 @@ export const schemaTypes = [
   localeText,
   localeRichText,
   richText,
+  accessibleImage,
 
   // Documenti principali
   page,
