@@ -479,11 +479,20 @@ export function DealerDashboard() {
           </Flex>
         </Card>
 
+        {/* Avviso se ci sono dealer inattivi */}
+        {stats.inactive > 0 && (
+          <Card padding={3} radius={2} tone="critical">
+            <Text size={1}>
+              ❌ {stats.inactive} rivenditori sono <strong>INATTIVI</strong> e non appaiono sul sito pubblico. Attivali cliccando l'icona occhio.
+            </Text>
+          </Card>
+        )}
+
         {/* Avviso se mancano coordinate */}
         {stats.total > 0 && stats.withCoords < stats.active && (
           <Card padding={3} radius={2} tone="caution">
             <Text size={1}>
-              ⚠️ {stats.active - stats.withCoords} rivenditori attivi non hanno coordinate GPS e non appariranno sulla mappa.
+              ⚠️ {stats.active - stats.withCoords} rivenditori attivi non hanno coordinate GPS. La mappa calcolerà automaticamente la posizione dalla città/indirizzo.
             </Text>
           </Card>
         )}
