@@ -1,5 +1,5 @@
-// PageDashboard.tsx - Dashboard panoramica per gestione pagine (v2 - Dark Mode + Duplicati Slug)
-import React, { useState, useEffect, useCallback } from 'react'
+// PageDashboard.tsx - Dashboard panoramica per gestione pagine (v3 - Vista Unificata)
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import {
   Box,
   Button,
@@ -26,7 +26,7 @@ import {
   LaunchIcon,
   CheckmarkCircleIcon,
   CloseCircleIcon,
-  WarningOutlineIcon,
+  PublishIcon,
 } from '@sanity/icons'
 import { useClient } from 'sanity'
 
@@ -40,6 +40,25 @@ interface Page {
   isPublished: boolean
   sectionCount?: number
   sectionTypes?: string[]
+}
+
+// Rappresentazione unificata di una pagina (combina draft + published)
+interface UnifiedPage {
+  baseId: string // ID senza prefisso drafts.
+  draft: Page | null
+  published: Page | null
+  // Dati da mostrare (presi dalla bozza se esiste, altrimenti dalla pubblicata)
+  displayData: {
+    title: string | { it?: string; en?: string; es?: string }
+    slug?: { current: string }
+    updatedAt: string
+    createdAt: string
+    isPublished: boolean
+    sectionCount?: number
+    sectionTypes?: string[]
+  }
+  // Stato della pagina
+  status: 'draft_only' | 'published_only' | 'has_pending_changes'
 }
 
 // Helper per estrarre il titolo dalla struttura multilingua
@@ -104,97 +123,123 @@ export function PageDashboard() {
     loadPages()
   }, [loadPages])
 
-  // Analizza le pagine per trovare problemi
-  const analyzePages = () => {
-    const slugMap: Record<string, { drafts: Page[]; published: Page[] }> = {}
+  // ========== LOGICA UNIFICATA: Raggruppa draft e published ==========
+  const unifiedPages = useMemo(() => {
+    const pageMap = new Map<string, { draft: Page | null; published: Page | null }>()
 
+    // Raggruppa per baseId
     pages.forEach((page) => {
-      const slug = page.slug?.current || 'no-slug'
-      if (!slugMap[slug]) {
-        slugMap[slug] = { drafts: [], published: [] }
+      const baseId = getBaseId(page._id)
+      if (!pageMap.has(baseId)) {
+        pageMap.set(baseId, { draft: null, published: null })
       }
+      const entry = pageMap.get(baseId)!
       if (isDraft(page._id)) {
-        slugMap[slug].drafts.push(page)
+        entry.draft = page
       } else {
-        slugMap[slug].published.push(page)
+        entry.published = page
       }
     })
 
-    // Trova slug con problemi
-    const duplicateSlugs: { slug: string; count: number; pages: Page[] }[] = []
-    const pagesWithPendingChanges: { slug: string; published: Page; draft: Page }[] = []
+    // Converti in array di UnifiedPage
+    const result: UnifiedPage[] = []
+    pageMap.forEach((entry, baseId) => {
+      const { draft, published } = entry
+      // Usa i dati della bozza se esiste, altrimenti della pubblicata
+      const source = draft || published!
 
-    Object.entries(slugMap).forEach(([slug, { drafts, published }]) => {
-      // Caso 1: Stesso slug usato da pagine DIVERSE (problema reale)
-      const uniqueBaseIds = new Set([
-        ...drafts.map((p) => getBaseId(p._id)),
-        ...published.map((p) => p._id),
-      ])
-
-      if (uniqueBaseIds.size > 1) {
-        duplicateSlugs.push({
-          slug,
-          count: uniqueBaseIds.size,
-          pages: [...drafts, ...published],
-        })
+      let status: UnifiedPage['status']
+      if (draft && published) {
+        status = 'has_pending_changes'
+      } else if (draft && !published) {
+        status = 'draft_only'
+      } else {
+        status = 'published_only'
       }
 
-      // Caso 2: Stessa pagina con bozza e pubblicata (modifiche pendenti)
-      drafts.forEach((draft) => {
-        const baseId = getBaseId(draft._id)
-        const matchingPublished = published.find((p) => p._id === baseId)
-        if (matchingPublished) {
-          pagesWithPendingChanges.push({
-            slug,
-            published: matchingPublished,
-            draft,
-          })
-        }
+      result.push({
+        baseId,
+        draft,
+        published,
+        displayData: {
+          title: source.title,
+          slug: source.slug,
+          updatedAt: source._updatedAt,
+          createdAt: source._createdAt,
+          isPublished: source.isPublished,
+          sectionCount: source.sectionCount,
+          sectionTypes: source.sectionTypes,
+        },
+        status,
       })
     })
 
-    return { duplicateSlugs, pagesWithPendingChanges, slugMap }
-  }
+    return result
+  }, [pages])
 
-  const { duplicateSlugs, pagesWithPendingChanges, slugMap } = analyzePages()
+  // Analizza per trovare slug duplicati (pagine DIVERSE con stesso slug)
+  const duplicateSlugs = useMemo(() => {
+    const slugMap: Record<string, UnifiedPage[]> = {}
+    unifiedPages.forEach((up) => {
+      const slug = up.displayData.slug?.current || 'no-slug'
+      if (!slugMap[slug]) {
+        slugMap[slug] = []
+      }
+      slugMap[slug].push(up)
+    })
 
-  // Ordina le pagine
-  const sortedPages = [...pages].sort((a, b) => {
-    switch (sortBy) {
-      case 'name':
-        return getTitle(a.title).localeCompare(getTitle(b.title))
-      case 'created':
-        return new Date(b._createdAt).getTime() - new Date(a._createdAt).getTime()
-      case 'sections':
-        return (b.sectionCount || 0) - (a.sectionCount || 0)
-      case 'updated':
-      default:
-        return new Date(b._updatedAt).getTime() - new Date(a._updatedAt).getTime()
-    }
-  })
+    const duplicates: { slug: string; count: number; pages: UnifiedPage[] }[] = []
+    Object.entries(slugMap).forEach(([slug, pgs]) => {
+      if (pgs.length > 1) {
+        duplicates.push({ slug, count: pgs.length, pages: pgs })
+      }
+    })
+    return duplicates
+  }, [unifiedPages])
 
-  // Filtra le pagine
-  const filteredPages = sortedPages.filter((page) => {
-    // Ricerca testuale
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase()
-      const title = getTitle(page.title).toLowerCase()
-      const slug = page.slug?.current?.toLowerCase() || ''
-      if (!title.includes(query) && !slug.includes(query)) return false
-    }
-    // Filtro status
-    if (filterStatus === 'published' && isDraft(page._id)) return false
-    if (filterStatus === 'draft' && !isDraft(page._id)) return false
-    return true
-  })
+  // Ordina le pagine unificate
+  const sortedUnifiedPages = useMemo(() => {
+    return [...unifiedPages].sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return getTitle(a.displayData.title).localeCompare(getTitle(b.displayData.title))
+        case 'created':
+          return new Date(b.displayData.createdAt).getTime() - new Date(a.displayData.createdAt).getTime()
+        case 'sections':
+          return (b.displayData.sectionCount || 0) - (a.displayData.sectionCount || 0)
+        case 'updated':
+        default:
+          return new Date(b.displayData.updatedAt).getTime() - new Date(a.displayData.updatedAt).getTime()
+      }
+    })
+  }, [unifiedPages, sortBy])
 
-  // Statistiche
-  const stats = {
-    total: pages.length,
-    published: pages.filter((p) => !isDraft(p._id)).length,
-    drafts: pages.filter((p) => isDraft(p._id)).length,
-    totalSections: pages.reduce((sum, p) => sum + (p.sectionCount || 0), 0),
-  }
+  // Filtra le pagine unificate
+  const filteredUnifiedPages = useMemo(() => {
+    return sortedUnifiedPages.filter((up) => {
+      // Ricerca testuale
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase()
+        const title = getTitle(up.displayData.title).toLowerCase()
+        const slug = up.displayData.slug?.current?.toLowerCase() || ''
+        if (!title.includes(query) && !slug.includes(query)) return false
+      }
+      // Filtro status
+      if (filterStatus === 'published' && up.status !== 'published_only') return false
+      if (filterStatus === 'draft' && up.status === 'published_only') return false
+      if (filterStatus === 'pending' && up.status !== 'has_pending_changes') return false
+      return true
+    })
+  }, [sortedUnifiedPages, searchQuery, filterStatus])
+
+  // Statistiche aggiornate
+  const stats = useMemo(() => ({
+    totalUnique: unifiedPages.length,
+    published: unifiedPages.filter((up) => up.status === 'published_only').length,
+    draftsOnly: unifiedPages.filter((up) => up.status === 'draft_only').length,
+    pendingChanges: unifiedPages.filter((up) => up.status === 'has_pending_changes').length,
+    totalSections: unifiedPages.reduce((sum, up) => sum + (up.displayData.sectionCount || 0), 0),
+  }), [unifiedPages])
 
   // Formatta data
   const formatDate = (date: string) => {
@@ -212,15 +257,16 @@ export function PageDashboard() {
   }
 
   // Ottieni URL pagina
-  const getPageUrl = (page: Page) => {
-    const slug = page.slug?.current
+  const getPageUrl = (up: UnifiedPage) => {
+    const slug = up.displayData.slug?.current
     if (!slug) return null
     return slug === 'home' ? FRONTEND_URL : `${FRONTEND_URL}/${slug}`
   }
 
-  // Modifica pagina
-  const handleEdit = (page: Page) => {
-    window.location.href = `/structure/page;${page._id}`
+  // Modifica pagina - preferisce la bozza se esiste
+  const handleEdit = (up: UnifiedPage) => {
+    const editId = up.draft ? up.draft._id : up.published!._id
+    window.location.href = `/structure/page;${editId}`
   }
 
   // Crea nuova pagina
@@ -228,12 +274,13 @@ export function PageDashboard() {
     window.location.href = `/structure/page;template=page`
   }
 
-  // Toggle pubblicazione
-  const handleTogglePublish = async (page: Page) => {
+  // Toggle pubblicazione (campo isPublished)
+  const handleTogglePublish = async (up: UnifiedPage) => {
     try {
+      const page = up.draft || up.published!
       const newValue = page.isPublished === false ? true : false
       await client.patch(page._id).set({ isPublished: newValue }).commit()
-      toast.push({ status: 'success', title: newValue ? 'Pagina pubblicata' : 'Pagina nascosta' })
+      toast.push({ status: 'success', title: newValue ? 'Pagina attivata' : 'Pagina nascosta' })
       loadPages()
     } catch (err) {
       console.error('Errore aggiornamento:', err)
@@ -242,15 +289,16 @@ export function PageDashboard() {
   }
 
   // Duplica pagina
-  const handleDuplicate = async (page: Page) => {
+  const handleDuplicate = async (up: UnifiedPage) => {
     try {
-      const fullPage = await client.fetch(`*[_id == $id][0]`, { id: page._id })
+      const sourceId = up.draft?._id || up.published!._id
+      const fullPage = await client.fetch(`*[_id == $id][0]`, { id: sourceId })
       const newPage = {
         _type: 'page',
-        title: typeof page.title === 'string'
-          ? `${page.title} (Copia)`
-          : { ...page.title, it: `${getTitle(page.title)} (Copia)` },
-        slug: { current: `${page.slug?.current || 'pagina'}-copia-${Date.now()}` },
+        title: typeof up.displayData.title === 'string'
+          ? `${up.displayData.title} (Copia)`
+          : { ...up.displayData.title, it: `${getTitle(up.displayData.title)} (Copia)` },
+        slug: { current: `${up.displayData.slug?.current || 'pagina'}-copia-${Date.now()}` },
         isPublished: false,
         sections: fullPage?.sections || [],
       }
@@ -263,15 +311,18 @@ export function PageDashboard() {
     }
   }
 
-  // Elimina pagina
-  const handleDelete = async (page: Page) => {
-    if (page.slug?.current === 'home') {
+  // Elimina pagina (elimina sia draft che published)
+  const handleDelete = async (up: UnifiedPage) => {
+    if (up.displayData.slug?.current === 'home') {
       toast.push({ status: 'warning', title: 'Non puoi eliminare la homepage!' })
       return
     }
-    if (!window.confirm(`Eliminare "${getTitle(page.title)}"?\n\nQuesta azione non può essere annullata.`)) return
+    if (!window.confirm(`Eliminare "${getTitle(up.displayData.title)}"?\n\nQuesta azione eliminerà sia la bozza che la versione pubblicata.`)) return
     try {
-      await client.delete(page._id)
+      const transaction = client.transaction()
+      if (up.draft) transaction.delete(up.draft._id)
+      if (up.published) transaction.delete(up.published._id)
+      await transaction.commit()
       toast.push({ status: 'success', title: 'Pagina eliminata' })
       loadPages()
     } catch (err) {
@@ -280,13 +331,58 @@ export function PageDashboard() {
     }
   }
 
-  // Bulk publish/unpublish
+  // Pubblica le modifiche pendenti (usa l'API publish di Sanity)
+  const handlePublishChanges = async (up: UnifiedPage) => {
+    if (up.status !== 'has_pending_changes' && up.status !== 'draft_only') return
+    try {
+      if (up.draft) {
+        // Pubblica il documento usando l'endpoint publish
+        await client
+          .patch(up.baseId)
+          .set(await client.fetch(`*[_id == $id][0]`, { id: up.draft._id }))
+          .commit()
+
+        // Elimina la bozza
+        await client.delete(up.draft._id)
+
+        toast.push({ status: 'success', title: 'Modifiche pubblicate!' })
+        loadPages()
+      }
+    } catch (err) {
+      console.error('Errore pubblicazione:', err)
+      toast.push({ status: 'error', title: 'Errore pubblicazione - prova dal pannello editor' })
+    }
+  }
+
+  // Scarta le modifiche (elimina la bozza, mantiene la pubblicata)
+  const handleDiscardChanges = async (up: UnifiedPage) => {
+    if (up.status !== 'has_pending_changes') return
+    if (!window.confirm(`Scartare le modifiche a "${getTitle(up.displayData.title)}"?\n\nLe modifiche non pubblicate verranno perse.`)) return
+    try {
+      if (up.draft) {
+        await client.delete(up.draft._id)
+        toast.push({ status: 'success', title: 'Modifiche scartate' })
+        loadPages()
+      }
+    } catch (err) {
+      console.error('Errore:', err)
+      toast.push({ status: 'error', title: 'Errore' })
+    }
+  }
+
+  // Bulk actions
   const handleBulkPublish = async (publish: boolean) => {
     if (selectedPages.size === 0) return
     try {
       const transaction = client.transaction()
-      selectedPages.forEach((id) => {
-        transaction.patch(id, { set: { isPublished: publish } })
+      selectedPages.forEach((baseId) => {
+        const up = unifiedPages.find((p) => p.baseId === baseId)
+        if (up) {
+          const page = up.draft || up.published
+          if (page) {
+            transaction.patch(page._id, { set: { isPublished: publish } })
+          }
+        }
       })
       await transaction.commit()
       setSelectedPages(new Set())
@@ -298,36 +394,43 @@ export function PageDashboard() {
     }
   }
 
-  // Toggle selezione
-  const toggleSelection = (id: string) => {
+  // Toggle selezione (usa baseId)
+  const toggleSelection = (baseId: string) => {
     const newSelection = new Set(selectedPages)
-    if (newSelection.has(id)) {
-      newSelection.delete(id)
+    if (newSelection.has(baseId)) {
+      newSelection.delete(baseId)
     } else {
-      newSelection.add(id)
+      newSelection.add(baseId)
     }
     setSelectedPages(newSelection)
   }
 
   // Seleziona tutti
   const selectAll = () => {
-    if (selectedPages.size === filteredPages.length) {
+    if (selectedPages.size === filteredUnifiedPages.length) {
       setSelectedPages(new Set())
     } else {
-      setSelectedPages(new Set(filteredPages.map((p) => p._id)))
+      setSelectedPages(new Set(filteredUnifiedPages.map((up) => up.baseId)))
     }
   }
 
   // Controlla se una pagina ha slug duplicato
-  const hasSlugConflict = (page: Page) => {
-    return duplicateSlugs.some((d) => d.pages.some((p) => p._id === page._id))
+  const hasSlugConflict = (up: UnifiedPage) => {
+    return duplicateSlugs.some((d) => d.pages.some((p) => p.baseId === up.baseId))
   }
 
-  // Controlla se una pagina ha modifiche pendenti
-  const hasPendingChanges = (page: Page) => {
-    return pagesWithPendingChanges.some(
-      (p) => p.published._id === page._id || p.draft._id === page._id
-    )
+  // Ottieni il badge appropriato per lo stato
+  const getStatusBadge = (status: UnifiedPage['status']) => {
+    switch (status) {
+      case 'draft_only':
+        return <Badge tone="caution">Solo Bozza</Badge>
+      case 'has_pending_changes':
+        return <Badge tone="caution">Modifiche Pendenti</Badge>
+      case 'published_only':
+        return <Badge tone="positive">Pubblicata</Badge>
+      default:
+        return null
+    }
   }
 
   if (loading) {
@@ -358,9 +461,9 @@ export function PageDashboard() {
         {/* Header */}
         <Flex align="center" justify="space-between" wrap="wrap" gap={3}>
           <Stack space={2}>
-            <Heading size={3}>📄 Gestione Pagine</Heading>
+            <Heading size={3}>Gestione Pagine</Heading>
             <Text size={1} muted>
-              Panoramica di tutte le pagine del sito
+              {stats.totalUnique} pagine totali
             </Text>
           </Stack>
           <Button
@@ -377,8 +480,8 @@ export function PageDashboard() {
             <Flex align="center" gap={3}>
               <Text size={3}>📄</Text>
               <Stack space={1}>
-                <Text size={3} weight="bold">{stats.total}</Text>
-                <Text size={1} muted>Totale Documenti</Text>
+                <Text size={3} weight="bold">{stats.totalUnique}</Text>
+                <Text size={1} muted>Pagine</Text>
               </Stack>
             </Flex>
           </Card>
@@ -395,8 +498,8 @@ export function PageDashboard() {
             <Flex align="center" gap={3}>
               <Text size={3}>📝</Text>
               <Stack space={1}>
-                <Text size={3} weight="bold">{stats.drafts}</Text>
-                <Text size={1} muted>Bozze</Text>
+                <Text size={3} weight="bold">{stats.draftsOnly + stats.pendingChanges}</Text>
+                <Text size={1} muted>Da Pubblicare</Text>
               </Stack>
             </Flex>
           </Card>
@@ -405,83 +508,74 @@ export function PageDashboard() {
               <Text size={3}>🧩</Text>
               <Stack space={1}>
                 <Text size={3} weight="bold">{stats.totalSections}</Text>
-                <Text size={1} muted>Sezioni Totali</Text>
+                <Text size={1} muted>Sezioni</Text>
               </Stack>
             </Flex>
           </Card>
         </Grid>
 
-        {/* Avviso Slug Duplicati (PROBLEMA GRAVE) */}
+        {/* Avviso Slug Duplicati */}
         {duplicateSlugs.length > 0 && (
           <Card padding={4} radius={2} tone="critical" shadow={1}>
-            <Flex align="flex-start" gap={3}>
-              <Text size={3}>🚨</Text>
-              <Stack space={3} flex={1}>
-                <Text size={2} weight="bold">
-                  ERRORE: URL Duplicati!
-                </Text>
-                <Text size={1}>
-                  Ci sono pagine diverse che usano lo stesso URL. Questo causa conflitti.
-                </Text>
-                <Stack space={2}>
-                  {duplicateSlugs.map((dup) => (
-                    <Card key={dup.slug} padding={2} radius={2} tone="critical">
-                      <Text size={1}>
-                        <strong>/{dup.slug}</strong> → {dup.count} pagine usano questo URL
-                      </Text>
-                    </Card>
-                  ))}
-                </Stack>
-                <Text size={1} muted>
-                  Soluzione: Modifica gli slug delle pagine duplicate o eliminale.
-                </Text>
-              </Stack>
-            </Flex>
+            <Stack space={3}>
+              <Flex align="center" gap={2}>
+                <Text size={2} weight="bold">🚨 ERRORE: URL Duplicati!</Text>
+              </Flex>
+              <Text size={1}>
+                Pagine diverse usano lo stesso URL. Questo causa conflitti.
+              </Text>
+              {duplicateSlugs.map((dup) => (
+                <Card key={dup.slug} padding={2} radius={2} tone="critical">
+                  <Text size={1}>
+                    <strong>/{dup.slug}</strong> → {dup.count} pagine
+                  </Text>
+                </Card>
+              ))}
+              <Text size={1} muted>
+                Soluzione: Modifica lo slug di una delle pagine o eliminala.
+              </Text>
+            </Stack>
           </Card>
         )}
 
         {/* Avviso Modifiche Pendenti */}
-        {pagesWithPendingChanges.length > 0 && (
+        {stats.pendingChanges > 0 && (
           <Card padding={3} radius={2} tone="caution" shadow={1}>
             <Flex align="center" gap={3}>
               <Text size={2}>📝</Text>
-              <Stack space={2} flex={1}>
-                <Text size={1} weight="semibold">
-                  {pagesWithPendingChanges.length} pagine con modifiche non pubblicate
-                </Text>
-                <Text size={1} muted>
-                  {pagesWithPendingChanges.map((p) => `"${getTitle(p.published.title)}"`).join(', ')}
-                </Text>
-              </Stack>
+              <Text size={1}>
+                <strong>{stats.pendingChanges}</strong> pagine con modifiche non pubblicate
+              </Text>
             </Flex>
           </Card>
         )}
 
-        {/* Filtri e Ordinamento */}
+        {/* Filtri */}
         <Card padding={3} radius={2} shadow={1}>
           <Flex gap={3} wrap="wrap" align="flex-end">
             <Box flex={1} style={{ minWidth: 200 }}>
               <Text size={1} weight="semibold" style={{ marginBottom: 8 }}>Cerca</Text>
               <TextInput
                 icon={SearchIcon}
-                placeholder="Nome o URL pagina..."
+                placeholder="Nome o URL..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.currentTarget.value)}
               />
             </Box>
-            <Box style={{ minWidth: 150 }}>
+            <Box style={{ minWidth: 180 }}>
               <Text size={1} weight="semibold" style={{ marginBottom: 8 }}>Stato</Text>
               <Select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.currentTarget.value)}
               >
-                <option value="all">Tutti ({stats.total})</option>
-                <option value="published">✅ Pubblicate ({stats.published})</option>
-                <option value="draft">📝 Bozze ({stats.drafts})</option>
+                <option value="all">Tutte ({stats.totalUnique})</option>
+                <option value="published">Pubblicate ({stats.published})</option>
+                <option value="draft">Da Pubblicare ({stats.draftsOnly + stats.pendingChanges})</option>
+                <option value="pending">Modifiche Pendenti ({stats.pendingChanges})</option>
               </Select>
             </Box>
             <Box style={{ minWidth: 150 }}>
-              <Text size={1} weight="semibold" style={{ marginBottom: 8 }}>Ordina per</Text>
+              <Text size={1} weight="semibold" style={{ marginBottom: 8 }}>Ordina</Text>
               <Select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.currentTarget.value)}
@@ -500,12 +594,12 @@ export function PageDashboard() {
           <Card padding={3} radius={2} tone="primary">
             <Flex align="center" justify="space-between" wrap="wrap" gap={2}>
               <Text size={1}>
-                <strong>{selectedPages.size}</strong> pagine selezionate
+                <strong>{selectedPages.size}</strong> selezionate
               </Text>
               <Flex gap={2}>
                 <Button
                   icon={CheckmarkCircleIcon}
-                  text="Pubblica"
+                  text="Attiva"
                   mode="ghost"
                   tone="positive"
                   onClick={() => handleBulkPublish(true)}
@@ -528,14 +622,14 @@ export function PageDashboard() {
         )}
 
         {/* Lista Pagine */}
-        {filteredPages.length === 0 ? (
+        {filteredUnifiedPages.length === 0 ? (
           <Card padding={5} radius={2} tone="transparent" style={{ textAlign: 'center' }}>
             <Stack space={3}>
               <Text size={3}>🔍</Text>
               <Text size={2} muted>
                 {searchQuery || filterStatus !== 'all' ? 'Nessuna pagina trovata' : 'Nessuna pagina creata'}
               </Text>
-              {pages.length === 0 && (
+              {unifiedPages.length === 0 && (
                 <Button
                   icon={AddIcon}
                   text="Crea la prima pagina"
@@ -547,12 +641,12 @@ export function PageDashboard() {
           </Card>
         ) : (
           <Stack space={2}>
-            {/* Header lista con checkbox */}
+            {/* Header lista */}
             <Card padding={2} radius={2} tone="transparent">
               <Flex align="center" gap={3}>
                 <input
                   type="checkbox"
-                  checked={selectedPages.size === filteredPages.length && filteredPages.length > 0}
+                  checked={selectedPages.size === filteredUnifiedPages.length && filteredUnifiedPages.length > 0}
                   onChange={selectAll}
                   style={{ width: 18, height: 18, cursor: 'pointer' }}
                 />
@@ -562,118 +656,101 @@ export function PageDashboard() {
               </Flex>
             </Card>
 
-            {filteredPages.map((page) => {
-              const pageUrl = getPageUrl(page)
-              const isHome = page.slug?.current === 'home'
-              const isPageDraft = isDraft(page._id)
-              const slugConflict = hasSlugConflict(page)
-              const pendingChanges = hasPendingChanges(page)
+            {filteredUnifiedPages.map((up) => {
+              const pageUrl = getPageUrl(up)
+              const isHome = up.displayData.slug?.current === 'home'
+              const slugConflict = hasSlugConflict(up)
 
-              // Determina il tono della card
               let cardTone: 'default' | 'caution' | 'critical' | 'positive' = 'default'
               if (slugConflict) cardTone = 'critical'
-              else if (isPageDraft) cardTone = 'caution'
+              else if (up.status === 'draft_only' || up.status === 'has_pending_changes') cardTone = 'caution'
 
               return (
-                <Card
-                  key={page._id}
-                  padding={3}
-                  radius={2}
-                  shadow={1}
-                  tone={cardTone}
-                >
+                <Card key={up.baseId} padding={3} radius={2} shadow={1} tone={cardTone}>
                   <Flex align="center" gap={3} wrap="wrap">
                     {/* Checkbox */}
                     <input
                       type="checkbox"
-                      checked={selectedPages.has(page._id)}
-                      onChange={() => toggleSelection(page._id)}
+                      checked={selectedPages.has(up.baseId)}
+                      onChange={() => toggleSelection(up.baseId)}
                       style={{ width: 18, height: 18, cursor: 'pointer' }}
                     />
 
                     {/* Info */}
-                    <Box flex={1} style={{ minWidth: 200 }}>
+                    <Box flex={1} style={{ minWidth: 180 }}>
                       <Flex align="center" gap={2} wrap="wrap">
-                        <Text weight="semibold">{getTitle(page.title)}</Text>
+                        <Text weight="semibold">{getTitle(up.displayData.title)}</Text>
                         {isHome && <Badge tone="primary">Home</Badge>}
-                        {isPageDraft && <Badge tone="caution">Bozza</Badge>}
+                        {getStatusBadge(up.status)}
                         {slugConflict && <Badge tone="critical">URL Duplicato!</Badge>}
-                        {pendingChanges && !isPageDraft && <Badge tone="caution">Mod. Pendenti</Badge>}
                       </Flex>
-                      <Flex align="center" gap={2}>
-                        <Text size={1} muted>/{page.slug?.current || ''}</Text>
-                        {isPageDraft && (
-                          <Text size={0} muted style={{ opacity: 0.7 }}>
-                            (ID: {page._id})
-                          </Text>
-                        )}
-                      </Flex>
+                      <Text size={1} muted>/{up.displayData.slug?.current || ''}</Text>
                     </Box>
 
-                    {/* Sezioni contenute */}
-                    <Box style={{ maxWidth: 280 }}>
+                    {/* Sezioni */}
+                    <Box style={{ maxWidth: 250 }}>
                       <Flex gap={1} wrap="wrap">
-                        {page.sectionTypes && page.sectionTypes.length > 0 ? (
-                          page.sectionTypes.slice(0, 6).map((type, idx) => (
+                        {up.displayData.sectionTypes && up.displayData.sectionTypes.length > 0 ? (
+                          up.displayData.sectionTypes.slice(0, 5).map((type, idx) => (
                             <Badge key={idx} mode="outline" fontSize={0}>
                               {type.replace('Section', '')}
                             </Badge>
                           ))
                         ) : (
-                          <Badge mode="outline" tone="caution" fontSize={0}>
-                            Vuota
-                          </Badge>
+                          <Badge mode="outline" tone="caution" fontSize={0}>Vuota</Badge>
                         )}
-                        {page.sectionTypes && page.sectionTypes.length > 6 && (
-                          <Badge mode="outline" fontSize={0}>
-                            +{page.sectionTypes.length - 6}
-                          </Badge>
+                        {up.displayData.sectionTypes && up.displayData.sectionTypes.length > 5 && (
+                          <Badge mode="outline" fontSize={0}>+{up.displayData.sectionTypes.length - 5}</Badge>
                         )}
                       </Flex>
                     </Box>
 
-                    <Text size={1} muted style={{ minWidth: 130 }}>
-                      {formatDate(page._updatedAt)}
+                    <Text size={1} muted style={{ minWidth: 120 }}>
+                      {formatDate(up.displayData.updatedAt)}
                     </Text>
 
                     {/* Azioni */}
                     <Flex gap={1}>
-                      <Button
-                        icon={EditIcon}
-                        mode="ghost"
-                        title="Modifica"
-                        onClick={() => handleEdit(page)}
-                      />
+                      <Button icon={EditIcon} mode="ghost" title="Modifica" onClick={() => handleEdit(up)} />
                       {pageUrl && (
+                        <Button icon={LaunchIcon} mode="ghost" title="Apri nel sito" as="a" href={pageUrl} target="_blank" />
+                      )}
+                      {up.status === 'has_pending_changes' && (
+                        <>
+                          <Button
+                            icon={PublishIcon}
+                            mode="ghost"
+                            tone="positive"
+                            title="Pubblica modifiche"
+                            onClick={() => handlePublishChanges(up)}
+                          />
+                          <Button
+                            icon={CloseCircleIcon}
+                            mode="ghost"
+                            tone="caution"
+                            title="Scarta modifiche"
+                            onClick={() => handleDiscardChanges(up)}
+                          />
+                        </>
+                      )}
+                      {up.status === 'draft_only' && (
                         <Button
-                          icon={LaunchIcon}
+                          icon={PublishIcon}
                           mode="ghost"
-                          title="Apri nel sito"
-                          as="a"
-                          href={pageUrl}
-                          target="_blank"
+                          tone="positive"
+                          title="Pubblica"
+                          onClick={() => handlePublishChanges(up)}
                         />
                       )}
                       <Button
-                        icon={page.isPublished !== false ? EyeClosedIcon : EyeOpenIcon}
+                        icon={up.displayData.isPublished !== false ? EyeClosedIcon : EyeOpenIcon}
                         mode="ghost"
-                        title={page.isPublished !== false ? 'Nascondi' : 'Pubblica'}
-                        onClick={() => handleTogglePublish(page)}
+                        title={up.displayData.isPublished !== false ? 'Nascondi' : 'Attiva'}
+                        onClick={() => handleTogglePublish(up)}
                       />
-                      <Button
-                        icon={CopyIcon}
-                        mode="ghost"
-                        title="Duplica"
-                        onClick={() => handleDuplicate(page)}
-                      />
+                      <Button icon={CopyIcon} mode="ghost" title="Duplica" onClick={() => handleDuplicate(up)} />
                       {!isHome && (
-                        <Button
-                          icon={TrashIcon}
-                          mode="ghost"
-                          tone="critical"
-                          title="Elimina"
-                          onClick={() => handleDelete(page)}
-                        />
+                        <Button icon={TrashIcon} mode="ghost" tone="critical" title="Elimina" onClick={() => handleDelete(up)} />
                       )}
                     </Flex>
                   </Flex>
@@ -683,25 +760,22 @@ export function PageDashboard() {
           </Stack>
         )}
 
-        {/* Riepilogo */}
-        {filteredPages.length > 0 && filteredPages.length !== pages.length && (
-          <Text size={1} muted style={{ textAlign: 'center' }}>
-            Visualizzate {filteredPages.length} di {pages.length} pagine
-          </Text>
-        )}
-
         {/* Legenda */}
         <Card padding={3} radius={2} tone="transparent">
           <Stack space={2}>
             <Text size={1} weight="semibold">Legenda:</Text>
             <Flex gap={4} wrap="wrap">
               <Flex align="center" gap={2}>
-                <Badge tone="caution">Bozza</Badge>
-                <Text size={1} muted>Modifiche non ancora pubblicate</Text>
+                <Badge tone="positive">Pubblicata</Badge>
+                <Text size={1} muted>Live sul sito</Text>
               </Flex>
               <Flex align="center" gap={2}>
-                <Badge tone="critical">URL Duplicato!</Badge>
-                <Text size={1} muted>Pagine diverse con stesso URL (da correggere)</Text>
+                <Badge tone="caution">Solo Bozza</Badge>
+                <Text size={1} muted>Mai pubblicata</Text>
+              </Flex>
+              <Flex align="center" gap={2}>
+                <Badge tone="caution">Modifiche Pendenti</Badge>
+                <Text size={1} muted>Ha modifiche non pubblicate</Text>
               </Flex>
             </Flex>
           </Stack>
