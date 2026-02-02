@@ -2,6 +2,7 @@
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { CreditCardIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
+import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 
 export default defineType({
   name: 'pricingSection',
@@ -186,7 +187,7 @@ export default defineType({
 
     defineField({
       name: 'paddingY',
-      title: 'Spaziatura Verticale',
+      title: 'Spaziatura Verticale (Legacy)',
       type: 'string',
       group: 'style',
       description: 'Padding sopra e sotto la sezione',
@@ -199,6 +200,39 @@ export default defineType({
         ],
       },
       initialValue: 'medium',
+    }),
+
+    defineField({
+      name: 'paddingTop',
+      title: 'Spaziatura Sopra',
+      type: 'string',
+      group: 'style',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'paddingBottom',
+      title: 'Spaziatura Sotto',
+      type: 'string',
+      group: 'style',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'marginTop',
+      title: 'Margine Sopra',
+      type: 'string',
+      group: 'style',
+      options: { list: marginOptions },
+      initialValue: 'none',
+    }),
+    defineField({
+      name: 'marginBottom',
+      title: 'Margine Sotto',
+      type: 'string',
+      group: 'style',
+      options: { list: marginOptions },
+      initialValue: 'none',
     }),
   ],
 

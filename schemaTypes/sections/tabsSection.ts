@@ -1,6 +1,7 @@
 // Tabs Section - Contenuti a schede
 import { defineType, defineField } from 'sanity'
 import { iconOptions } from '../shared/iconOptions'
+import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 
 export default defineType({
   name: 'tabsSection',
@@ -158,6 +159,38 @@ export default defineType({
         ],
       },
       initialValue: 'white',
+    }),
+    defineField({
+      name: 'paddingTop',
+      title: 'Spaziatura Sopra',
+      type: 'string',
+      group: 'style',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'paddingBottom',
+      title: 'Spaziatura Sotto',
+      type: 'string',
+      group: 'style',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'marginTop',
+      title: 'Margine Sopra',
+      type: 'string',
+      group: 'style',
+      options: { list: marginOptions },
+      initialValue: 'none',
+    }),
+    defineField({
+      name: 'marginBottom',
+      title: 'Margine Sotto',
+      type: 'string',
+      group: 'style',
+      options: { list: marginOptions },
+      initialValue: 'none',
     }),
   ],
   preview: {

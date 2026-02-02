@@ -2,6 +2,7 @@
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { StackCompactIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
+import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 
 export default defineType({
   name: 'logoCloudSection',
@@ -172,6 +173,38 @@ export default defineType({
       type: 'boolean',
       group: 'style',
       initialValue: false,
+    }),
+    defineField({
+      name: 'paddingTop',
+      title: 'Spaziatura Sopra',
+      type: 'string',
+      group: 'style',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'paddingBottom',
+      title: 'Spaziatura Sotto',
+      type: 'string',
+      group: 'style',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'marginTop',
+      title: 'Margine Sopra',
+      type: 'string',
+      group: 'style',
+      options: { list: marginOptions },
+      initialValue: 'none',
+    }),
+    defineField({
+      name: 'marginBottom',
+      title: 'Margine Sotto',
+      type: 'string',
+      group: 'style',
+      options: { list: marginOptions },
+      initialValue: 'none',
     }),
   ],
 

@@ -1,5 +1,6 @@
 // Before/After Section - Confronto immagini con slider
 import { defineType, defineField } from 'sanity'
+import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 
 export default defineType({
   name: 'beforeAfterSection',
@@ -159,6 +160,38 @@ export default defineType({
         ],
       },
       initialValue: 'gray',
+    }),
+    defineField({
+      name: 'paddingTop',
+      title: 'Spaziatura Sopra',
+      type: 'string',
+      group: 'style',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'paddingBottom',
+      title: 'Spaziatura Sotto',
+      type: 'string',
+      group: 'style',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'marginTop',
+      title: 'Margine Sopra',
+      type: 'string',
+      group: 'style',
+      options: { list: marginOptions },
+      initialValue: 'none',
+    }),
+    defineField({
+      name: 'marginBottom',
+      title: 'Margine Sotto',
+      type: 'string',
+      group: 'style',
+      options: { list: marginOptions },
+      initialValue: 'none',
     }),
   ],
   preview: {

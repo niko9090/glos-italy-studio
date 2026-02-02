@@ -3,6 +3,7 @@ import { defineType, defineField, defineArrayMember } from 'sanity'
 import { BulbOutlineIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { iconOptions } from '../shared/iconOptions'
+import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 
 export default defineType({
   name: 'featuresSection',
@@ -403,7 +404,7 @@ export default defineType({
 
     defineField({
       name: 'paddingY',
-      title: 'Spaziatura Verticale',
+      title: 'Spaziatura Verticale (Legacy)',
       type: 'string',
       group: 'style',
       options: {
@@ -415,6 +416,39 @@ export default defineType({
         ],
       },
       initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'paddingTop',
+      title: 'Spaziatura Sopra',
+      type: 'string',
+      group: 'style',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'paddingBottom',
+      title: 'Spaziatura Sotto',
+      type: 'string',
+      group: 'style',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'marginTop',
+      title: 'Margine Sopra',
+      type: 'string',
+      group: 'style',
+      options: { list: marginOptions },
+      initialValue: 'none',
+    }),
+    defineField({
+      name: 'marginBottom',
+      title: 'Margine Sotto',
+      type: 'string',
+      group: 'style',
+      options: { list: marginOptions },
+      initialValue: 'none',
     }),
 
     // === ANIMAZIONI ===

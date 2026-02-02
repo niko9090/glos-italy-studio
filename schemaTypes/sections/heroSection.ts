@@ -3,6 +3,7 @@ import { defineType, defineField } from 'sanity'
 import { HomeIcon } from '@sanity/icons'
 import { getPlainText, truncate } from '../../lib/previewHelpers'
 import { iconOptionsCompact } from '../shared/iconOptions'
+import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 
 export default defineType({
   name: 'heroSection',
@@ -379,6 +380,39 @@ export default defineType({
         ],
       },
       initialValue: 'medium',
+    }),
+
+    defineField({
+      name: 'paddingTop',
+      title: 'Spaziatura Sopra',
+      type: 'string',
+      group: 'layout',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'paddingBottom',
+      title: 'Spaziatura Sotto',
+      type: 'string',
+      group: 'layout',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'marginTop',
+      title: 'Margine Sopra',
+      type: 'string',
+      group: 'layout',
+      options: { list: marginOptions },
+      initialValue: 'none',
+    }),
+    defineField({
+      name: 'marginBottom',
+      title: 'Margine Sotto',
+      type: 'string',
+      group: 'layout',
+      options: { list: marginOptions },
+      initialValue: 'none',
     }),
 
     // === STILE ===

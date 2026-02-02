@@ -2,6 +2,7 @@
 import { defineType, defineField } from 'sanity'
 import { PackageIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
+import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 
 export default defineType({
   name: 'productsSection',
@@ -104,6 +105,40 @@ export default defineType({
       type: 'string',
       description: 'Dove porta il pulsante. Es: /prodotti, /catalogo',
       group: 'action',
+    }),
+
+    // === SPAZIATURA ===
+    defineField({
+      name: 'paddingTop',
+      title: 'Spaziatura Sopra',
+      type: 'string',
+      group: 'display',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'paddingBottom',
+      title: 'Spaziatura Sotto',
+      type: 'string',
+      group: 'display',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+    defineField({
+      name: 'marginTop',
+      title: 'Margine Sopra',
+      type: 'string',
+      group: 'display',
+      options: { list: marginOptions },
+      initialValue: 'none',
+    }),
+    defineField({
+      name: 'marginBottom',
+      title: 'Margine Sotto',
+      type: 'string',
+      group: 'display',
+      options: { list: marginOptions },
+      initialValue: 'none',
     }),
   ],
 
