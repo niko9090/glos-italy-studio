@@ -1,8 +1,9 @@
-// Sezione: Contatti - VERSIONE AVANZATA
+// Sezione: Contatti - VERSIONE AVANZATA v1.5.0
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { EnvelopeIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { iconOptions } from '../shared/iconOptions'
+import { paddingOptions, marginOptions, containerWidthOptions } from '../shared/spacingOptions'
 
 export default defineType({
   name: 'contactSection',
@@ -576,18 +577,72 @@ export default defineType({
 
     defineField({
       name: 'paddingY',
-      title: 'Spaziatura Verticale',
+      title: 'Spaziatura Verticale (Legacy)',
       type: 'string',
       group: 'layout',
+      description: 'Usa Padding Top/Bottom per controllo più preciso',
       options: {
-        list: [
-          { title: 'Piccola', value: 'sm' },
-          { title: 'Media', value: 'md' },
-          { title: 'Grande', value: 'lg' },
-          { title: 'Extra Grande', value: 'xl' },
-        ],
+        list: paddingOptions,
       },
       initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'paddingTop',
+      title: 'Spaziatura Sopra',
+      type: 'string',
+      group: 'layout',
+      description: 'Spazio sopra la sezione',
+      options: {
+        list: paddingOptions,
+      },
+    }),
+
+    defineField({
+      name: 'paddingBottom',
+      title: 'Spaziatura Sotto',
+      type: 'string',
+      group: 'layout',
+      description: 'Spazio sotto la sezione',
+      options: {
+        list: paddingOptions,
+      },
+    }),
+
+    defineField({
+      name: 'marginTop',
+      title: 'Margine Sopra',
+      type: 'string',
+      group: 'layout',
+      description: 'Distanza dalla sezione precedente',
+      options: {
+        list: marginOptions,
+      },
+      initialValue: 'none',
+    }),
+
+    defineField({
+      name: 'marginBottom',
+      title: 'Margine Sotto',
+      type: 'string',
+      group: 'layout',
+      description: 'Distanza dalla sezione successiva',
+      options: {
+        list: marginOptions,
+      },
+      initialValue: 'none',
+    }),
+
+    defineField({
+      name: 'containerMaxWidth',
+      title: 'Larghezza Massima Sezione',
+      type: 'string',
+      group: 'layout',
+      description: 'Controlla la larghezza del contenitore',
+      options: {
+        list: containerWidthOptions,
+      },
+      initialValue: 'normal',
     }),
 
     // === STILE ===

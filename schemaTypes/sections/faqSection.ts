@@ -1,8 +1,9 @@
-// Sezione: FAQ (Domande Frequenti)
+// Sezione: FAQ (Domande Frequenti) - v1.5.0
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { HelpCircleIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { iconOptions } from '../shared/iconOptions'
+import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 
 export default defineType({
   name: 'faqSection',
@@ -189,6 +190,43 @@ export default defineType({
       description: 'Numera le domande (1, 2, 3...)',
       group: 'layout',
       initialValue: false,
+    }),
+
+    // === SPAZIATURA ===
+    defineField({
+      name: 'paddingTop',
+      title: 'Spaziatura Sopra',
+      type: 'string',
+      group: 'layout',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'paddingBottom',
+      title: 'Spaziatura Sotto',
+      type: 'string',
+      group: 'layout',
+      options: { list: paddingOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'marginTop',
+      title: 'Margine Sopra',
+      type: 'string',
+      group: 'layout',
+      options: { list: marginOptions },
+      initialValue: 'none',
+    }),
+
+    defineField({
+      name: 'marginBottom',
+      title: 'Margine Sotto',
+      type: 'string',
+      group: 'layout',
+      options: { list: marginOptions },
+      initialValue: 'none',
     }),
 
     // === STILE ===

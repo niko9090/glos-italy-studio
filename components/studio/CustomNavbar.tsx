@@ -5,12 +5,18 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.4.0'
+const SITE_VERSION = '1.5.0'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '1.5.0': [
+    '📐 Spaziatura granulare sezioni (padding/margini)',
+    '📏 Larghezza contenitore personalizzabile',
+    '🎨 Opzioni layout migliorate per Contatti',
+    '🔧 Fix visualizzazione campi vuoti',
+  ],
   '1.4.0': [
     '🗺️ Geocoding automatico rivenditori (no lat/lng richieste)',
     '🎯 Icone con menu a tendina in tutti gli schemi',
