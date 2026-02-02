@@ -1,4 +1,4 @@
-// PageDashboard.tsx - Dashboard panoramica per gestione pagine (VERSIONE MIGLIORATA)
+// PageDashboard.tsx - Dashboard panoramica per gestione pagine (v2 - Dark Mode + Duplicati Slug)
 import React, { useState, useEffect, useCallback } from 'react'
 import {
   Box,
@@ -13,9 +13,7 @@ import {
   Badge,
   Spinner,
   Select,
-  MenuButton,
-  Menu,
-  MenuItem,
+  useToast,
 } from '@sanity/ui'
 import {
   AddIcon,
@@ -26,9 +24,9 @@ import {
   EyeOpenIcon,
   EyeClosedIcon,
   LaunchIcon,
-  SortIcon,
   CheckmarkCircleIcon,
   CloseCircleIcon,
+  WarningOutlineIcon,
 } from '@sanity/icons'
 import { useClient } from 'sanity'
 
@@ -51,11 +49,22 @@ function getTitle(title: Page['title']): string {
   return title.it || title.en || title.es || 'Senza titolo'
 }
 
+// Controlla se è una bozza
+function isDraft(id: string): boolean {
+  return id.startsWith('drafts.')
+}
+
+// Ottiene l'ID base (senza prefisso drafts.)
+function getBaseId(id: string): string {
+  return id.replace('drafts.', '')
+}
+
 // URL del frontend
 const FRONTEND_URL = 'https://glositaly.vercel.app'
 
 export function PageDashboard() {
   const client = useClient({ apiVersion: '2024-01-01' })
+  const toast = useToast()
 
   const [pages, setPages] = useState<Page[]>([])
   const [loading, setLoading] = useState(true)
@@ -95,6 +104,60 @@ export function PageDashboard() {
     loadPages()
   }, [loadPages])
 
+  // Analizza le pagine per trovare problemi
+  const analyzePages = () => {
+    const slugMap: Record<string, { drafts: Page[]; published: Page[] }> = {}
+
+    pages.forEach((page) => {
+      const slug = page.slug?.current || 'no-slug'
+      if (!slugMap[slug]) {
+        slugMap[slug] = { drafts: [], published: [] }
+      }
+      if (isDraft(page._id)) {
+        slugMap[slug].drafts.push(page)
+      } else {
+        slugMap[slug].published.push(page)
+      }
+    })
+
+    // Trova slug con problemi
+    const duplicateSlugs: { slug: string; count: number; pages: Page[] }[] = []
+    const pagesWithPendingChanges: { slug: string; published: Page; draft: Page }[] = []
+
+    Object.entries(slugMap).forEach(([slug, { drafts, published }]) => {
+      // Caso 1: Stesso slug usato da pagine DIVERSE (problema reale)
+      const uniqueBaseIds = new Set([
+        ...drafts.map((p) => getBaseId(p._id)),
+        ...published.map((p) => p._id),
+      ])
+
+      if (uniqueBaseIds.size > 1) {
+        duplicateSlugs.push({
+          slug,
+          count: uniqueBaseIds.size,
+          pages: [...drafts, ...published],
+        })
+      }
+
+      // Caso 2: Stessa pagina con bozza e pubblicata (modifiche pendenti)
+      drafts.forEach((draft) => {
+        const baseId = getBaseId(draft._id)
+        const matchingPublished = published.find((p) => p._id === baseId)
+        if (matchingPublished) {
+          pagesWithPendingChanges.push({
+            slug,
+            published: matchingPublished,
+            draft,
+          })
+        }
+      })
+    })
+
+    return { duplicateSlugs, pagesWithPendingChanges, slugMap }
+  }
+
+  const { duplicateSlugs, pagesWithPendingChanges, slugMap } = analyzePages()
+
   // Ordina le pagine
   const sortedPages = [...pages].sort((a, b) => {
     switch (sortBy) {
@@ -120,33 +183,18 @@ export function PageDashboard() {
       if (!title.includes(query) && !slug.includes(query)) return false
     }
     // Filtro status
-    if (filterStatus === 'published' && page.isPublished === false) return false
-    if (filterStatus === 'draft' && page.isPublished !== false) return false
+    if (filterStatus === 'published' && isDraft(page._id)) return false
+    if (filterStatus === 'draft' && !isDraft(page._id)) return false
     return true
   })
 
   // Statistiche
   const stats = {
     total: pages.length,
-    published: pages.filter((p) => p.isPublished !== false).length,
-    drafts: pages.filter((p) => p.isPublished === false).length,
+    published: pages.filter((p) => !isDraft(p._id)).length,
+    drafts: pages.filter((p) => isDraft(p._id)).length,
     totalSections: pages.reduce((sum, p) => sum + (p.sectionCount || 0), 0),
   }
-
-  // Trova pagine con nomi duplicati
-  const findDuplicates = () => {
-    const titleCount: Record<string, string[]> = {}
-    pages.forEach((p) => {
-      const title = getTitle(p.title).toLowerCase().trim()
-      if (!titleCount[title]) titleCount[title] = []
-      titleCount[title].push(p._id)
-    })
-    return Object.entries(titleCount)
-      .filter(([, ids]) => ids.length > 1)
-      .map(([title, ids]) => ({ title, ids }))
-  }
-
-  const duplicates = findDuplicates()
 
   // Formatta data
   const formatDate = (date: string) => {
@@ -170,9 +218,8 @@ export function PageDashboard() {
     return slug === 'home' ? FRONTEND_URL : `${FRONTEND_URL}/${slug}`
   }
 
-  // Modifica pagina (apre in Gestione Contenuti)
+  // Modifica pagina
   const handleEdit = (page: Page) => {
-    // Naviga alla pagina di edit nel structure tool
     window.location.href = `/structure/page;${page._id}`
   }
 
@@ -186,9 +233,11 @@ export function PageDashboard() {
     try {
       const newValue = page.isPublished === false ? true : false
       await client.patch(page._id).set({ isPublished: newValue }).commit()
+      toast.push({ status: 'success', title: newValue ? 'Pagina pubblicata' : 'Pagina nascosta' })
       loadPages()
     } catch (err) {
       console.error('Errore aggiornamento:', err)
+      toast.push({ status: 'error', title: 'Errore aggiornamento' })
     }
   }
 
@@ -206,24 +255,28 @@ export function PageDashboard() {
         sections: fullPage?.sections || [],
       }
       await client.create(newPage)
+      toast.push({ status: 'success', title: 'Pagina duplicata' })
       loadPages()
     } catch (err) {
       console.error('Errore duplicazione:', err)
+      toast.push({ status: 'error', title: 'Errore duplicazione' })
     }
   }
 
   // Elimina pagina
   const handleDelete = async (page: Page) => {
     if (page.slug?.current === 'home') {
-      alert('Non puoi eliminare la homepage!')
+      toast.push({ status: 'warning', title: 'Non puoi eliminare la homepage!' })
       return
     }
-    if (!window.confirm(`Eliminare la pagina "${getTitle(page.title)}"?\nQuesta azione non può essere annullata.`)) return
+    if (!window.confirm(`Eliminare "${getTitle(page.title)}"?\n\nQuesta azione non può essere annullata.`)) return
     try {
       await client.delete(page._id)
+      toast.push({ status: 'success', title: 'Pagina eliminata' })
       loadPages()
     } catch (err) {
       console.error('Errore eliminazione:', err)
+      toast.push({ status: 'error', title: 'Errore eliminazione' })
     }
   }
 
@@ -237,9 +290,11 @@ export function PageDashboard() {
       })
       await transaction.commit()
       setSelectedPages(new Set())
+      toast.push({ status: 'success', title: `${selectedPages.size} pagine aggiornate` })
       loadPages()
     } catch (err) {
       console.error('Errore operazione bulk:', err)
+      toast.push({ status: 'error', title: 'Errore operazione' })
     }
   }
 
@@ -261,6 +316,18 @@ export function PageDashboard() {
     } else {
       setSelectedPages(new Set(filteredPages.map((p) => p._id)))
     }
+  }
+
+  // Controlla se una pagina ha slug duplicato
+  const hasSlugConflict = (page: Page) => {
+    return duplicateSlugs.some((d) => d.pages.some((p) => p._id === page._id))
+  }
+
+  // Controlla se una pagina ha modifiche pendenti
+  const hasPendingChanges = (page: Page) => {
+    return pagesWithPendingChanges.some(
+      (p) => p.published._id === page._id || p.draft._id === page._id
+    )
   }
 
   if (loading) {
@@ -291,7 +358,7 @@ export function PageDashboard() {
         {/* Header */}
         <Flex align="center" justify="space-between" wrap="wrap" gap={3}>
           <Stack space={2}>
-            <Heading size={3}>Gestione Pagine</Heading>
+            <Heading size={3}>📄 Gestione Pagine</Heading>
             <Text size={1} muted>
               Panoramica di tutte le pagine del sito
             </Text>
@@ -311,7 +378,7 @@ export function PageDashboard() {
               <Text size={3}>📄</Text>
               <Stack space={1}>
                 <Text size={3} weight="bold">{stats.total}</Text>
-                <Text size={1} muted>Totale Pagine</Text>
+                <Text size={1} muted>Totale Documenti</Text>
               </Stack>
             </Flex>
           </Card>
@@ -344,17 +411,46 @@ export function PageDashboard() {
           </Card>
         </Grid>
 
-        {/* Avviso Duplicati */}
-        {duplicates.length > 0 && (
+        {/* Avviso Slug Duplicati (PROBLEMA GRAVE) */}
+        {duplicateSlugs.length > 0 && (
+          <Card padding={4} radius={2} tone="critical" shadow={1}>
+            <Flex align="flex-start" gap={3}>
+              <Text size={3}>🚨</Text>
+              <Stack space={3} flex={1}>
+                <Text size={2} weight="bold">
+                  ERRORE: URL Duplicati!
+                </Text>
+                <Text size={1}>
+                  Ci sono pagine diverse che usano lo stesso URL. Questo causa conflitti.
+                </Text>
+                <Stack space={2}>
+                  {duplicateSlugs.map((dup) => (
+                    <Card key={dup.slug} padding={2} radius={2} tone="critical">
+                      <Text size={1}>
+                        <strong>/{dup.slug}</strong> → {dup.count} pagine usano questo URL
+                      </Text>
+                    </Card>
+                  ))}
+                </Stack>
+                <Text size={1} muted>
+                  Soluzione: Modifica gli slug delle pagine duplicate o eliminale.
+                </Text>
+              </Stack>
+            </Flex>
+          </Card>
+        )}
+
+        {/* Avviso Modifiche Pendenti */}
+        {pagesWithPendingChanges.length > 0 && (
           <Card padding={3} radius={2} tone="caution" shadow={1}>
             <Flex align="center" gap={3}>
-              <Text size={2}>⚠️</Text>
+              <Text size={2}>📝</Text>
               <Stack space={2} flex={1}>
                 <Text size={1} weight="semibold">
-                  Attenzione: {duplicates.length} pagine con nomi duplicati
+                  {pagesWithPendingChanges.length} pagine con modifiche non pubblicate
                 </Text>
                 <Text size={1} muted>
-                  {duplicates.map((d) => `"${d.title}" (${d.ids.length}x)`).join(', ')}
+                  {pagesWithPendingChanges.map((p) => `"${getTitle(p.published.title)}"`).join(', ')}
                 </Text>
               </Stack>
             </Flex>
@@ -379,9 +475,9 @@ export function PageDashboard() {
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.currentTarget.value)}
               >
-                <option value="all">Tutte</option>
-                <option value="published">✅ Pubblicate</option>
-                <option value="draft">📝 Bozze</option>
+                <option value="all">Tutti ({stats.total})</option>
+                <option value="published">✅ Pubblicate ({stats.published})</option>
+                <option value="draft">📝 Bozze ({stats.drafts})</option>
               </Select>
             </Box>
             <Box style={{ minWidth: 150 }}>
@@ -452,7 +548,7 @@ export function PageDashboard() {
         ) : (
           <Stack space={2}>
             {/* Header lista con checkbox */}
-            <Card padding={2} radius={2} style={{ background: '#f3f4f6' }}>
+            <Card padding={2} radius={2} tone="transparent">
               <Flex align="center" gap={3}>
                 <input
                   type="checkbox"
@@ -469,7 +565,14 @@ export function PageDashboard() {
             {filteredPages.map((page) => {
               const pageUrl = getPageUrl(page)
               const isHome = page.slug?.current === 'home'
-              const isDuplicate = duplicates.some((d) => d.ids.includes(page._id))
+              const isPageDraft = isDraft(page._id)
+              const slugConflict = hasSlugConflict(page)
+              const pendingChanges = hasPendingChanges(page)
+
+              // Determina il tono della card
+              let cardTone: 'default' | 'caution' | 'critical' | 'positive' = 'default'
+              if (slugConflict) cardTone = 'critical'
+              else if (isPageDraft) cardTone = 'caution'
 
               return (
                 <Card
@@ -477,10 +580,7 @@ export function PageDashboard() {
                   padding={3}
                   radius={2}
                   shadow={1}
-                  style={{
-                    borderLeft: `4px solid ${isDuplicate ? '#ef4444' : page.isPublished !== false ? '#10b981' : '#f59e0b'}`,
-                    background: selectedPages.has(page._id) ? '#eff6ff' : isDuplicate ? '#fef2f2' : undefined,
-                  }}
+                  tone={cardTone}
                 >
                   <Flex align="center" gap={3} wrap="wrap">
                     {/* Checkbox */}
@@ -493,25 +593,29 @@ export function PageDashboard() {
 
                     {/* Info */}
                     <Box flex={1} style={{ minWidth: 200 }}>
-                      <Flex align="center" gap={2}>
+                      <Flex align="center" gap={2} wrap="wrap">
                         <Text weight="semibold">{getTitle(page.title)}</Text>
                         {isHome && <Badge tone="primary">Home</Badge>}
-                        {isDuplicate && <Badge tone="critical">Duplicata?</Badge>}
+                        {isPageDraft && <Badge tone="caution">Bozza</Badge>}
+                        {slugConflict && <Badge tone="critical">URL Duplicato!</Badge>}
+                        {pendingChanges && !isPageDraft && <Badge tone="caution">Mod. Pendenti</Badge>}
                       </Flex>
-                      <Text size={1} muted>/{page.slug?.current || ''}</Text>
+                      <Flex align="center" gap={2}>
+                        <Text size={1} muted>/{page.slug?.current || ''}</Text>
+                        {isPageDraft && (
+                          <Text size={0} muted style={{ opacity: 0.7 }}>
+                            (ID: {page._id})
+                          </Text>
+                        )}
+                      </Flex>
                     </Box>
 
-                    {/* Badge Stato */}
-                    <Badge tone={page.isPublished !== false ? 'positive' : 'caution'}>
-                      {page.isPublished !== false ? 'Online' : 'Bozza'}
-                    </Badge>
-
                     {/* Sezioni contenute */}
-                    <Box style={{ maxWidth: 250 }}>
+                    <Box style={{ maxWidth: 280 }}>
                       <Flex gap={1} wrap="wrap">
                         {page.sectionTypes && page.sectionTypes.length > 0 ? (
-                          page.sectionTypes.slice(0, 5).map((type, idx) => (
-                            <Badge key={idx} mode="outline" fontSize={0} style={{ fontSize: '10px' }}>
+                          page.sectionTypes.slice(0, 6).map((type, idx) => (
+                            <Badge key={idx} mode="outline" fontSize={0}>
                               {type.replace('Section', '')}
                             </Badge>
                           ))
@@ -520,15 +624,15 @@ export function PageDashboard() {
                             Vuota
                           </Badge>
                         )}
-                        {page.sectionTypes && page.sectionTypes.length > 5 && (
+                        {page.sectionTypes && page.sectionTypes.length > 6 && (
                           <Badge mode="outline" fontSize={0}>
-                            +{page.sectionTypes.length - 5}
+                            +{page.sectionTypes.length - 6}
                           </Badge>
                         )}
                       </Flex>
                     </Box>
 
-                    <Text size={1} muted style={{ minWidth: 120 }}>
+                    <Text size={1} muted style={{ minWidth: 130 }}>
                       {formatDate(page._updatedAt)}
                     </Text>
 
@@ -585,6 +689,23 @@ export function PageDashboard() {
             Visualizzate {filteredPages.length} di {pages.length} pagine
           </Text>
         )}
+
+        {/* Legenda */}
+        <Card padding={3} radius={2} tone="transparent">
+          <Stack space={2}>
+            <Text size={1} weight="semibold">Legenda:</Text>
+            <Flex gap={4} wrap="wrap">
+              <Flex align="center" gap={2}>
+                <Badge tone="caution">Bozza</Badge>
+                <Text size={1} muted>Modifiche non ancora pubblicate</Text>
+              </Flex>
+              <Flex align="center" gap={2}>
+                <Badge tone="critical">URL Duplicato!</Badge>
+                <Text size={1} muted>Pagine diverse con stesso URL (da correggere)</Text>
+              </Flex>
+            </Flex>
+          </Stack>
+        </Card>
       </Stack>
     </Box>
   )
