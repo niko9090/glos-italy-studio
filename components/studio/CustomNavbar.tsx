@@ -45,10 +45,17 @@ const CHANGELOG: Record<string, string[]> = {
   ],
 }
 
+// Ordine versioni (dalla più recente alla più vecchia)
+const VERSION_ORDER = Object.keys(CHANGELOG).sort((a, b) => {
+  const [aMajor, aMinor, aPatch] = a.split('.').map(Number)
+  const [bMajor, bMinor, bPatch] = b.split('.').map(Number)
+  if (bMajor !== aMajor) return bMajor - aMajor
+  if (bMinor !== aMinor) return bMinor - aMinor
+  return bPatch - aPatch
+})
+
 export function CustomNavbar(props: NavbarProps) {
   const [showTooltip, setShowTooltip] = useState(false)
-
-  const currentChangelog = CHANGELOG[SITE_VERSION] || []
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
@@ -57,7 +64,7 @@ export function CustomNavbar(props: NavbarProps) {
         {props.renderDefault(props)}
       </div>
 
-      {/* Badge versione con tooltip changelog */}
+      {/* Badge versione con tooltip changelog completo */}
       <div
         style={{ position: 'relative', marginRight: '12px' }}
         onMouseEnter={() => setShowTooltip(true)}
@@ -79,7 +86,7 @@ export function CustomNavbar(props: NavbarProps) {
           v{SITE_VERSION}
         </div>
 
-        {/* Tooltip Changelog */}
+        {/* Tooltip Changelog Completo */}
         {showTooltip && (
           <div
             style={{
@@ -89,12 +96,15 @@ export function CustomNavbar(props: NavbarProps) {
               marginTop: '8px',
               backgroundColor: '#1a1a1a',
               color: 'white',
-              padding: '12px 16px',
+              padding: '16px',
               borderRadius: '8px',
               fontSize: '12px',
               fontFamily: 'system-ui, sans-serif',
-              minWidth: '280px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+              minWidth: '320px',
+              maxWidth: '400px',
+              maxHeight: '70vh',
+              overflowY: 'auto',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
               zIndex: 9999,
             }}
           >
@@ -102,38 +112,75 @@ export function CustomNavbar(props: NavbarProps) {
             <div
               style={{
                 fontWeight: '700',
-                fontSize: '13px',
-                marginBottom: '10px',
-                paddingBottom: '8px',
+                fontSize: '14px',
+                marginBottom: '12px',
+                paddingBottom: '10px',
                 borderBottom: '1px solid #333',
                 color: '#0077FF',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
               }}
             >
-              📋 Novità v{SITE_VERSION}
+              📋 Storico Versioni
             </div>
 
-            {/* Lista modifiche */}
-            <ul
-              style={{
-                margin: 0,
-                padding: 0,
-                listStyle: 'none',
-              }}
-            >
-              {currentChangelog.map((item, index) => (
-                <li
-                  key={index}
-                  style={{
-                    padding: '4px 0',
-                    fontSize: '11px',
-                    lineHeight: '1.4',
-                    color: '#e0e0e0',
-                  }}
-                >
-                  {item}
-                </li>
+            {/* Lista tutte le versioni */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {VERSION_ORDER.map((version) => (
+                <div key={version}>
+                  {/* Titolo versione */}
+                  <div
+                    style={{
+                      fontWeight: '600',
+                      fontSize: '12px',
+                      marginBottom: '6px',
+                      color: version === SITE_VERSION ? '#00cc66' : '#888',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                    }}
+                  >
+                    {version === SITE_VERSION && (
+                      <span style={{
+                        backgroundColor: '#00cc66',
+                        color: '#000',
+                        padding: '1px 6px',
+                        borderRadius: '4px',
+                        fontSize: '9px',
+                        fontWeight: '700',
+                      }}>
+                        ATTUALE
+                      </span>
+                    )}
+                    v{version}
+                  </div>
+
+                  {/* Lista modifiche */}
+                  <ul
+                    style={{
+                      margin: 0,
+                      padding: '0 0 0 12px',
+                      listStyle: 'none',
+                    }}
+                  >
+                    {CHANGELOG[version].map((item, index) => (
+                      <li
+                        key={index}
+                        style={{
+                          padding: '2px 0',
+                          fontSize: '11px',
+                          lineHeight: '1.4',
+                          color: version === SITE_VERSION ? '#e0e0e0' : '#888',
+                        }}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
+            </div>
 
             {/* Freccia tooltip */}
             <div
