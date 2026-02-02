@@ -133,6 +133,21 @@ export function PageDashboard() {
     totalSections: pages.reduce((sum, p) => sum + (p.sectionCount || 0), 0),
   }
 
+  // Trova pagine con nomi duplicati
+  const findDuplicates = () => {
+    const titleCount: Record<string, string[]> = {}
+    pages.forEach((p) => {
+      const title = getTitle(p.title).toLowerCase().trim()
+      if (!titleCount[title]) titleCount[title] = []
+      titleCount[title].push(p._id)
+    })
+    return Object.entries(titleCount)
+      .filter(([, ids]) => ids.length > 1)
+      .map(([title, ids]) => ({ title, ids }))
+  }
+
+  const duplicates = findDuplicates()
+
   // Formatta data
   const formatDate = (date: string) => {
     try {
@@ -329,6 +344,23 @@ export function PageDashboard() {
           </Card>
         </Grid>
 
+        {/* Avviso Duplicati */}
+        {duplicates.length > 0 && (
+          <Card padding={3} radius={2} tone="caution" shadow={1}>
+            <Flex align="center" gap={3}>
+              <Text size={2}>⚠️</Text>
+              <Stack space={2} flex={1}>
+                <Text size={1} weight="semibold">
+                  Attenzione: {duplicates.length} pagine con nomi duplicati
+                </Text>
+                <Text size={1} muted>
+                  {duplicates.map((d) => `"${d.title}" (${d.ids.length}x)`).join(', ')}
+                </Text>
+              </Stack>
+            </Flex>
+          </Card>
+        )}
+
         {/* Filtri e Ordinamento */}
         <Card padding={3} radius={2} shadow={1}>
           <Flex gap={3} wrap="wrap" align="flex-end">
@@ -437,6 +469,7 @@ export function PageDashboard() {
             {filteredPages.map((page) => {
               const pageUrl = getPageUrl(page)
               const isHome = page.slug?.current === 'home'
+              const isDuplicate = duplicates.some((d) => d.ids.includes(page._id))
 
               return (
                 <Card
@@ -445,8 +478,8 @@ export function PageDashboard() {
                   radius={2}
                   shadow={1}
                   style={{
-                    borderLeft: `4px solid ${page.isPublished !== false ? '#10b981' : '#f59e0b'}`,
-                    background: selectedPages.has(page._id) ? '#eff6ff' : undefined,
+                    borderLeft: `4px solid ${isDuplicate ? '#ef4444' : page.isPublished !== false ? '#10b981' : '#f59e0b'}`,
+                    background: selectedPages.has(page._id) ? '#eff6ff' : isDuplicate ? '#fef2f2' : undefined,
                   }}
                 >
                   <Flex align="center" gap={3} wrap="wrap">
@@ -463,18 +496,37 @@ export function PageDashboard() {
                       <Flex align="center" gap={2}>
                         <Text weight="semibold">{getTitle(page.title)}</Text>
                         {isHome && <Badge tone="primary">Home</Badge>}
+                        {isDuplicate && <Badge tone="critical">Duplicata?</Badge>}
                       </Flex>
                       <Text size={1} muted>/{page.slug?.current || ''}</Text>
                     </Box>
 
-                    {/* Badge */}
+                    {/* Badge Stato */}
                     <Badge tone={page.isPublished !== false ? 'positive' : 'caution'}>
                       {page.isPublished !== false ? 'Online' : 'Bozza'}
                     </Badge>
 
-                    <Badge mode="outline">
-                      {page.sectionCount || 0} sez.
-                    </Badge>
+                    {/* Sezioni contenute */}
+                    <Box style={{ maxWidth: 250 }}>
+                      <Flex gap={1} wrap="wrap">
+                        {page.sectionTypes && page.sectionTypes.length > 0 ? (
+                          page.sectionTypes.slice(0, 5).map((type, idx) => (
+                            <Badge key={idx} mode="outline" fontSize={0} style={{ fontSize: '10px' }}>
+                              {type.replace('Section', '')}
+                            </Badge>
+                          ))
+                        ) : (
+                          <Badge mode="outline" tone="caution" fontSize={0}>
+                            Vuota
+                          </Badge>
+                        )}
+                        {page.sectionTypes && page.sectionTypes.length > 5 && (
+                          <Badge mode="outline" fontSize={0}>
+                            +{page.sectionTypes.length - 5}
+                          </Badge>
+                        )}
+                      </Flex>
+                    </Box>
 
                     <Text size={1} muted style={{ minWidth: 120 }}>
                       {formatDate(page._updatedAt)}
