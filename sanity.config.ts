@@ -1,4 +1,4 @@
-// sanity.config.ts - Configurazione principale Sanity Studio (v1.7.0)
+// sanity.config.ts - Configurazione principale Sanity Studio (v1.8.0)
 import { defineConfig, definePlugin } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { presentationTool, defineLocations } from 'sanity/presentation'

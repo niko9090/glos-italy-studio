@@ -68,8 +68,10 @@ export default defineType({
 
         // === CONTENUTI STRUTTURATI ===
         { type: 'statsSection' },
+        { type: 'counterSection' },
         { type: 'productsSection' },
         { type: 'featuresSection' },
+        { type: 'pricingSection' },
         { type: 'iconBoxesSection' },
         { type: 'tabsSection' },
         { type: 'timelineSection' },
@@ -83,6 +85,7 @@ export default defineType({
         { type: 'faqSection' },
         { type: 'ctaSection' },
         { type: 'contactSection' },
+        { type: 'mapSection' },
 
         // === UTILITY ===
         { type: 'downloadSection' },

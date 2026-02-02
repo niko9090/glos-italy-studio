@@ -42,6 +42,9 @@ import iconBoxesSection from './sections/iconBoxesSection'
 import beforeAfterSection from './sections/beforeAfterSection'
 import downloadSection from './sections/downloadSection'
 import embedSection from './sections/embedSection'
+import pricingSection from './sections/pricingSection'
+import mapSection from './sections/mapSection'
+import counterSection from './sections/counterSection'
 
 export const schemaTypes = [
   // Tipi oggetto base
@@ -86,4 +89,7 @@ export const schemaTypes = [
   beforeAfterSection,
   downloadSection,
   embedSection,
+  pricingSection,
+  mapSection,
+  counterSection,
 ]

@@ -1,0 +1,220 @@
+// Sezione: Prezzi - Tabelle di comparazione piani
+import { defineType, defineField, defineArrayMember } from 'sanity'
+import { CreditCardIcon } from '@sanity/icons'
+import { getPlainText } from '../../lib/previewHelpers'
+
+export default defineType({
+  name: 'pricingSection',
+  title: 'Prezzi',
+  type: 'object',
+  icon: CreditCardIcon,
+  description: 'Mostra i piani tariffari con tabella di comparazione',
+
+  groups: [
+    { name: 'content', title: '📝 Contenuto', default: true },
+    { name: 'plans', title: '💰 Piani' },
+    { name: 'layout', title: '📐 Layout' },
+    { name: 'style', title: '🎨 Stile' },
+  ],
+
+  fields: [
+    // === CONTENUTO ===
+    defineField({
+      name: 'title',
+      title: 'Titolo Sezione',
+      type: 'localeString',
+      description: 'Es: "I Nostri Piani", "Scegli il Piano Giusto per Te"',
+      group: 'content',
+    }),
+
+    defineField({
+      name: 'subtitle',
+      title: 'Sottotitolo',
+      type: 'localeString',
+      description: 'Breve descrizione della sezione prezzi',
+      group: 'content',
+    }),
+
+    // === PIANI ===
+    defineField({
+      name: 'plans',
+      title: 'Piani Tariffari',
+      type: 'array',
+      group: 'plans',
+      description: 'Aggiungi i piani da mostrare (consigliato: 2-4 piani)',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          title: 'Piano',
+          fields: [
+            defineField({
+              name: 'name',
+              title: 'Nome Piano',
+              type: 'localeString',
+              description: 'Es: "Base", "Pro", "Enterprise"',
+              validation: Rule => Rule.required(),
+            }),
+            defineField({
+              name: 'price',
+              title: 'Prezzo',
+              type: 'string',
+              description: 'Es: "€29", "€99", "Contattaci" - può includere simbolo valuta',
+              validation: Rule => Rule.required(),
+            }),
+            defineField({
+              name: 'period',
+              title: 'Periodo',
+              type: 'localeString',
+              description: 'Es: "/mese", "/anno", "una tantum"',
+            }),
+            defineField({
+              name: 'description',
+              title: 'Descrizione',
+              type: 'localeString',
+              description: 'Breve descrizione del piano',
+            }),
+            defineField({
+              name: 'features',
+              title: 'Caratteristiche',
+              type: 'array',
+              description: 'Lista delle funzionalita incluse/escluse',
+              of: [
+                defineArrayMember({
+                  type: 'object',
+                  title: 'Caratteristica',
+                  fields: [
+                    defineField({
+                      name: 'text',
+                      title: 'Testo',
+                      type: 'localeString',
+                      description: 'Es: "Supporto email", "Storage 10GB"',
+                      validation: Rule => Rule.required(),
+                    }),
+                    defineField({
+                      name: 'included',
+                      title: 'Incluso',
+                      type: 'boolean',
+                      description: 'La caratteristica e inclusa in questo piano?',
+                      initialValue: true,
+                    }),
+                  ],
+                  preview: {
+                    select: { text: 'text.it', included: 'included' },
+                    prepare({ text, included }) {
+                      return {
+                        title: `${included ? '✓' : '✗'} ${text || 'Caratteristica'}`,
+                      }
+                    },
+                  },
+                }),
+              ],
+            }),
+            defineField({
+              name: 'ctaText',
+              title: 'Testo Pulsante',
+              type: 'localeString',
+              description: 'Es: "Inizia Ora", "Contattaci", "Prova Gratis"',
+            }),
+            defineField({
+              name: 'ctaLink',
+              title: 'Link Pulsante',
+              type: 'string',
+              description: 'URL di destinazione del pulsante',
+            }),
+            defineField({
+              name: 'highlighted',
+              title: 'In Evidenza',
+              type: 'boolean',
+              description: 'Evidenzia questo piano come consigliato',
+              initialValue: false,
+            }),
+            defineField({
+              name: 'badge',
+              title: 'Badge',
+              type: 'localeString',
+              description: 'Etichetta sopra il piano. Es: "Piu popolare", "Migliore Offerta"',
+            }),
+          ],
+          preview: {
+            select: { name: 'name.it', price: 'price', highlighted: 'highlighted', badge: 'badge.it' },
+            prepare({ name, price, highlighted, badge }) {
+              const prefix = highlighted ? '⭐ ' : ''
+              const badgeText = badge ? ` [${badge}]` : ''
+              return {
+                title: `${prefix}${name || 'Piano'}${badgeText}`,
+                subtitle: price || 'Prezzo non definito',
+              }
+            },
+          },
+        }),
+      ],
+    }),
+
+    // === LAYOUT ===
+    defineField({
+      name: 'layout',
+      title: 'Tipo Layout',
+      type: 'string',
+      group: 'layout',
+      description: 'Come disporre i piani nella pagina',
+      options: {
+        list: [
+          { title: '📏 Riga (affiancati)', value: 'row' },
+          { title: '🔲 Griglia (responsive)', value: 'grid' },
+        ],
+      },
+      initialValue: 'row',
+    }),
+
+    defineField({
+      name: 'showComparison',
+      title: 'Mostra Tabella Comparativa',
+      type: 'boolean',
+      group: 'layout',
+      description: 'Visualizza una tabella per confrontare le caratteristiche tra i piani',
+      initialValue: false,
+    }),
+
+    // === STILE ===
+    defineField({
+      name: 'backgroundColor',
+      title: 'Colore Sfondo',
+      type: 'string',
+      group: 'style',
+      description: 'Colore di sfondo della sezione',
+    }),
+
+    defineField({
+      name: 'paddingY',
+      title: 'Spaziatura Verticale',
+      type: 'string',
+      group: 'style',
+      description: 'Padding sopra e sotto la sezione',
+      options: {
+        list: [
+          { title: 'Nessuna', value: 'none' },
+          { title: 'Piccola', value: 'small' },
+          { title: 'Media', value: 'medium' },
+          { title: 'Grande', value: 'large' },
+        ],
+      },
+      initialValue: 'medium',
+    }),
+  ],
+
+  preview: {
+    select: { title: 'title.it', plans: 'plans', layout: 'layout' },
+    prepare({ title, plans, layout }) {
+      const titleText = title || 'Prezzi'
+      const count = plans?.length || 0
+      const layoutLabels: Record<string, string> = {
+        row: 'Riga',
+        grid: 'Griglia',
+      }
+      return {
+        title: `💰 ${titleText}`,
+        subtitle: `${count} piani • ${layoutLabels[layout] || 'Riga'}`,
+      }
+    },
+  },
+})
