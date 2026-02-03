@@ -111,6 +111,79 @@ export default defineType({
       hidden: ({ parent }) => !parent?.showForm,
     }),
 
+    // === TIPO DI RICHIESTA (Menu a tendina) ===
+    defineField({
+      name: 'showRequestType',
+      title: 'Mostra Menu "Tipo di Richiesta"',
+      type: 'boolean',
+      description: 'Aggiunge un menu a tendina per smistare le richieste',
+      group: 'form',
+      initialValue: true,
+      hidden: ({ parent }) => !parent?.showForm,
+    }),
+
+    defineField({
+      name: 'requestTypeLabel',
+      title: 'Etichetta Menu Tipo Richiesta',
+      type: 'localeString',
+      description: 'Es: "Tipo di richiesta", "Come possiamo aiutarti?"',
+      group: 'form',
+      hidden: ({ parent }) => !parent?.showForm || !parent?.showRequestType,
+    }),
+
+    defineField({
+      name: 'requestTypes',
+      title: 'Opzioni Tipo di Richiesta',
+      type: 'array',
+      group: 'form',
+      description: 'Opzioni del menu a tendina',
+      hidden: ({ parent }) => !parent?.showForm || !parent?.showRequestType,
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'requestType',
+          fields: [
+            defineField({
+              name: 'value',
+              title: 'Valore',
+              type: 'string',
+              description: 'Valore tecnico (es: "info", "preventivo")',
+              validation: Rule => Rule.required(),
+            }),
+            defineField({
+              name: 'label',
+              title: 'Etichetta Visibile',
+              type: 'localeString',
+              description: 'Testo mostrato all\'utente',
+              validation: Rule => Rule.required(),
+            }),
+            defineField({
+              name: 'icon',
+              title: 'Icona (opzionale)',
+              type: 'string',
+              description: 'Emoji o icona',
+            }),
+          ],
+          preview: {
+            select: { label: 'label.it', value: 'value', icon: 'icon' },
+            prepare({ label, value, icon }) {
+              return {
+                title: `${icon || '📌'} ${label || value}`,
+                subtitle: value,
+              }
+            },
+          },
+        }),
+      ],
+      // Opzioni predefinite
+      initialValue: [
+        { value: 'informazioni', label: { it: 'Richiesta informazioni', en: 'Information request' }, icon: 'ℹ️' },
+        { value: 'preventivo', label: { it: 'Richiesta preventivo', en: 'Quote request' }, icon: '💰' },
+        { value: 'assistenza', label: { it: 'Assistenza tecnica', en: 'Technical support' }, icon: '🔧' },
+        { value: 'rivenditore', label: { it: 'Diventa rivenditore', en: 'Become a dealer' }, icon: '🤝' },
+      ],
+    }),
+
     defineField({
       name: 'formSubtitle',
       title: 'Sottotitolo Form',

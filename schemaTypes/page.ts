@@ -70,11 +70,14 @@ export default defineType({
         { type: 'statsSection' },
         { type: 'counterSection' },
         { type: 'productsSection' },
+        { type: 'sectorsSection' },
         { type: 'featuresSection' },
+        { type: 'strengthsSection' },
         { type: 'pricingSection' },
         { type: 'iconBoxesSection' },
         { type: 'tabsSection' },
         { type: 'timelineSection' },
+        { type: 'caseStudiesSection' },
 
         // === SOCIAL PROOF ===
         { type: 'testimonialsSection' },

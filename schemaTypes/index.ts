@@ -10,6 +10,9 @@ import dealer from './dealer'
 import testimonial from './testimonial'
 import faq from './faq'
 import mediaItem from './mediaItem'
+// Nuovi schemi documento
+import sector from './sector'
+import caseStudy from './caseStudy'
 
 // Tipi oggetto per multilingua
 import localeString from './objects/localeString'
@@ -46,6 +49,10 @@ import embedSection from './sections/embedSection'
 import pricingSection from './sections/pricingSection'
 import mapSection from './sections/mapSection'
 import counterSection from './sections/counterSection'
+// Nuove sezioni
+import sectorsSection from './sections/sectorsSection'
+import strengthsSection from './sections/strengthsSection'
+import caseStudiesSection from './sections/caseStudiesSection'
 
 export const schemaTypes = [
   // Tipi oggetto base (ORDINE IMPORTANTE: richText prima di localeRichText)
@@ -65,6 +72,8 @@ export const schemaTypes = [
   testimonial,
   faq,
   mediaItem,
+  sector,
+  caseStudy,
 
   // Sezioni (oggetti riutilizzabili)
   heroSection,
@@ -94,4 +103,8 @@ export const schemaTypes = [
   pricingSection,
   mapSection,
   counterSection,
+  // Nuove sezioni
+  sectorsSection,
+  strengthsSection,
+  caseStudiesSection,
 ]

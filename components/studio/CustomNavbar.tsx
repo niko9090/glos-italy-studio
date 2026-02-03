@@ -5,12 +5,20 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO
 // ============================================
-const SITE_VERSION = '2.0.4'
+const SITE_VERSION = '2.0.5'
 
 // ============================================
 // CHANGELOG - Solo versioni funzionanti
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '2.0.5': [
+    '🏭 Settori Applicazione: nuovo documento + sezione',
+    '📋 Case Studies: sfida/soluzione/risultati',
+    '💪 Punti di Forza: sezione personalizzabile',
+    '📱 WhatsApp floating button',
+    '🎨 Font Inter + Palette metallica',
+    '📝 Form contatto con tipo richiesta',
+  ],
   '2.0.4': [
     '✨ Divisori wave automatici tra sezioni',
     '🌊 Transizioni fluide gradient/curve/slant',

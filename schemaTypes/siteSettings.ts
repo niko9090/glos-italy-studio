@@ -108,6 +108,16 @@ export default defineType({
     }),
 
     defineField({
+      name: 'whatsappMessage',
+      title: 'Messaggio WhatsApp Predefinito',
+      type: 'text',
+      group: 'contact',
+      rows: 2,
+      description: 'Messaggio pre-compilato quando l\'utente clicca sul pulsante WhatsApp',
+      initialValue: 'Ciao, vorrei informazioni sui vostri prodotti.',
+    }),
+
+    defineField({
       name: 'fax',
       title: 'Fax',
       type: 'string',

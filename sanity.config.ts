@@ -104,6 +104,24 @@ const structure = (S: any) =>
 
       S.divider(),
 
+      // === SETTORI ===
+      S.listItem()
+        .title('Settori Applicazione')
+        .icon(() => '🏭')
+        .child(
+          S.documentTypeList('sector').title('Settori')
+        ),
+
+      // === CASE STUDIES ===
+      S.listItem()
+        .title('Case Studies')
+        .icon(() => '📋')
+        .child(
+          S.documentTypeList('caseStudy').title('Case Studies')
+        ),
+
+      S.divider(),
+
       // === RIVENDITORI ===
       S.listItem()
         .title('Rivenditori')
