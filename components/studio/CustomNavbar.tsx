@@ -46,16 +46,19 @@ export function CustomNavbar(props: NavbarProps) {
   const [showTooltip, setShowTooltip] = useState(false)
 
   return (
-    <>
-      {props.renderDefault(props)}
+    <div style={{ display: 'flex', width: '100%' }}>
+      {/* Navbar default di Sanity */}
+      <div style={{ flex: 1 }}>
+        {props.renderDefault(props)}
+      </div>
 
-      {/* Badge versione - posizionato absolute per non interferire con layout */}
+      {/* Badge versione - dentro la barra a destra */}
       <div
         style={{
-          position: 'fixed',
-          top: '12px',
-          right: '12px',
-          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          paddingRight: '12px',
+          position: 'relative',
         }}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
@@ -116,6 +119,6 @@ export function CustomNavbar(props: NavbarProps) {
           </div>
         )}
       </div>
-    </>
+    </div>
   )
 }
