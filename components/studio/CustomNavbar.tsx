@@ -5,13 +5,17 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '2.0.0'
+const SITE_VERSION = '2.0.1'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // (Solo versioni funzionanti - no versioni con errori di build)
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '2.0.1': [
+    '🐛 Fix layout Studio: ora occupa tutta la larghezza',
+    '🔧 CustomNavbar: aggiunto minWidth e flex per espansione corretta',
+  ],
   '2.0.0': [
     '🐛 Fix SchemaError: rimossi campi duplicati negli schemi',
     '✅ statsSection: numberSize/numberWeight ora univoci',
@@ -84,9 +88,15 @@ export function CustomNavbar(props: NavbarProps) {
   const [showTooltip, setShowTooltip] = useState(false)
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%',
+      minWidth: 0,
+      flex: 1,
+    }}>
       {/* Navbar default */}
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
         {props.renderDefault(props)}
       </div>
 
