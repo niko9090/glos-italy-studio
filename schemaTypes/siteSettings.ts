@@ -124,6 +124,26 @@ export default defineType({
       group: 'contact',
     }),
 
+    // === FORM CONTATTI ===
+    defineField({
+      name: 'contactFormRecipient',
+      title: 'Email Destinatario Form Contatti',
+      type: 'string',
+      group: 'contact',
+      description: 'Email a cui verranno inviate le richieste dal form di contatto del sito',
+      validation: Rule => Rule.email(),
+      initialValue: 'info@glositaly.it',
+    }),
+
+    defineField({
+      name: 'contactFormSubject',
+      title: 'Oggetto Email Form Contatti',
+      type: 'string',
+      group: 'contact',
+      description: 'Oggetto predefinito delle email inviate dal form di contatto',
+      initialValue: '[GLOS Italy] Nuova richiesta dal sito web',
+    }),
+
     // === INDIRIZZI ===
     defineField({
       name: 'address',
