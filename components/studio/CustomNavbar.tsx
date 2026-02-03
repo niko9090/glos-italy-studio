@@ -5,16 +5,21 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '2.0.1'
+const SITE_VERSION = '2.0.2'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // (Solo versioni funzionanti - no versioni con errori di build)
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '2.0.2': [
+    'Fix definitivo layout Studio 1/3 larghezza',
+    'cleanPastePlugin: sostituito Fragment con div flex container',
+    'Il plugin layout wrapper ora rispetta la struttura flex di Sanity',
+  ],
   '2.0.1': [
-    '🐛 Fix layout Studio: ora occupa tutta la larghezza',
-    '🔧 CustomNavbar: aggiunto minWidth e flex per espansione corretta',
+    'Fix layout Studio: ora occupa tutta la larghezza',
+    'CustomNavbar: aggiunto minWidth e flex per espansione corretta',
   ],
   '2.0.0': [
     '🐛 Fix SchemaError: rimossi campi duplicati negli schemi',

@@ -1,4 +1,4 @@
-// sanity.config.ts - Configurazione principale Sanity Studio (v1.8.0)
+// sanity.config.ts - Configurazione principale Sanity Studio (v2.0.2)
 import { defineConfig, definePlugin } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { presentationTool, defineLocations } from 'sanity/presentation'
@@ -160,12 +160,12 @@ export default defineConfig({
   projectId: process.env.SANITY_STUDIO_PROJECT_ID || '97oreljh',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
 
-  // Componenti Studio personalizzati - DISABILITATO per debug layout
-  // studio: {
-  //   components: {
-  //     navbar: CustomNavbar,
-  //   },
-  // },
+  // Componenti Studio personalizzati
+  studio: {
+    components: {
+      navbar: CustomNavbar,
+    },
+  },
 
   plugins: [
     // Pulizia testo incollato

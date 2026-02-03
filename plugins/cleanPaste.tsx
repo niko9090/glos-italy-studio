@@ -54,10 +54,17 @@ export const cleanPastePlugin = definePlugin({
     components: {
       layout: (props) => {
         return (
-          <>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            height: '100%',
+            minWidth: 0,
+            flex: 1,
+          }}>
             <CleanPasteSetup />
             {props.renderDefault(props)}
-          </>
+          </div>
         )
       },
     },
