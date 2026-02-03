@@ -5,7 +5,7 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.9.5'
+const SITE_VERSION = '1.9.6'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
