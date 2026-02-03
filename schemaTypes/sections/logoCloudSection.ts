@@ -25,7 +25,7 @@ export default defineType({
     defineField({
       name: 'eyebrow',
       title: 'Etichetta',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "I NOSTRI PARTNER", "CLIENTI CHE CI HANNO SCELTO"',
       group: 'content',
     }),

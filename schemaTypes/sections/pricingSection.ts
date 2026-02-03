@@ -25,7 +25,7 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo Sezione',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "I Nostri Piani", "Scegli il Piano Giusto per Te"',
       group: 'content',
     }),
@@ -33,7 +33,7 @@ export default defineType({
     defineField({
       name: 'subtitle',
       title: 'Sottotitolo',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Breve descrizione della sezione prezzi',
       group: 'content',
     }),
@@ -53,7 +53,7 @@ export default defineType({
             defineField({
               name: 'name',
               title: 'Nome Piano',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Es: "Base", "Pro", "Enterprise"',
               validation: Rule => Rule.required(),
             }),
@@ -67,13 +67,13 @@ export default defineType({
             defineField({
               name: 'period',
               title: 'Periodo',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Es: "/mese", "/anno", "una tantum"',
             }),
             defineField({
               name: 'description',
               title: 'Descrizione',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Breve descrizione del piano',
             }),
             defineField({
@@ -89,7 +89,7 @@ export default defineType({
                     defineField({
                       name: 'text',
                       title: 'Testo',
-                      type: 'localeString',
+                      type: 'localeRichText',
                       description: 'Es: "Supporto email", "Storage 10GB"',
                       validation: Rule => Rule.required(),
                     }),
@@ -115,7 +115,7 @@ export default defineType({
             defineField({
               name: 'ctaText',
               title: 'Testo Pulsante',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Es: "Inizia Ora", "Contattaci", "Prova Gratis"',
             }),
             defineField({
@@ -134,7 +134,7 @@ export default defineType({
             defineField({
               name: 'badge',
               title: 'Badge',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Etichetta sopra il piano. Es: "Piu popolare", "Migliore Offerta"',
             }),
           ],

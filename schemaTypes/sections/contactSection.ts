@@ -27,7 +27,7 @@ export default defineType({
     defineField({
       name: 'eyebrow',
       title: 'Etichetta Sopra Titolo',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "CONTATTACI", "PARLIAMO"',
       group: 'content',
     }),
@@ -105,7 +105,7 @@ export default defineType({
     defineField({
       name: 'formTitle',
       title: 'Titolo Form',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "Inviaci un messaggio"',
       group: 'form',
       hidden: ({ parent }) => !parent?.showForm,
@@ -114,7 +114,7 @@ export default defineType({
     defineField({
       name: 'formSubtitle',
       title: 'Sottotitolo Form',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Breve descrizione sotto il titolo',
       group: 'form',
       hidden: ({ parent }) => !parent?.showForm,
@@ -160,13 +160,13 @@ export default defineType({
             defineField({
               name: 'label',
               title: 'Etichetta',
-              type: 'localeString',
+              type: 'localeRichText',
               validation: Rule => Rule.required(),
             }),
             defineField({
               name: 'placeholder',
               title: 'Placeholder',
-              type: 'localeString',
+              type: 'localeRichText',
             }),
             defineField({
               name: 'required',
@@ -210,7 +210,7 @@ export default defineType({
     defineField({
       name: 'submitButtonText',
       title: 'Testo Pulsante Invio',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "Invia Messaggio"',
       group: 'form',
       hidden: ({ parent }) => !parent?.showForm,
@@ -228,7 +228,7 @@ export default defineType({
     defineField({
       name: 'formSuccessMessage',
       title: 'Messaggio di Successo',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Cosa mostrare dopo l\'invio. Es: "Grazie! Ti risponderemo presto."',
       group: 'form',
       hidden: ({ parent }) => !parent?.showForm,
@@ -237,7 +237,7 @@ export default defineType({
     defineField({
       name: 'formErrorMessage',
       title: 'Messaggio di Errore',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "Si è verificato un errore. Riprova."',
       group: 'form',
       hidden: ({ parent }) => !parent?.showForm,
@@ -274,7 +274,7 @@ export default defineType({
     defineField({
       name: 'contactInfoTitle',
       title: 'Titolo Info Contatto',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "I Nostri Recapiti"',
       group: 'info',
       hidden: ({ parent }) => !parent?.showContactInfo,
@@ -311,7 +311,7 @@ export default defineType({
             defineField({
               name: 'label',
               title: 'Etichetta',
-              type: 'localeString',
+              type: 'localeRichText',
             }),
             defineField({
               name: 'value',
@@ -359,7 +359,7 @@ export default defineType({
     defineField({
       name: 'openingHoursTitle',
       title: 'Titolo Orari',
-      type: 'localeString',
+      type: 'localeRichText',
       group: 'info',
       hidden: ({ parent }) => !parent?.showOpeningHours,
     }),
@@ -378,7 +378,7 @@ export default defineType({
             defineField({
               name: 'days',
               title: 'Giorni',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Es: "Lunedì - Venerdì"',
             }),
             defineField({
@@ -390,7 +390,7 @@ export default defineType({
             defineField({
               name: 'note',
               title: 'Note',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Es: "Pausa pranzo: 12:30 - 14:00"',
             }),
           ],
@@ -408,7 +408,7 @@ export default defineType({
     defineField({
       name: 'socialTitle',
       title: 'Titolo Social',
-      type: 'localeString',
+      type: 'localeRichText',
       group: 'info',
       hidden: ({ parent }) => !parent?.showSocialLinks,
     }),

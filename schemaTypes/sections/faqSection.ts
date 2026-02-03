@@ -26,7 +26,7 @@ export default defineType({
     defineField({
       name: 'eyebrow',
       title: 'Etichetta',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "DOMANDE FREQUENTI"',
       group: 'content',
     }),
@@ -60,7 +60,7 @@ export default defineType({
             defineField({
               name: 'name',
               title: 'Nome Categoria',
-              type: 'localeString',
+              type: 'localeRichText',
             }),
             defineField({
               name: 'icon',
@@ -81,7 +81,7 @@ export default defineType({
                   defineField({
                     name: 'question',
                     title: 'Domanda',
-                    type: 'localeString',
+                    type: 'localeRichText',
                     validation: Rule => Rule.required(),
                   }),
                   defineField({
@@ -126,7 +126,7 @@ export default defineType({
           defineField({
             name: 'question',
             title: 'Domanda',
-            type: 'localeString',
+            type: 'localeRichText',
             validation: Rule => Rule.required(),
           }),
           defineField({
@@ -349,7 +349,7 @@ export default defineType({
     defineField({
       name: 'ctaTitle',
       title: 'Titolo CTA',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "Non hai trovato la risposta?"',
       group: 'content',
     }),
@@ -357,7 +357,7 @@ export default defineType({
     defineField({
       name: 'ctaButton',
       title: 'Testo Pulsante CTA',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "Contattaci"',
       group: 'content',
     }),

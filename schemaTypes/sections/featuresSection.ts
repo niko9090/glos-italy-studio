@@ -30,7 +30,7 @@ export default defineType({
     defineField({
       name: 'eyebrow',
       title: 'Etichetta Sopra Titolo',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Piccolo testo sopra il titolo. Es: "PERCHÉ SCEGLIERCI", "I NOSTRI PUNTI DI FORZA"',
       group: 'content',
     }),
@@ -88,7 +88,7 @@ export default defineType({
             defineField({
               name: 'title',
               title: 'Titolo',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Nome della caratteristica. Es: "Qualità Garantita"',
               validation: Rule => Rule.required(),
             }),
@@ -124,7 +124,7 @@ export default defineType({
             defineField({
               name: 'badge',
               title: 'Badge',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Etichetta piccola (es: "NUOVO", "POPOLARE")',
             }),
           ],
@@ -617,7 +617,7 @@ export default defineType({
     defineField({
       name: 'ctaText',
       title: 'Testo Pulsante',
-      type: 'localeString',
+      type: 'localeRichText',
       group: 'content',
       hidden: ({ parent }) => !parent?.showCta,
     }),

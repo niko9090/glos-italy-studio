@@ -156,7 +156,7 @@ export default defineType({
     defineField({
       name: 'buttonText',
       title: 'Testo Pulsante',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "Vedi Tutti i Prodotti", "Scopri il Catalogo"',
       group: 'action',
     }),

@@ -76,14 +76,14 @@ export default defineType({
             defineField({
               name: 'title',
               title: 'Titolo',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Titolo sovrapposto all\'immagine',
               group: 'content',
             }),
             defineField({
               name: 'subtitle',
               title: 'Sottotitolo',
-              type: 'localeString',
+              type: 'localeRichText',
               group: 'content',
             }),
             defineField({
@@ -95,7 +95,7 @@ export default defineType({
             defineField({
               name: 'buttonText',
               title: 'Testo Pulsante',
-              type: 'localeString',
+              type: 'localeRichText',
               group: 'content',
             }),
             defineField({
@@ -123,7 +123,7 @@ export default defineType({
             defineField({
               name: 'secondButtonText',
               title: 'Secondo Pulsante (Testo)',
-              type: 'localeString',
+              type: 'localeRichText',
               group: 'content',
             }),
             defineField({

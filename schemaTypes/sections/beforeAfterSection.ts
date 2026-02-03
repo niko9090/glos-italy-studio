@@ -75,7 +75,7 @@ export default defineType({
             defineField({
               name: 'caption',
               title: 'Didascalia',
-              type: 'localeString',
+              type: 'localeRichText',
             }),
           ],
           preview: {

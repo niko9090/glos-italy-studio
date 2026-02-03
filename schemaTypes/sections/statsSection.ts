@@ -81,7 +81,7 @@ export default defineType({
             defineField({
               name: 'label',
               title: 'Etichetta',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Es: "Anni di Esperienza"',
             }),
             defineField({

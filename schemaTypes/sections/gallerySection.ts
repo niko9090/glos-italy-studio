@@ -61,7 +61,7 @@ export default defineType({
             {
               name: 'caption',
               title: 'Didascalia',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Descrizione breve della foto',
             },
             {

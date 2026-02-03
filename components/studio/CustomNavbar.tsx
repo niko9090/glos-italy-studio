@@ -5,12 +5,18 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.7.0'
+const SITE_VERSION = '1.8.0'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '1.8.0': [
+    '✨ Editor Rich Text in TUTTI i campi testo',
+    '🎨 Formattazione inline: grassetto, colori, dimensioni',
+    '🌈 Gradienti, evidenziazioni, animazioni testo',
+    '📝 72 campi localeString convertiti in localeRichText',
+  ],
   '1.7.0': [
     '🔤 Tipografia personalizzabile in TUTTE le sezioni',
     '📏 Dimensione, peso e colore titoli configurabili',

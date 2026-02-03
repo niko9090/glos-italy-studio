@@ -30,7 +30,7 @@ export default defineType({
     defineField({
       name: 'eyebrow',
       title: 'Etichetta Sopra Titolo',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Piccolo testo sopra il titolo. Es: "INIZIA ORA", "OFFERTA SPECIALE"',
       group: 'content',
     }),
@@ -79,7 +79,7 @@ export default defineType({
           defineField({
             name: 'text',
             title: 'Testo',
-            type: 'localeString',
+            type: 'localeRichText',
           }),
         ],
         preview: {
@@ -107,7 +107,7 @@ export default defineType({
             defineField({
               name: 'text',
               title: 'Testo',
-              type: 'localeString',
+              type: 'localeRichText',
               validation: Rule => Rule.required(),
             }),
             defineField({
@@ -182,7 +182,7 @@ export default defineType({
     defineField({
       name: 'buttonText',
       title: 'Testo Pulsante (Legacy)',
-      type: 'localeString',
+      type: 'localeRichText',
       group: 'buttons',
       hidden: ({ parent }) => (parent?.buttons?.length || 0) > 0,
     }),
@@ -701,7 +701,7 @@ export default defineType({
     defineField({
       name: 'countdownLabel',
       title: 'Etichetta Countdown',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "Offerta valida fino a:"',
       group: 'content',
       hidden: ({ parent }) => !parent?.showCountdown,
@@ -717,7 +717,7 @@ export default defineType({
         defineField({
           name: 'text',
           title: 'Testo',
-          type: 'localeString',
+          type: 'localeRichText',
         }),
         defineField({
           name: 'color',

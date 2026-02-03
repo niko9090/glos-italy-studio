@@ -26,7 +26,7 @@ export default defineType({
     defineField({
       name: 'eyebrow',
       title: 'Etichetta',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "COSA DICONO DI NOI", "TESTIMONIANZE"',
       group: 'content',
     }),
@@ -677,7 +677,7 @@ export default defineType({
     defineField({
       name: 'aggregateRatingTitle',
       title: 'Titolo Rating',
-      type: 'localeString',
+      type: 'localeRichText',
       group: 'content',
       description: 'Es: "Valutazione media dei nostri clienti"',
       hidden: ({ parent }) => !parent?.showAggregateRating,
@@ -704,7 +704,7 @@ export default defineType({
     defineField({
       name: 'ctaText',
       title: 'Testo CTA',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Es: "Lascia anche tu una recensione"',
       group: 'content',
       hidden: ({ parent }) => !parent?.showCta,

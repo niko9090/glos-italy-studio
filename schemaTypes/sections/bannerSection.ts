@@ -25,7 +25,7 @@ export default defineType({
     defineField({
       name: 'buttonText',
       title: 'Testo Pulsante',
-      type: 'localeString',
+      type: 'localeRichText',
       group: 'content',
     }),
     defineField({

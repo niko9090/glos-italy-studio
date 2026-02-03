@@ -52,7 +52,7 @@ export default defineType({
             defineField({
               name: 'title',
               title: 'Titolo',
-              type: 'localeString',
+              type: 'localeRichText',
               validation: (Rule) => Rule.required(),
             }),
             defineField({

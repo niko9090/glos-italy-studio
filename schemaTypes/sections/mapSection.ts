@@ -26,7 +26,7 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo Sezione',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Titolo opzionale della sezione mappa',
       group: 'content',
     }),
@@ -34,7 +34,7 @@ export default defineType({
     defineField({
       name: 'subtitle',
       title: 'Sottotitolo',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Sottotitolo opzionale della sezione',
       group: 'content',
     }),
@@ -113,14 +113,14 @@ export default defineType({
             defineField({
               name: 'title',
               title: 'Titolo',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Nome del punto sulla mappa',
               validation: Rule => Rule.required(),
             }),
             defineField({
               name: 'description',
               title: 'Descrizione',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Descrizione opzionale del punto',
             }),
             defineField({

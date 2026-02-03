@@ -28,7 +28,7 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Titolo Sezione',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Titolo opzionale sopra i contatori',
       group: 'content',
     }),
@@ -36,7 +36,7 @@ export default defineType({
     defineField({
       name: 'subtitle',
       title: 'Sottotitolo',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Breve descrizione sotto il titolo',
       group: 'content',
     }),
@@ -75,7 +75,7 @@ export default defineType({
             defineField({
               name: 'label',
               title: 'Etichetta',
-              type: 'localeString',
+              type: 'localeRichText',
               description: 'Descrizione sotto il numero (es: "Clienti Soddisfatti")',
               validation: Rule => Rule.required(),
             }),

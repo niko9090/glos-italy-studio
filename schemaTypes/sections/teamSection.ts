@@ -50,7 +50,7 @@ export default defineType({
             defineField({
               name: 'role',
               title: 'Ruolo',
-              type: 'localeString',
+              type: 'localeRichText',
             }),
             defineField({
               name: 'photo',

@@ -26,7 +26,7 @@ export default defineType({
     defineField({
       name: 'eyebrow',
       title: 'Etichetta Sopra Titolo',
-      type: 'localeString',
+      type: 'localeRichText',
       description: 'Piccolo testo sopra il titolo. Es: "CHI SIAMO", "I NOSTRI VALORI"',
       group: 'content',
     }),
@@ -60,7 +60,7 @@ export default defineType({
           defineField({
             name: 'text',
             title: 'Testo',
-            type: 'localeString',
+            type: 'localeRichText',
           }),
           defineField({
             name: 'link',

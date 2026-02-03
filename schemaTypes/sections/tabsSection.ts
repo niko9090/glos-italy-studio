@@ -43,7 +43,7 @@ export default defineType({
             defineField({
               name: 'label',
               title: 'Etichetta Tab',
-              type: 'localeString',
+              type: 'localeRichText',
               validation: (Rule) => Rule.required(),
             }),
             defineField({
@@ -73,7 +73,7 @@ export default defineType({
                 {
                   type: 'object',
                   fields: [
-                    { name: 'text', title: 'Testo', type: 'localeString' },
+                    { name: 'text', title: 'Testo', type: 'localeRichText' },
                     { name: 'icon', title: 'Icona', type: 'string', options: { list: iconOptions } },
                   ],
                   preview: {
@@ -88,7 +88,7 @@ export default defineType({
             defineField({
               name: 'buttonText',
               title: 'Testo Pulsante',
-              type: 'localeString',
+              type: 'localeRichText',
             }),
             defineField({
               name: 'buttonLink',

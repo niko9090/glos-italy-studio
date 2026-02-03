@@ -48,7 +48,7 @@ export default defineType({
             defineField({
               name: 'title',
               title: 'Nome File',
-              type: 'localeString',
+              type: 'localeRichText',
               validation: (Rule) => Rule.required(),
             }),
             defineField({
