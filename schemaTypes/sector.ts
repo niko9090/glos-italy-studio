@@ -21,14 +21,58 @@ export default defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Descrizione',
+      title: 'Descrizione Breve',
       type: 'localeText',
+      description: 'Mostrata nelle card e nelle anteprime',
+    }),
+    defineField({
+      name: 'fullDescription',
+      title: 'Descrizione Completa',
+      type: 'localeRichText',
+      description: 'Contenuto completo mostrato nella pagina del settore',
     }),
     defineField({
       name: 'icon',
       title: 'Icona',
       type: 'string',
       description: 'Emoji o nome icona',
+    }),
+    defineField({
+      name: 'keyPoints',
+      title: 'Punti Chiave / Vantaggi',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'keyPoint',
+          title: 'Punto Chiave',
+          fields: [
+            {
+              name: 'icon',
+              title: 'Icona',
+              type: 'string',
+              description: 'Emoji',
+            },
+            {
+              name: 'title',
+              title: 'Titolo',
+              type: 'localeString',
+            },
+            {
+              name: 'description',
+              title: 'Descrizione',
+              type: 'localeText',
+            },
+          ],
+          preview: {
+            select: { title: 'title.it', icon: 'icon' },
+            prepare: ({ title, icon }) => ({
+              title: title || 'Punto senza titolo',
+              subtitle: icon,
+            }),
+          },
+        },
+      ],
     }),
     defineField({
       name: 'image',
