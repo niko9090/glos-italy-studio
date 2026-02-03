@@ -5,12 +5,17 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO
 // ============================================
-const SITE_VERSION = '2.0.3'
+const SITE_VERSION = '2.0.4'
 
 // ============================================
 // CHANGELOG - Solo versioni funzionanti
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '2.0.4': [
+    '✨ Divisori wave automatici tra sezioni',
+    '🌊 Transizioni fluide gradient/curve/slant',
+    '🎨 Grafica moderna con Framer Motion',
+  ],
   '2.0.3': [
     '🔧 Fix layout altezza - rimosso flex problematico',
     '✅ CustomNavbar semplificato',
