@@ -4,6 +4,8 @@ import { HomeIcon } from '@sanity/icons'
 import { getPlainText, truncate } from '../../lib/previewHelpers'
 import { iconOptionsCompact } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { animationOptions, hoverEffectOptions, animationSpeedOptions } from '../shared/animationOptions'
+import { gradientOptions } from '../shared/styleOptions'
 
 export default defineType({
   name: 'heroSection',
@@ -18,6 +20,7 @@ export default defineType({
     { name: 'media', title: '🖼️ Media' },
     { name: 'layout', title: '📐 Layout' },
     { name: 'style', title: '🎨 Stile' },
+    { name: 'effects', title: '✨ Effetti Moderni' },
     { name: 'advanced', title: '⚙️ Avanzato' },
   ],
 
@@ -491,6 +494,54 @@ export default defineType({
       },
       initialValue: 'subtle',
       hidden: ({ parent }) => !parent?.parallax,
+    }),
+
+    // === EFFETTI MODERNI ===
+    defineField({
+      name: 'showFloatingParticles',
+      title: 'Particelle Fluttuanti',
+      type: 'boolean',
+      group: 'effects',
+      description: 'Mostra particelle animate sullo sfondo (attivo di default)',
+      initialValue: true,
+    }),
+
+    defineField({
+      name: 'particleCount',
+      title: 'Numero Particelle',
+      type: 'number',
+      group: 'effects',
+      description: 'Quante particelle mostrare (3-10)',
+      initialValue: 6,
+      validation: Rule => Rule.min(3).max(10),
+      hidden: ({ parent }) => !parent?.showFloatingParticles,
+    }),
+
+    defineField({
+      name: 'showGlowLines',
+      title: 'Linee Luminose',
+      type: 'boolean',
+      group: 'effects',
+      description: 'Mostra linee decorative animate in basso',
+      initialValue: true,
+    }),
+
+    defineField({
+      name: 'buttonGlowOnHover',
+      title: 'Glow sui Bottoni',
+      type: 'boolean',
+      group: 'effects',
+      description: 'Effetto bagliore sui bottoni quando ci passi sopra',
+      initialValue: true,
+    }),
+
+    defineField({
+      name: 'titleTextShadow',
+      title: 'Ombra sul Titolo',
+      type: 'boolean',
+      group: 'effects',
+      description: 'Aggiunge ombra al titolo per maggiore impatto',
+      initialValue: true,
     }),
 
     // === AVANZATO ===
