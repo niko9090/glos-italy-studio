@@ -1,5 +1,6 @@
 // Video Section - Embed video YouTube/Vimeo o self-hosted
 import { defineType, defineField } from 'sanity'
+import { getPlainText } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
@@ -284,13 +285,14 @@ export default defineType({
       poster: 'poster',
     },
     prepare({ title, videoType, poster }) {
+      const titleText = getPlainText(title)
       const typeLabels: Record<string, string> = {
         youtube: 'YouTube',
         vimeo: 'Vimeo',
         file: 'File',
       }
       return {
-        title: title || 'Video',
+        title: titleText || 'Video',
         subtitle: `🎬 ${typeLabels[videoType] || 'Video'}`,
         media: poster,
       }

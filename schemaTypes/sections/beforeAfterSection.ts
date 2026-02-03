@@ -1,5 +1,6 @@
 // Before/After Section - Confronto immagini con slider
 import { defineType, defineField } from 'sanity'
+import { getPlainText } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
@@ -84,8 +85,9 @@ export default defineType({
               caption: 'caption.it',
             },
             prepare({ before, caption }) {
+              const captionText = getPlainText(caption)
               return {
-                title: caption || 'Confronto Prima/Dopo',
+                title: captionText || 'Confronto Prima/Dopo',
                 media: before,
               }
             },
@@ -245,9 +247,10 @@ export default defineType({
       comparisons: 'comparisons',
     },
     prepare({ title, comparisons }) {
+      const titleText = getPlainText(title)
       const count = comparisons?.length || 0
       return {
-        title: title || 'Prima/Dopo',
+        title: titleText || 'Prima/Dopo',
         subtitle: `🔄 ${count} confronti`,
       }
     },

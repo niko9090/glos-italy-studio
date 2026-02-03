@@ -187,6 +187,7 @@ export default defineType({
               icon: 'icon',
             },
             prepare({ title, lat, lng, icon }) {
+              const titleText = getPlainText(title)
               const icons: Record<string, string> = {
                 pin: '📍',
                 store: '🏪',
@@ -196,7 +197,7 @@ export default defineType({
                 star: '⭐',
               }
               return {
-                title: `${icons[icon] || '📍'} ${title || 'Marker'}`,
+                title: `${icons[icon] || '📍'} ${titleText || 'Marker'}`,
                 subtitle: lat && lng ? `${lat.toFixed(4)}, ${lng.toFixed(4)}` : 'Coordinate mancanti',
               }
             },

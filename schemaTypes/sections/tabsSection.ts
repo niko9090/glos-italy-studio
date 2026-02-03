@@ -1,5 +1,6 @@
 // Tabs Section - Contenuti a schede
 import { defineType, defineField } from 'sanity'
+import { getPlainText } from '../../lib/previewHelpers'
 import { iconOptions } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
@@ -79,7 +80,8 @@ export default defineType({
                   preview: {
                     select: { text: 'text.it' },
                     prepare({ text }) {
-                      return { title: text || 'Caratteristica' }
+                      const textValue = getPlainText(text)
+                      return { title: textValue || 'Caratteristica' }
                     },
                   },
                 },
@@ -102,8 +104,9 @@ export default defineType({
               icon: 'icon',
             },
             prepare({ label, icon }) {
+              const labelText = getPlainText(label)
               return {
-                title: `${icon || '📄'} ${label || 'Scheda'}`,
+                title: `${icon || '📄'} ${labelText || 'Scheda'}`,
               }
             },
           },
@@ -259,9 +262,10 @@ export default defineType({
       tabs: 'tabs',
     },
     prepare({ title, tabs }) {
+      const titleText = getPlainText(title)
       const count = tabs?.length || 0
       return {
-        title: title || 'Schede',
+        title: titleText || 'Schede',
         subtitle: `📑 ${count} tabs`,
       }
     },

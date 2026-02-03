@@ -1,5 +1,6 @@
 // Download Section - Risorse scaricabili (cataloghi, PDF, etc.)
 import { defineType, defineField } from 'sanity'
+import { getPlainText } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
@@ -105,6 +106,7 @@ export default defineType({
               thumbnail: 'thumbnail',
             },
             prepare({ title, fileType, thumbnail }) {
+              const titleText = getPlainText(title)
               const typeIcons: Record<string, string> = {
                 pdf: '📕',
                 doc: '📘',
@@ -115,7 +117,7 @@ export default defineType({
                 other: '📄',
               }
               return {
-                title: `${typeIcons[fileType] || '📄'} ${title || 'File'}`,
+                title: `${typeIcons[fileType] || '📄'} ${titleText || 'File'}`,
                 media: thumbnail,
               }
             },
@@ -266,9 +268,10 @@ export default defineType({
       files: 'files',
     },
     prepare({ title, files }) {
+      const titleText = getPlainText(title)
       const count = files?.length || 0
       return {
-        title: title || 'Download',
+        title: titleText || 'Download',
         subtitle: `📥 ${count} file`,
       }
     },

@@ -1,5 +1,6 @@
 // Embed Section - Contenuti esterni (mappe, form, widget)
 import { defineType, defineField } from 'sanity'
+import { getPlainText } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
@@ -257,6 +258,7 @@ export default defineType({
       embedType: 'embedType',
     },
     prepare({ title, embedType }) {
+      const titleText = getPlainText(title)
       const typeLabels: Record<string, string> = {
         'google-maps': '🗺️ Google Maps',
         'google-form': '📝 Google Form',
@@ -266,7 +268,7 @@ export default defineType({
         iframe: '🖼️ iFrame',
       }
       return {
-        title: title || 'Embed',
+        title: titleText || 'Embed',
         subtitle: `🔗 ${typeLabels[embedType] || 'Embed'}`,
       }
     },

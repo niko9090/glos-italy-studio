@@ -118,9 +118,10 @@ export default defineType({
             },
             prepare({ number, prefix, suffix, label, icon }) {
               const displayNumber = `${prefix || ''}${number || 0}${suffix || ''}`
+              const labelText = getPlainText(label)
               return {
                 title: `${icon || '🔢'} ${displayNumber}`,
-                subtitle: label || 'Senza etichetta',
+                subtitle: labelText || 'Senza etichetta',
               }
             },
           },
@@ -334,6 +335,7 @@ export default defineType({
       layout: 'layout',
     },
     prepare({ title, counters, layout }) {
+      const titleText = getPlainText(title)
       const count = counters?.length || 0
       const layoutLabels: Record<string, string> = {
         'row': 'Riga',
@@ -342,7 +344,7 @@ export default defineType({
         'grid-4': 'Griglia 4 col',
       }
       return {
-        title: `🔢 ${title || 'Contatori Animati'}`,
+        title: `🔢 ${titleText || 'Contatori Animati'}`,
         subtitle: `${count} contator${count === 1 ? 'e' : 'i'} • ${layoutLabels[layout] || 'Riga'}`,
       }
     },

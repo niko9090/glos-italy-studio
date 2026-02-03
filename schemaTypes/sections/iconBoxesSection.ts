@@ -1,5 +1,6 @@
 // Icon Boxes Section - Griglia di box con icone
 import { defineType, defineField } from 'sanity'
+import { getPlainText } from '../../lib/previewHelpers'
 import { iconOptions } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
@@ -90,8 +91,9 @@ export default defineType({
               title: 'title.it',
             },
             prepare({ icon, title }) {
+              const titleText = getPlainText(title)
               return {
-                title: `${icon || '📦'} ${title || 'Box'}`,
+                title: `${icon || '📦'} ${titleText || 'Box'}`,
               }
             },
           },
@@ -294,9 +296,10 @@ export default defineType({
       boxes: 'boxes',
     },
     prepare({ title, boxes }) {
+      const titleText = getPlainText(title)
       const count = boxes?.length || 0
       return {
-        title: title || 'Box con Icone',
+        title: titleText || 'Box con Icone',
         subtitle: `🎯 ${count} box`,
       }
     },

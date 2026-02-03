@@ -85,7 +85,8 @@ export default defineType({
         preview: {
           select: { icon: 'icon', text: 'text.it' },
           prepare({ icon, text }) {
-            return { title: `${icon || '✓'} ${text || 'Punto'}` }
+            const textValue = getPlainText(text)
+            return { title: `${icon || '✓'} ${textValue || 'Punto'}` }
           },
         },
       }],
@@ -171,7 +172,8 @@ export default defineType({
           preview: {
             select: { text: 'text.it', variant: 'variant' },
             prepare({ text, variant }) {
-              return { title: text || 'Pulsante', subtitle: variant }
+              const textValue = getPlainText(text)
+              return { title: textValue || 'Pulsante', subtitle: variant }
             },
           },
         }),

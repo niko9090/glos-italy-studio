@@ -113,7 +113,8 @@ export default defineType({
         preview: {
           select: { text: 'text.it', variant: 'variant' },
           prepare({ text, variant }) {
-            return { title: text || 'Pulsante', subtitle: variant }
+            const textValue = getPlainText(text)
+            return { title: textValue || 'Pulsante', subtitle: variant }
           },
         },
       }],

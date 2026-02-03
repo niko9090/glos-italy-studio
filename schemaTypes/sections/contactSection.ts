@@ -197,8 +197,9 @@ export default defineType({
           preview: {
             select: { label: 'label.it', type: 'type', required: 'required' },
             prepare({ label, type, required }) {
+              const labelText = getPlainText(label)
               return {
-                title: `${label || 'Campo'} ${required ? '*' : ''}`,
+                title: `${labelText || 'Campo'} ${required ? '*' : ''}`,
                 subtitle: type,
               }
             },
@@ -397,7 +398,8 @@ export default defineType({
           preview: {
             select: { days: 'days.it', hours: 'hours' },
             prepare({ days, hours }) {
-              return { title: days || 'Giorno', subtitle: hours }
+              const daysText = getPlainText(days)
+              return { title: daysText || 'Giorno', subtitle: hours }
             },
           },
         }),

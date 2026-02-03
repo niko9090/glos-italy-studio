@@ -131,8 +131,9 @@ export default defineType({
           preview: {
             select: { title: 'title.it', icon: 'icon', iconImage: 'iconImage' },
             prepare({ title, icon, iconImage }) {
+              const titleText = getPlainText(title)
               return {
-                title: `${icon || '✨'} ${title || 'Caratteristica'}`,
+                title: `${icon || '✨'} ${titleText || 'Caratteristica'}`,
                 media: iconImage,
               }
             },

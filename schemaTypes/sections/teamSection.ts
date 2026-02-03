@@ -1,5 +1,6 @@
 // Team Section - Membri del team
 import { defineType, defineField } from 'sanity'
+import { getPlainText } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 import { animationOptions, hoverEffectOptions } from '../shared/animationOptions'
 import { cardStyleOptions } from '../shared/styleOptions'
@@ -91,9 +92,10 @@ export default defineType({
               media: 'photo',
             },
             prepare({ name, role, media }) {
+              const roleText = getPlainText(role)
               return {
                 title: name || 'Membro',
-                subtitle: role,
+                subtitle: roleText,
                 media,
               }
             },
@@ -281,9 +283,10 @@ export default defineType({
       members: 'members',
     },
     prepare({ title, members }) {
+      const titleText = getPlainText(title)
       const count = members?.length || 0
       return {
-        title: title || 'Team',
+        title: titleText || 'Team',
         subtitle: `👥 ${count} membri`,
       }
     },

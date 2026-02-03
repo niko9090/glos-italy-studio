@@ -104,8 +104,9 @@ export default defineType({
                   preview: {
                     select: { text: 'text.it', included: 'included' },
                     prepare({ text, included }) {
+                      const textValue = getPlainText(text)
                       return {
-                        title: `${included ? '✓' : '✗'} ${text || 'Caratteristica'}`,
+                        title: `${included ? '✓' : '✗'} ${textValue || 'Caratteristica'}`,
                       }
                     },
                   },
@@ -141,10 +142,12 @@ export default defineType({
           preview: {
             select: { name: 'name.it', price: 'price', highlighted: 'highlighted', badge: 'badge.it' },
             prepare({ name, price, highlighted, badge }) {
+              const nameText = getPlainText(name)
+              const badgeValue = getPlainText(badge)
               const prefix = highlighted ? '⭐ ' : ''
-              const badgeText = badge ? ` [${badge}]` : ''
+              const badgeText = badgeValue ? ` [${badgeValue}]` : ''
               return {
-                title: `${prefix}${name || 'Piano'}${badgeText}`,
+                title: `${prefix}${nameText || 'Piano'}${badgeText}`,
                 subtitle: price || 'Prezzo non definito',
               }
             },
@@ -299,7 +302,7 @@ export default defineType({
   preview: {
     select: { title: 'title.it', plans: 'plans', layout: 'layout' },
     prepare({ title, plans, layout }) {
-      const titleText = title || 'Prezzi'
+      const titleText = getPlainText(title) || 'Prezzi'
       const count = plans?.length || 0
       const layoutLabels: Record<string, string> = {
         row: 'Riga',

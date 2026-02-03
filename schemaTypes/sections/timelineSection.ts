@@ -1,5 +1,6 @@
 // Timeline Section - Storia aziendale, processi, step
 import { defineType, defineField } from 'sanity'
+import { getPlainText } from '../../lib/previewHelpers'
 import { iconOptions } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
 import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
@@ -87,8 +88,9 @@ export default defineType({
               media: 'image',
             },
             prepare({ year, title, media }) {
+              const titleText = getPlainText(title)
               return {
-                title: `${year} - ${title || 'Evento'}`,
+                title: `${year} - ${titleText || 'Evento'}`,
                 media,
               }
             },
@@ -278,9 +280,10 @@ export default defineType({
       items: 'items',
     },
     prepare({ title, items }) {
+      const titleText = getPlainText(title)
       const count = items?.length || 0
       return {
-        title: title || 'Timeline',
+        title: titleText || 'Timeline',
         subtitle: `📅 ${count} eventi`,
       }
     },

@@ -208,7 +208,8 @@ export default defineType({
           preview: {
             select: { title: 'title.it', media: 'image' },
             prepare({ title, media }) {
-              return { title: title || 'Slide senza titolo', media }
+              const titleText = getPlainText(title)
+              return { title: titleText || 'Slide senza titolo', media }
             },
           },
         },

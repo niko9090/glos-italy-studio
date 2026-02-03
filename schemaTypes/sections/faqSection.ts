@@ -94,7 +94,8 @@ export default defineType({
                 preview: {
                   select: { question: 'question.it' },
                   prepare({ question }) {
-                    return { title: question || 'Domanda' }
+                    const questionText = getPlainText(question)
+                    return { title: questionText || 'Domanda' }
                   },
                 },
               }],
@@ -103,8 +104,9 @@ export default defineType({
           preview: {
             select: { name: 'name.it', questions: 'questions' },
             prepare({ name, questions }) {
+              const nameText = getPlainText(name)
               return {
-                title: name || 'Categoria',
+                title: nameText || 'Categoria',
                 subtitle: `${questions?.length || 0} domande`,
               }
             },
@@ -144,7 +146,8 @@ export default defineType({
         preview: {
           select: { question: 'question.it' },
           prepare({ question }) {
-            return { title: `❓ ${question || 'Domanda'}` }
+            const questionText = getPlainText(question)
+            return { title: `❓ ${questionText || 'Domanda'}` }
           },
         },
       }],

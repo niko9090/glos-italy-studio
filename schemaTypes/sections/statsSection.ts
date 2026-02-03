@@ -128,9 +128,10 @@ export default defineType({
           preview: {
             select: { number: 'number', label: 'label.it', icon: 'icon' },
             prepare({ number, label, icon }) {
+              const labelText = getPlainText(label)
               return {
                 title: `${icon || '📊'} ${number}`,
-                subtitle: label || 'Senza etichetta',
+                subtitle: labelText || 'Senza etichetta',
               }
             },
           },

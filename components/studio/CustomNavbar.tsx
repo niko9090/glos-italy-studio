@@ -5,12 +5,18 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.8.0'
+const SITE_VERSION = '1.9.0'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '1.9.0': [
+    '🐛 Fix SchemaError per localeRichText',
+    '✅ Preview corrette in tutte le sezioni',
+    '🔧 getPlainText() per estrarre testo da Portable Text',
+    '📋 25 file sezioni aggiornati',
+  ],
   '1.8.0': [
     '✨ Editor Rich Text in TUTTI i campi testo',
     '🎨 Formattazione inline: grassetto, colori, dimensioni',
