@@ -990,126 +990,11 @@ const richTextBlock = defineArrayMember({
 })
 
 // ============================================
-// BLOCCO CON EFFETTI (per effetti a livello blocco)
-// ============================================
-const blockWithEffects = defineArrayMember({
-  type: 'object',
-  name: 'styledBlock',
-  title: '🎨 Blocco Stilizzato',
-  fields: [
-    {
-      name: 'content',
-      type: 'array',
-      title: 'Contenuto',
-      of: [richTextBlock],
-    },
-    {
-      name: 'background',
-      type: 'string',
-      title: 'Sfondo Blocco',
-      options: { list: blockBackgrounds },
-      initialValue: 'none',
-    },
-    {
-      name: 'backgroundGradient',
-      type: 'object',
-      title: 'Gradiente Sfondo Personalizzato',
-      fields: [
-        {
-          name: 'from',
-          type: 'string',
-          title: 'Colore Iniziale',
-          options: { list: textColors },
-        },
-        {
-          name: 'to',
-          type: 'string',
-          title: 'Colore Finale',
-          options: { list: textColors },
-        },
-        {
-          name: 'direction',
-          type: 'string',
-          title: 'Direzione',
-          options: {
-            list: [
-              { title: 'Orizzontale →', value: 'to-r' },
-              { title: 'Orizzontale ←', value: 'to-l' },
-              { title: 'Verticale ↓', value: 'to-b' },
-              { title: 'Verticale ↑', value: 'to-t' },
-              { title: 'Diagonale ↘', value: 'to-br' },
-              { title: 'Diagonale ↙', value: 'to-bl' },
-            ],
-          },
-        },
-      ],
-    },
-    {
-      name: 'border',
-      type: 'string',
-      title: 'Bordo',
-      options: { list: blockBorders },
-      initialValue: 'none',
-    },
-    {
-      name: 'borderColor',
-      type: 'string',
-      title: 'Colore Bordo',
-      options: { list: textColors },
-    },
-    {
-      name: 'shadow',
-      type: 'string',
-      title: 'Ombra',
-      options: { list: blockShadows },
-      initialValue: 'none',
-    },
-    {
-      name: 'padding',
-      type: 'string',
-      title: 'Padding',
-      options: { list: blockPaddings },
-      initialValue: 'md',
-    },
-    {
-      name: 'animation',
-      type: 'string',
-      title: 'Animazione Blocco',
-      options: { list: textAnimations },
-      initialValue: 'none',
-    },
-    {
-      name: 'textAlign',
-      type: 'string',
-      title: 'Allineamento Testo',
-      options: {
-        list: [
-          { title: 'Sinistra', value: 'left' },
-          { title: 'Centro', value: 'center' },
-          { title: 'Destra', value: 'right' },
-        ],
-      },
-      initialValue: 'left',
-    },
-  ],
-  preview: {
-    select: {
-      content: 'content',
-      background: 'background',
-    },
-    prepare({ content, background }: any) {
-      const text = content?.[0]?.children?.[0]?.text || 'Blocco stilizzato'
-      return {
-        title: text,
-        subtitle: `Sfondo: ${background || 'nessuno'}`,
-      }
-    },
-  },
-})
-
-// ============================================
 // EXPORT TIPO PRINCIPALE
 // ============================================
+// NOTA: Rimosso blockWithEffects (styledBlock) perché causava SchemaError
+// La struttura nidificata con defineArrayMember dentro defineArrayMember non è supportata
+// Tutte le funzionalità di formattazione sono comunque disponibili nel richTextBlock
 export default defineType({
   name: 'localeRichText',
   title: 'Testo Formattato Multilingua',
@@ -1118,6 +1003,6 @@ export default defineType({
     name: lang.id,
     title: lang.title,
     type: 'array',
-    of: [richTextBlock, blockWithEffects],
+    of: [richTextBlock],
   })),
 })
