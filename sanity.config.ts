@@ -168,8 +168,8 @@ export default defineConfig({
   },
 
   plugins: [
-    // Pulizia testo incollato
-    cleanPastePlugin(),
+    // Pulizia testo incollato - DISABILITATO per debug layout
+    // cleanPastePlugin(),
 
     // Dashboard personalizzate
     pageDashboardPlugin(),

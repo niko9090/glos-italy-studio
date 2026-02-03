@@ -1,14 +1,14 @@
 // Plugin che pulisce automaticamente il testo incollato da HTML
 // Fa sì che Ctrl+V funzioni come Ctrl+Shift+V (incolla solo testo)
+// NOTA: NON usa layout wrapper per evitare problemi di larghezza
 
 import { useEffect } from 'react'
 import { definePlugin } from 'sanity'
 
-// Componente che imposta il listener globale per il paste
+// Componente invisibile che imposta il listener globale per il paste
 function CleanPasteSetup() {
   useEffect(() => {
     const handlePaste = (event: ClipboardEvent) => {
-      // Verifica se siamo in un editor Portable Text
       const target = event.target as HTMLElement
       if (!target) return
 
@@ -25,20 +25,14 @@ function CleanPasteSetup() {
       const htmlText = clipboardData.getData('text/html')
       const plainText = clipboardData.getData('text/plain')
 
-      // Se c'è HTML, forza l'uso del testo semplice
       if (htmlText && plainText) {
         event.preventDefault()
         event.stopPropagation()
-
-        // Usa execCommand per inserire il testo come se fosse digitato
-        // Questo è il modo più compatibile con Portable Text
         document.execCommand('insertText', false, plainText)
       }
     }
 
-    // Aggiungi listener in capture phase per intercettare prima di Sanity
     document.addEventListener('paste', handlePaste, true)
-
     return () => {
       document.removeEventListener('paste', handlePaste, true)
     }
@@ -47,24 +41,18 @@ function CleanPasteSetup() {
   return null
 }
 
-// Plugin Sanity
+// Plugin Sanity - usa navbar invece di layout per non wrappare tutto
 export const cleanPastePlugin = definePlugin({
   name: 'clean-paste',
   studio: {
     components: {
-      layout: (props) => {
+      // Usiamo navbar per iniettare il setup senza wrappare il layout
+      navbar: (props) => {
         return (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            height: '100%',
-            minWidth: 0,
-            flex: 1,
-          }}>
+          <>
             <CleanPasteSetup />
             {props.renderDefault(props)}
-          </div>
+          </>
         )
       },
     },
