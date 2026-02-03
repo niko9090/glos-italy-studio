@@ -2,6 +2,7 @@
 import { defineType, defineField } from 'sanity'
 import { iconOptions } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'timelineSection',
@@ -9,9 +10,10 @@ export default defineType({
   type: 'object',
   icon: () => '📅',
   groups: [
-    { name: 'content', title: 'Contenuto', default: true },
-    { name: 'items', title: 'Eventi' },
-    { name: 'style', title: 'Stile' },
+    { name: 'content', title: '📝 Contenuto', default: true },
+    { name: 'items', title: '📍 Eventi' },
+    { name: 'typography', title: '🔤 Tipografia' },
+    { name: 'style', title: '🎨 Stile' },
   ],
   fields: [
     defineField({
@@ -95,7 +97,90 @@ export default defineType({
       ],
       validation: (Rule) => Rule.min(2).error('Aggiungi almeno 2 eventi'),
     }),
-    // Style
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo Sezione',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'yearSize',
+      title: 'Dimensione Anno/Data',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (18px)', value: 'lg' },
+          { title: 'Grande (24px)', value: 'xl' },
+          { title: 'Extra Grande (32px)', value: '2xl' },
+        ],
+      },
+      initialValue: 'xl',
+    }),
+
+    defineField({
+      name: 'yearWeight',
+      title: 'Peso Anno/Data',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'eventTitleSize',
+      title: 'Dimensione Titolo Evento',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (16px)', value: 'base' },
+          { title: 'Normale (18px)', value: 'lg' },
+          { title: 'Grande (20px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'descriptionSize',
+      title: 'Dimensione Descrizione',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+        ],
+      },
+      initialValue: 'base',
+    }),
+
+    // === STILE ===
     defineField({
       name: 'layout',
       title: 'Layout',

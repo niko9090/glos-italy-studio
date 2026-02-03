@@ -1,6 +1,7 @@
 // Before/After Section - Confronto immagini con slider
 import { defineType, defineField } from 'sanity'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'beforeAfterSection',
@@ -8,9 +9,10 @@ export default defineType({
   type: 'object',
   icon: () => '🔄',
   groups: [
-    { name: 'content', title: 'Contenuto', default: true },
-    { name: 'images', title: 'Immagini' },
-    { name: 'style', title: 'Stile' },
+    { name: 'content', title: '📝 Contenuto', default: true },
+    { name: 'images', title: '🖼️ Immagini' },
+    { name: 'typography', title: '🔤 Tipografia' },
+    { name: 'style', title: '🎨 Stile' },
   ],
   fields: [
     defineField({
@@ -92,7 +94,50 @@ export default defineType({
       ],
       validation: (Rule) => Rule.min(1).error('Aggiungi almeno un confronto'),
     }),
-    // Style
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'labelSize',
+      title: 'Dimensione Etichette Prima/Dopo',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (12px)', value: 'xs' },
+          { title: 'Normale (14px)', value: 'sm' },
+          { title: 'Grande (16px)', value: 'base' },
+        ],
+      },
+      initialValue: 'sm',
+    }),
+
+    // === STILE ===
     defineField({
       name: 'layout',
       title: 'Layout',

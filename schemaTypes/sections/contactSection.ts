@@ -4,6 +4,7 @@ import { EnvelopeIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { iconOptions } from '../shared/iconOptions'
 import { paddingOptions, marginOptions, containerWidthOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'contactSection',
@@ -17,6 +18,7 @@ export default defineType({
     { name: 'form', title: '📝 Form' },
     { name: 'info', title: '📍 Info Contatto' },
     { name: 'layout', title: '📐 Layout' },
+    { name: 'typography', title: '🔤 Tipografia' },
     { name: 'style', title: '🎨 Stile' },
   ],
 
@@ -643,6 +645,79 @@ export default defineType({
         list: containerWidthOptions,
       },
       initialValue: 'normal',
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'subtitleSize',
+      title: 'Dimensione Sottotitolo',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+          { title: 'Extra Grande (20px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'base',
+    }),
+
+    defineField({
+      name: 'labelSize',
+      title: 'Dimensione Etichette Form',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (12px)', value: 'xs' },
+          { title: 'Normale (14px)', value: 'sm' },
+          { title: 'Grande (16px)', value: 'base' },
+        ],
+      },
+      initialValue: 'sm',
+    }),
+
+    defineField({
+      name: 'infoTitleSize',
+      title: 'Dimensione Titoli Info',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+        ],
+      },
+      initialValue: 'base',
     }),
 
     // === STILE ===

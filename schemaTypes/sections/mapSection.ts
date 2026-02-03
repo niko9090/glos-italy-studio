@@ -4,6 +4,7 @@ import { defineType, defineField, defineArrayMember } from 'sanity'
 import { PinIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'mapSection',
@@ -13,10 +14,11 @@ export default defineType({
   description: 'Mappa interattiva con marker personalizzati e stile configurabile',
 
   groups: [
-    { name: 'content', title: 'Contenuto', default: true },
-    { name: 'map', title: 'Mappa' },
-    { name: 'markers', title: 'Marker' },
-    { name: 'style', title: 'Stile' },
+    { name: 'content', title: '📝 Contenuto', default: true },
+    { name: 'map', title: '🗺️ Mappa' },
+    { name: 'markers', title: '📍 Marker' },
+    { name: 'typography', title: '🔤 Tipografia' },
+    { name: 'style', title: '🎨 Stile' },
   ],
 
   fields: [
@@ -201,6 +203,48 @@ export default defineType({
           },
         }),
       ],
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'subtitleSize',
+      title: 'Dimensione Sottotitolo',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+        ],
+      },
+      initialValue: 'base',
     }),
 
     // === STILE ===

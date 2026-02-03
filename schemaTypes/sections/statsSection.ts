@@ -4,6 +4,9 @@ import { BarChartIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { iconOptions } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { animationOptions, hoverEffectOptions } from '../shared/animationOptions'
+import { cardStyleOptions } from '../shared/styleOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'statsSection',
@@ -16,6 +19,7 @@ export default defineType({
     { name: 'content', title: '📝 Contenuto', default: true },
     { name: 'items', title: '📊 Numeri' },
     { name: 'layout', title: '📐 Layout' },
+    { name: 'typography', title: '🔤 Tipografia' },
     { name: 'style', title: '🎨 Stile' },
     { name: 'animation', title: '✨ Animazioni' },
   ],
@@ -211,6 +215,67 @@ export default defineType({
       group: 'layout',
       description: 'Mostra linee verticali tra le statistiche',
       initialValue: false,
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo Sezione',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'numberSize',
+      title: 'Dimensione Numeri',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Medio (48px)', value: 'md' },
+          { title: 'Grande (56px)', value: 'lg' },
+          { title: 'Extra Large (64px)', value: 'xl' },
+          { title: 'XXL (72px)', value: '2xl' },
+          { title: 'Gigante (80px)', value: '3xl' },
+        ],
+      },
+      initialValue: 'xl',
+    }),
+
+    defineField({
+      name: 'numberWeight',
+      title: 'Peso Numeri',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'labelSize',
+      title: 'Dimensione Etichette',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+          { title: 'Extra Large (20px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'lg',
     }),
 
     // === STILE ===

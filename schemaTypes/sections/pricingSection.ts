@@ -3,6 +3,7 @@ import { defineType, defineField, defineArrayMember } from 'sanity'
 import { CreditCardIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'pricingSection',
@@ -15,6 +16,7 @@ export default defineType({
     { name: 'content', title: '📝 Contenuto', default: true },
     { name: 'plans', title: '💰 Piani' },
     { name: 'layout', title: '📐 Layout' },
+    { name: 'typography', title: '🔤 Tipografia' },
     { name: 'style', title: '🎨 Stile' },
   ],
 
@@ -174,6 +176,64 @@ export default defineType({
       group: 'layout',
       description: 'Visualizza una tabella per confrontare le caratteristiche tra i piani',
       initialValue: false,
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'priceSize',
+      title: 'Dimensione Prezzi',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Normale (32px)', value: 'lg' },
+          { title: 'Grande (40px)', value: 'xl' },
+          { title: 'Extra Grande (48px)', value: '2xl' },
+          { title: 'Gigante (56px)', value: '3xl' },
+        ],
+      },
+      initialValue: 'xl',
+    }),
+
+    defineField({
+      name: 'planNameSize',
+      title: 'Dimensione Nomi Piani',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (18px)', value: 'lg' },
+          { title: 'Normale (20px)', value: 'xl' },
+          { title: 'Grande (24px)', value: '2xl' },
+        ],
+      },
+      initialValue: 'xl',
     }),
 
     // === STILE ===

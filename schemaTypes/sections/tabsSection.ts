@@ -2,6 +2,7 @@
 import { defineType, defineField } from 'sanity'
 import { iconOptions } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'tabsSection',
@@ -9,9 +10,10 @@ export default defineType({
   type: 'object',
   icon: () => '📑',
   groups: [
-    { name: 'content', title: 'Contenuto', default: true },
-    { name: 'tabs', title: 'Schede' },
-    { name: 'style', title: 'Stile' },
+    { name: 'content', title: '📝 Contenuto', default: true },
+    { name: 'tabs', title: '📑 Schede' },
+    { name: 'typography', title: '🔤 Tipografia' },
+    { name: 'style', title: '🎨 Stile' },
   ],
   fields: [
     defineField({
@@ -109,7 +111,65 @@ export default defineType({
       ],
       validation: (Rule) => Rule.min(2).error('Aggiungi almeno 2 schede'),
     }),
-    // Style
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'tabLabelSize',
+      title: 'Dimensione Etichette Tab',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+        ],
+      },
+      initialValue: 'base',
+    }),
+
+    defineField({
+      name: 'contentSize',
+      title: 'Dimensione Testo Contenuto',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+        ],
+      },
+      initialValue: 'base',
+    }),
+
+    // === STILE ===
     defineField({
       name: 'tabStyle',
       title: 'Stile Tabs',

@@ -4,6 +4,9 @@ import { BellIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { iconOptionsCompact } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { animationOptions } from '../shared/animationOptions'
+import { gradientOptions, backgroundColorOptions } from '../shared/styleOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'ctaSection',
@@ -17,6 +20,7 @@ export default defineType({
     { name: 'buttons', title: '🔘 Pulsanti' },
     { name: 'media', title: '🖼️ Media' },
     { name: 'layout', title: '📐 Layout' },
+    { name: 'typography', title: '🔤 Tipografia' },
     { name: 'style', title: '🎨 Stile' },
     { name: 'animation', title: '✨ Animazioni' },
   ],
@@ -487,6 +491,66 @@ export default defineType({
       group: 'layout',
       options: { list: marginOptions },
       initialValue: 'none',
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'xl',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+      description: 'Lascia vuoto per bianco automatico',
+    }),
+
+    defineField({
+      name: 'subtitleSize',
+      title: 'Dimensione Sottotitolo',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (16px)', value: 'sm' },
+          { title: 'Normale (18px)', value: 'base' },
+          { title: 'Grande (20px)', value: 'lg' },
+          { title: 'Extra Large (24px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'eyebrowStyle',
+      title: 'Stile Eyebrow',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Normale', value: 'normal' },
+          { title: 'MAIUSCOLO', value: 'uppercase' },
+          { title: 'Con Bordo', value: 'bordered' },
+          { title: 'Badge Colorato', value: 'badge' },
+        ],
+      },
+      initialValue: 'uppercase',
     }),
 
     // === STILE ===

@@ -3,6 +3,7 @@ import { defineType, defineField } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'gallerySection',
@@ -15,6 +16,7 @@ export default defineType({
     { name: 'content', title: '📝 Contenuto', default: true },
     { name: 'images', title: '🖼️ Immagini' },
     { name: 'layout', title: '📐 Layout' },
+    { name: 'typography', title: '🔤 Tipografia' },
     { name: 'style', title: '🎨 Stile' },
     { name: 'interaction', title: '✨ Interazioni' },
   ],
@@ -200,6 +202,63 @@ export default defineType({
       group: 'layout',
       initialValue: false,
       hidden: ({ parent }) => !parent?.maxImages || parent?.maxImages === 0,
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'subtitleSize',
+      title: 'Dimensione Sottotitolo',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+        ],
+      },
+      initialValue: 'base',
+    }),
+
+    defineField({
+      name: 'captionSize',
+      title: 'Dimensione Didascalie',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (12px)', value: 'xs' },
+          { title: 'Normale (14px)', value: 'sm' },
+          { title: 'Grande (16px)', value: 'base' },
+        ],
+      },
+      initialValue: 'sm',
     }),
 
     // === STILE ===

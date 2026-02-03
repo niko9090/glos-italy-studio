@@ -4,6 +4,9 @@ import { BulbOutlineIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { iconOptions } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { animationOptions, hoverEffectOptions } from '../shared/animationOptions'
+import { cardStyleOptions, iconStyleOptions, accentColorOptions } from '../shared/styleOptions'
+import { typographyFieldGroup, titleSizeOptions, fontWeightOptions, textColorOptions, textAlignOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'featuresSection',
@@ -17,6 +20,7 @@ export default defineType({
     { name: 'features', title: '✨ Caratteristiche' },
     { name: 'media', title: '🖼️ Media' },
     { name: 'layout', title: '📐 Layout' },
+    { name: 'typography', title: '🔤 Tipografia' },
     { name: 'style', title: '🎨 Stile' },
     { name: 'animation', title: '✨ Animazioni' },
   ],
@@ -297,6 +301,90 @@ export default defineType({
         ],
       },
       initialValue: 'lg',
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+      description: 'Lascia vuoto per usare il colore automatico',
+    }),
+
+    defineField({
+      name: 'subtitleSize',
+      title: 'Dimensione Sottotitolo',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (18px)', value: 'base' },
+          { title: 'Grande (20px)', value: 'lg' },
+          { title: 'Extra Large (24px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'subtitleWeight',
+      title: 'Peso Sottotitolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'normal',
+    }),
+
+    defineField({
+      name: 'itemTitleSize',
+      title: 'Dimensione Titoli Card',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (16px)', value: 'sm' },
+          { title: 'Normale (18px)', value: 'base' },
+          { title: 'Grande (20px)', value: 'lg' },
+          { title: 'Extra Large (24px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'itemDescriptionSize',
+      title: 'Dimensione Testo Card',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (12px)', value: 'xs' },
+          { title: 'Normale (14px)', value: 'sm' },
+          { title: 'Grande (16px)', value: 'base' },
+        ],
+      },
+      initialValue: 'sm',
     }),
 
     // === STILE ===

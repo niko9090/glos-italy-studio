@@ -3,6 +3,7 @@ import { defineType, defineField } from 'sanity'
 import { TextIcon } from '@sanity/icons'
 import { getPlainText, truncate } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'richTextSection',
@@ -12,9 +13,10 @@ export default defineType({
   description: 'Sezione con testo formattato libero, ideale per contenuti editoriali',
 
   groups: [
-    { name: 'content', title: 'Contenuto', default: true },
-    { name: 'layout', title: 'Layout' },
-    { name: 'style', title: 'Stile' },
+    { name: 'content', title: '📝 Contenuto', default: true },
+    { name: 'layout', title: '📐 Layout' },
+    { name: 'typography', title: '🔤 Tipografia' },
+    { name: 'style', title: '🎨 Stile' },
   ],
 
   fields: [
@@ -83,6 +85,65 @@ export default defineType({
         ],
       },
       initialValue: 1,
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'bodySize',
+      title: 'Dimensione Testo',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+          { title: 'Extra Grande (20px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'base',
+    }),
+
+    defineField({
+      name: 'lineHeight',
+      title: 'Interlinea',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Compatta', value: 'tight' },
+          { title: 'Normale', value: 'normal' },
+          { title: 'Ariosa', value: 'relaxed' },
+          { title: 'Spaziata', value: 'loose' },
+        ],
+      },
+      initialValue: 'relaxed',
     }),
 
     // === STILE ===

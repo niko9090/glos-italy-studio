@@ -4,6 +4,7 @@ import { ImageIcon } from '@sanity/icons'
 import { getPlainText, truncate } from '../../lib/previewHelpers'
 import { iconOptionsCompact } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'textImageSection',
@@ -13,10 +14,11 @@ export default defineType({
   description: 'Sezione con testo formattato e immagine affiancati',
 
   groups: [
-    { name: 'content', title: 'Contenuto', default: true },
-    { name: 'media', title: 'Immagine' },
-    { name: 'layout', title: 'Layout' },
-    { name: 'style', title: 'Stile' },
+    { name: 'content', title: '📝 Contenuto', default: true },
+    { name: 'media', title: '🖼️ Immagine' },
+    { name: 'layout', title: '📐 Layout' },
+    { name: 'typography', title: '🔤 Tipografia' },
+    { name: 'style', title: '🎨 Stile' },
   ],
 
   fields: [
@@ -225,6 +227,64 @@ export default defineType({
         ],
       },
       initialValue: 'normal',
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'eyebrowSize',
+      title: 'Dimensione Etichetta',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (12px)', value: 'xs' },
+          { title: 'Normale (14px)', value: 'sm' },
+          { title: 'Grande (16px)', value: 'base' },
+        ],
+      },
+      initialValue: 'sm',
+    }),
+
+    defineField({
+      name: 'bodySize',
+      title: 'Dimensione Testo Corpo',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+          { title: 'Extra Grande (20px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'base',
     }),
 
     // === STILE ===

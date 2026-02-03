@@ -2,6 +2,7 @@
 import { defineType, defineField } from 'sanity'
 import { iconOptions } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'iconBoxesSection',
@@ -9,9 +10,10 @@ export default defineType({
   type: 'object',
   icon: () => '🎯',
   groups: [
-    { name: 'content', title: 'Contenuto', default: true },
-    { name: 'boxes', title: 'Box' },
-    { name: 'style', title: 'Stile' },
+    { name: 'content', title: '📝 Contenuto', default: true },
+    { name: 'boxes', title: '📦 Box' },
+    { name: 'typography', title: '🔤 Tipografia' },
+    { name: 'style', title: '🎨 Stile' },
   ],
   fields: [
     defineField({
@@ -97,7 +99,64 @@ export default defineType({
       ],
       validation: (Rule) => Rule.min(2).error('Aggiungi almeno 2 box'),
     }),
-    // Style
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo Sezione',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'boxTitleSize',
+      title: 'Dimensione Titoli Box',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (16px)', value: 'base' },
+          { title: 'Normale (18px)', value: 'lg' },
+          { title: 'Grande (20px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'boxDescriptionSize',
+      title: 'Dimensione Descrizioni Box',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+        ],
+      },
+      initialValue: 'sm',
+    }),
+
+    // === STILE ===
     defineField({
       name: 'columns',
       title: 'Colonne',

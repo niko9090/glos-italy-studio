@@ -3,6 +3,7 @@ import { defineType, defineField, defineArrayMember } from 'sanity'
 import { UsersIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'testimonialsSection',
@@ -15,6 +16,7 @@ export default defineType({
     { name: 'content', title: '📝 Contenuto', default: true },
     { name: 'testimonials', title: '💬 Testimonianze' },
     { name: 'layout', title: '📐 Layout' },
+    { name: 'typography', title: '🔤 Tipografia' },
     { name: 'style', title: '🎨 Stile' },
     { name: 'animation', title: '✨ Animazioni' },
   ],
@@ -322,6 +324,114 @@ export default defineType({
       group: 'layout',
       hidden: ({ parent }) => !['carousel', 'slider-thumb', 'marquee'].includes(parent?.layout || ''),
       initialValue: true,
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'subtitleSize',
+      title: 'Dimensione Sottotitolo',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+          { title: 'Extra Grande (20px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'base',
+    }),
+
+    defineField({
+      name: 'quoteFontSize',
+      title: 'Dimensione Citazione',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+          { title: 'Extra Grande (20px)', value: 'xl' },
+          { title: 'XXL (24px)', value: '2xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'quoteWeight',
+      title: 'Peso Citazione',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'normal',
+    }),
+
+    defineField({
+      name: 'authorSize',
+      title: 'Dimensione Nome Autore',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+        ],
+      },
+      initialValue: 'base',
+    }),
+
+    defineField({
+      name: 'authorWeight',
+      title: 'Peso Nome Autore',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'semibold',
+    }),
+
+    defineField({
+      name: 'roleSize',
+      title: 'Dimensione Ruolo/Azienda',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (12px)', value: 'xs' },
+          { title: 'Normale (14px)', value: 'sm' },
+          { title: 'Grande (16px)', value: 'base' },
+        ],
+      },
+      initialValue: 'sm',
     }),
 
     // === STILE ===

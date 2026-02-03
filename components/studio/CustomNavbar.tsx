@@ -5,12 +5,18 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.6.0'
+const SITE_VERSION = '1.7.0'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '1.7.0': [
+    '🔤 Tipografia personalizzabile in TUTTE le sezioni',
+    '📏 Dimensione, peso e colore titoli configurabili',
+    '✏️ Controllo testi: sottotitoli, descrizioni, etichette',
+    '🎯 Campi specifici per ogni sezione (prezzi, numeri, citazioni)',
+  ],
   '1.6.0': [
     '📄 Dashboard Pagine v3: vista unificata',
     '🔗 No piu duplicati (draft+published in una riga)',

@@ -3,6 +3,7 @@ import { defineType, defineField } from 'sanity'
 import { PlayIcon } from '@sanity/icons'
 import { getPlainText } from '../../lib/previewHelpers'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'carouselSection',
@@ -16,6 +17,7 @@ export default defineType({
     { name: 'slides', title: '🖼️ Slide' },
     { name: 'layout', title: '📐 Layout' },
     { name: 'navigation', title: '🎮 Navigazione' },
+    { name: 'typography', title: '🔤 Tipografia' },
     { name: 'style', title: '🎨 Stile' },
     { name: 'animation', title: '✨ Animazioni' },
   ],
@@ -429,6 +431,64 @@ export default defineType({
       type: 'boolean',
       group: 'navigation',
       initialValue: true,
+    }),
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo Sezione',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'slideTitleSize',
+      title: 'Dimensione Titolo Slide',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Normale (24px)', value: 'lg' },
+          { title: 'Grande (32px)', value: 'xl' },
+          { title: 'Extra Grande (40px)', value: '2xl' },
+          { title: 'Gigante (48px)', value: '3xl' },
+        ],
+      },
+      initialValue: 'xl',
+    }),
+
+    defineField({
+      name: 'slideDescriptionSize',
+      title: 'Dimensione Descrizione Slide',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+        ],
+      },
+      initialValue: 'base',
     }),
 
     // === STILE ===

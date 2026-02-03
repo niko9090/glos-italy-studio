@@ -1,6 +1,9 @@
 // Team Section - Membri del team
 import { defineType, defineField } from 'sanity'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { animationOptions, hoverEffectOptions } from '../shared/animationOptions'
+import { cardStyleOptions } from '../shared/styleOptions'
+import { titleSizeOptions, fontWeightOptions, textColorOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'teamSection',
@@ -8,9 +11,10 @@ export default defineType({
   type: 'object',
   icon: () => '👥',
   groups: [
-    { name: 'content', title: 'Contenuto', default: true },
-    { name: 'members', title: 'Membri' },
-    { name: 'style', title: 'Stile' },
+    { name: 'content', title: '📝 Contenuto', default: true },
+    { name: 'members', title: '👥 Membri' },
+    { name: 'typography', title: '🔤 Tipografia' },
+    { name: 'style', title: '🎨 Stile' },
   ],
   fields: [
     defineField({
@@ -97,7 +101,65 @@ export default defineType({
         },
       ],
     }),
-    // Style
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'titleSize',
+      title: 'Dimensione Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: titleSizeOptions },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'titleWeight',
+      title: 'Peso Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'bold',
+    }),
+
+    defineField({
+      name: 'titleColor',
+      title: 'Colore Titolo',
+      type: 'string',
+      group: 'typography',
+      options: { list: textColorOptions },
+    }),
+
+    defineField({
+      name: 'nameSize',
+      title: 'Dimensione Nomi',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (16px)', value: 'sm' },
+          { title: 'Normale (18px)', value: 'base' },
+          { title: 'Grande (20px)', value: 'lg' },
+          { title: 'Extra Large (24px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'roleSize',
+      title: 'Dimensione Ruoli',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (12px)', value: 'xs' },
+          { title: 'Normale (14px)', value: 'sm' },
+          { title: 'Grande (16px)', value: 'base' },
+        ],
+      },
+      initialValue: 'sm',
+    }),
+
+    // === STILE ===
     defineField({
       name: 'layout',
       title: 'Layout',

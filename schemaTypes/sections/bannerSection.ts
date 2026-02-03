@@ -2,6 +2,7 @@
 import { defineType, defineField } from 'sanity'
 import { iconOptions } from '../shared/iconOptions'
 import { paddingOptions, marginOptions } from '../shared/spacingOptions'
+import { fontWeightOptions } from '../shared/typographyOptions'
 
 export default defineType({
   name: 'bannerSection',
@@ -9,8 +10,9 @@ export default defineType({
   type: 'object',
   icon: () => '🏷️',
   groups: [
-    { name: 'content', title: 'Contenuto', default: true },
-    { name: 'style', title: 'Stile' },
+    { name: 'content', title: '📝 Contenuto', default: true },
+    { name: 'typography', title: '🔤 Tipografia' },
+    { name: 'style', title: '🎨 Stile' },
   ],
   fields: [
     defineField({
@@ -49,7 +51,34 @@ export default defineType({
         list: iconOptions,
       },
     }),
-    // Style
+
+    // === TIPOGRAFIA ===
+    defineField({
+      name: 'textSize',
+      title: 'Dimensione Testo',
+      type: 'string',
+      group: 'typography',
+      options: {
+        list: [
+          { title: 'Piccolo (14px)', value: 'sm' },
+          { title: 'Normale (16px)', value: 'base' },
+          { title: 'Grande (18px)', value: 'lg' },
+          { title: 'Extra Grande (20px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'base',
+    }),
+
+    defineField({
+      name: 'textWeight',
+      title: 'Peso Testo',
+      type: 'string',
+      group: 'typography',
+      options: { list: fontWeightOptions },
+      initialValue: 'medium',
+    }),
+
+    // === STILE ===
     defineField({
       name: 'variant',
       title: 'Variante',
