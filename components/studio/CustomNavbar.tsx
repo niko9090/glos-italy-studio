@@ -5,12 +5,17 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.9.3'
+const SITE_VERSION = '1.9.4'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '1.9.4': [
+    '🐛 Fix SchemaError: localeRichText usa tipo richText',
+    '✅ Riferimento al tipo richText esistente',
+    '🔧 Semplificazione massima',
+  ],
   '1.9.3': [
     '🐛 Fix SchemaError: defineField esplicito',
     '✅ Rimosso .map() dinamico per campi lingua',
