@@ -572,22 +572,6 @@ export default defineType({
     }),
 
     defineField({
-      name: 'titleSize',
-      title: 'Dimensione Titolo',
-      type: 'string',
-      group: 'style',
-      options: {
-        list: [
-          { title: 'Normale', value: 'normal' },
-          { title: 'Grande', value: 'large' },
-          { title: 'Extra Grande', value: 'xl' },
-          { title: 'Gigante', value: 'xxl' },
-        ],
-      },
-      initialValue: 'large',
-    }),
-
-    defineField({
       name: 'borderRadius',
       title: 'Bordi Arrotondati',
       type: 'string',

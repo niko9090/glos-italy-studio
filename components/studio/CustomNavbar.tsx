@@ -5,12 +5,18 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.9.7'
+const SITE_VERSION = '1.9.8'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '1.9.8': [
+    '🐛 Fix SchemaError: rimossi campi duplicati',
+    '✅ statsSection: rimossi numberSize/numberWeight duplicati',
+    '✅ ctaSection: rimosso titleSize duplicato',
+    '🔧 Ogni campo ora definito una sola volta',
+  ],
   '1.9.5': [
     '🐛 Fix SchemaError: ordine schemi corretto',
     '✅ richText ora viene PRIMA di localeRichText',

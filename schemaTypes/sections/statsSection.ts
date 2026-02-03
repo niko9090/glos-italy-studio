@@ -336,39 +336,6 @@ export default defineType({
     }),
 
     defineField({
-      name: 'numberSize',
-      title: 'Dimensione Numeri',
-      type: 'string',
-      group: 'style',
-      options: {
-        list: [
-          { title: 'Piccola', value: 'sm' },
-          { title: 'Media', value: 'md' },
-          { title: 'Grande', value: 'lg' },
-          { title: 'Extra Grande', value: 'xl' },
-          { title: 'Gigante', value: 'xxl' },
-        ],
-      },
-      initialValue: 'xl',
-    }),
-
-    defineField({
-      name: 'numberWeight',
-      title: 'Peso Numeri',
-      type: 'string',
-      group: 'style',
-      options: {
-        list: [
-          { title: 'Normale', value: 'normal' },
-          { title: 'Medium', value: 'medium' },
-          { title: 'Bold', value: 'bold' },
-          { title: 'Extra Bold', value: 'extrabold' },
-        ],
-      },
-      initialValue: 'bold',
-    }),
-
-    defineField({
       name: 'cardStyle',
       title: 'Stile Cards',
       type: 'string',
