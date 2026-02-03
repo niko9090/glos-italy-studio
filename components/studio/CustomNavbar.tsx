@@ -5,48 +5,18 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.9.8'
+const SITE_VERSION = '2.0.0'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
+// (Solo versioni funzionanti - no versioni con errori di build)
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
-  '1.9.8': [
-    '🐛 Fix SchemaError: rimossi campi duplicati',
-    '✅ statsSection: rimossi numberSize/numberWeight duplicati',
-    '✅ ctaSection: rimosso titleSize duplicato',
-    '🔧 Ogni campo ora definito una sola volta',
-  ],
-  '1.9.5': [
-    '🐛 Fix SchemaError: ordine schemi corretto',
-    '✅ richText ora viene PRIMA di localeRichText',
-    '🔧 Risolto problema dipendenza tipo',
-  ],
-  '1.9.4': [
-    '🐛 Fix SchemaError: localeRichText usa tipo richText',
-    '✅ Riferimento al tipo richText esistente',
-    '🔧 Semplificazione massima',
-  ],
-  '1.9.3': [
-    '🐛 Fix SchemaError: defineField esplicito',
-    '✅ Rimosso .map() dinamico per campi lingua',
-    '🔧 Versione ultra-minimale per debug',
-  ],
-  '1.9.2': [
-    '🐛 Fix SchemaError: versione semplificata localeRichText',
-    '✅ Rimossi componenti custom problematici',
-    '🔧 Rich text base: grassetto, corsivo, colori, link, dimensioni',
-  ],
-  '1.9.1': [
-    '🐛 Fix SchemaError: rimosso styledBlock nidificato',
-    '✅ Semplificato localeRichText per compatibilità Sanity',
-    '🔧 Risolto problema defineArrayMember nidificato',
-  ],
-  '1.9.0': [
-    '🐛 Fix SchemaError per localeRichText',
-    '✅ Preview corrette in tutte le sezioni',
-    '🔧 getPlainText() per estrarre testo da Portable Text',
-    '📋 25 file sezioni aggiornati',
+  '2.0.0': [
+    '🐛 Fix SchemaError: rimossi campi duplicati negli schemi',
+    '✅ statsSection: numberSize/numberWeight ora univoci',
+    '✅ ctaSection: titleSize ora univoco',
+    '🔧 Pulizia codice e stabilizzazione',
   ],
   '1.8.0': [
     '✨ Editor Rich Text in TUTTI i campi testo',
@@ -111,7 +81,149 @@ const VERSION_ORDER = Object.keys(CHANGELOG).sort((a, b) => {
 })
 
 export function CustomNavbar(props: NavbarProps) {
-  // Ritorna semplicemente la navbar default senza modifiche
-  // per testare se il problema di layout è causato dal wrapper custom
-  return props.renderDefault(props)
+  const [showTooltip, setShowTooltip] = useState(false)
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      {/* Navbar default */}
+      <div style={{ flex: 1 }}>
+        {props.renderDefault(props)}
+      </div>
+
+      {/* Badge versione con tooltip changelog completo */}
+      <div
+        style={{ position: 'relative', marginRight: '12px' }}
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        <div
+          style={{
+            backgroundColor: '#0047AB',
+            color: 'white',
+            padding: '4px 10px',
+            borderRadius: '4px',
+            fontSize: '11px',
+            fontWeight: '600',
+            fontFamily: 'system-ui, sans-serif',
+            whiteSpace: 'nowrap',
+            cursor: 'help',
+          }}
+        >
+          v{SITE_VERSION}
+        </div>
+
+        {/* Tooltip Changelog Completo */}
+        {showTooltip && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '100%',
+              right: 0,
+              marginTop: '8px',
+              backgroundColor: '#1a1a1a',
+              color: 'white',
+              padding: '16px',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontFamily: 'system-ui, sans-serif',
+              minWidth: '320px',
+              maxWidth: '400px',
+              maxHeight: '70vh',
+              overflowY: 'auto',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+              zIndex: 9999,
+            }}
+          >
+            {/* Header */}
+            <div
+              style={{
+                fontWeight: '700',
+                fontSize: '14px',
+                marginBottom: '12px',
+                paddingBottom: '10px',
+                borderBottom: '1px solid #333',
+                color: '#0077FF',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              📋 Storico Versioni
+            </div>
+
+            {/* Lista tutte le versioni */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {VERSION_ORDER.map((version) => (
+                <div key={version}>
+                  {/* Titolo versione */}
+                  <div
+                    style={{
+                      fontWeight: '600',
+                      fontSize: '12px',
+                      marginBottom: '6px',
+                      color: version === SITE_VERSION ? '#00cc66' : '#888',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                    }}
+                  >
+                    {version === SITE_VERSION && (
+                      <span style={{
+                        backgroundColor: '#00cc66',
+                        color: '#000',
+                        padding: '1px 6px',
+                        borderRadius: '4px',
+                        fontSize: '9px',
+                        fontWeight: '700',
+                      }}>
+                        ATTUALE
+                      </span>
+                    )}
+                    v{version}
+                  </div>
+
+                  {/* Lista modifiche */}
+                  <ul
+                    style={{
+                      margin: 0,
+                      padding: '0 0 0 12px',
+                      listStyle: 'none',
+                    }}
+                  >
+                    {CHANGELOG[version].map((item, index) => (
+                      <li
+                        key={index}
+                        style={{
+                          padding: '2px 0',
+                          fontSize: '11px',
+                          lineHeight: '1.4',
+                          color: version === SITE_VERSION ? '#e0e0e0' : '#888',
+                        }}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            {/* Freccia tooltip */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '-6px',
+                right: '12px',
+                width: 0,
+                height: 0,
+                borderLeft: '6px solid transparent',
+                borderRight: '6px solid transparent',
+                borderBottom: '6px solid #1a1a1a',
+              }}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
