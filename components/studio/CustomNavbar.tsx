@@ -5,12 +5,17 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.9.4'
+const SITE_VERSION = '1.9.5'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '1.9.5': [
+    '🐛 Fix SchemaError: ordine schemi corretto',
+    '✅ richText ora viene PRIMA di localeRichText',
+    '🔧 Risolto problema dipendenza tipo',
+  ],
   '1.9.4': [
     '🐛 Fix SchemaError: localeRichText usa tipo richText',
     '✅ Riferimento al tipo richText esistente',

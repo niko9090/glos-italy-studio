@@ -48,11 +48,11 @@ import mapSection from './sections/mapSection'
 import counterSection from './sections/counterSection'
 
 export const schemaTypes = [
-  // Tipi oggetto base
+  // Tipi oggetto base (ORDINE IMPORTANTE: richText prima di localeRichText)
   localeString,
   localeText,
-  localeRichText,
   richText,
+  localeRichText,
   accessibleImage,
 
   // Documenti principali
