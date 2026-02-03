@@ -1,36 +1,6 @@
-// Tipo: Rich Text Multilingua con formattazione ULTRA COMPLETA
+// Tipo: Rich Text Multilingua - VERSIONE SEMPLIFICATA
+// Risolve SchemaError causato dalla complessità eccessiva
 import { defineType, defineArrayMember } from 'sanity'
-import {
-  TextColorPreview,
-  HighlightPreview,
-  FontSizePreview,
-  FontFamilyPreview,
-  FontWeightPreview,
-  GradientPreview,
-  TextShadowPreview,
-  TextOutlinePreview,
-  AnimationPreview,
-  InlineIconPreview,
-  ButtonStylePreview,
-  InlineBorderPreview,
-  LetterSpacingPreview,
-  LineHeightPreview,
-  TextTransformPreview,
-  TextDecorationPreview,
-  LinkPreview,
-  StrongPreview,
-  EmPreview,
-  UnderlinePreview,
-  StrikeThroughPreview,
-  CodePreview,
-  SupPreview,
-  SubPreview,
-  MarkPreview,
-  SmallTextPreview,
-  AbbrPreview,
-  KbdPreview,
-} from '../../components/portableText/PreviewComponents'
-import IconPicker from '../../components/inputs/IconPicker'
 
 // Lingue supportate
 const supportedLanguages = [
@@ -40,467 +10,72 @@ const supportedLanguages = [
 ]
 
 // ============================================
-// COLORI TESTO - Palette completa
+// COLORI TESTO - Palette base
 // ============================================
 const textColors = [
-  // Neutri
   { title: '⬛ Nero', value: 'black' },
   { title: '⬜ Bianco', value: 'white' },
-  { title: '🔘 Grigio Scuro', value: 'gray-dark' },
   { title: '🔘 Grigio', value: 'gray' },
-  { title: '🔘 Grigio Chiaro', value: 'gray-light' },
-
-  // Brand
-  { title: '🔵 Blu GLOS (Primary)', value: 'primary' },
-  { title: '🔵 Blu Scuro', value: 'primary-dark' },
-  { title: '🔵 Blu Chiaro', value: 'primary-light' },
-
-  // Colori vivaci
+  { title: '🔵 Blu GLOS', value: 'primary' },
   { title: '🔴 Rosso', value: 'red' },
-  { title: '🔴 Rosso Scuro', value: 'red-dark' },
-  { title: '🟠 Arancione', value: 'orange' },
-  { title: '🟡 Giallo', value: 'yellow' },
   { title: '🟢 Verde', value: 'green' },
-  { title: '🟢 Verde Scuro', value: 'green-dark' },
-  { title: '🟢 Verde Lime', value: 'lime' },
-  { title: '🩵 Ciano', value: 'cyan' },
-  { title: '🔵 Blu Cielo', value: 'sky' },
+  { title: '🟠 Arancione', value: 'orange' },
   { title: '🟣 Viola', value: 'purple' },
-  { title: '💜 Viola Scuro', value: 'purple-dark' },
-  { title: '🩷 Rosa', value: 'pink' },
-  { title: '💗 Rosa Acceso', value: 'pink-hot' },
-  { title: '🤎 Marrone', value: 'brown' },
-
-  // Speciali
-  { title: '🪙 Oro', value: 'gold' },
-  { title: '🥈 Argento', value: 'silver' },
-  { title: '🥉 Bronzo', value: 'bronze' },
-  { title: '💎 Diamante', value: 'diamond' },
-  { title: '🌈 Arcobaleno', value: 'rainbow' },
 ]
 
 // ============================================
-// COLORI SFONDO/EVIDENZIAZIONE
+// COLORI EVIDENZIAZIONE
 // ============================================
 const highlightColors = [
   { title: '🟡 Giallo', value: 'yellow' },
   { title: '🟢 Verde Chiaro', value: 'lightgreen' },
   { title: '🔵 Azzurro', value: 'lightblue' },
   { title: '🩷 Rosa', value: 'pink' },
-  { title: '🟣 Lavanda', value: 'lavender' },
-  { title: '🟠 Pesca', value: 'peach' },
-  { title: '⬜ Grigio Chiaro', value: 'lightgray' },
-  { title: '🔴 Rosso Chiaro', value: 'lightred' },
-  { title: '🩵 Ciano Chiaro', value: 'lightcyan' },
-  { title: '🟤 Beige', value: 'beige' },
-  { title: '💛 Giallo Oro', value: 'gold-light' },
-  { title: '💜 Viola Chiaro', value: 'violet-light' },
 ]
 
 // ============================================
-// DIMENSIONI FONT - Scala completa
+// DIMENSIONI FONT
 // ============================================
 const fontSizes = [
-  { title: '10px - Minuscolo', value: 'xs' },
-  { title: '12px - Molto Piccolo', value: 'sm' },
-  { title: '14px - Piccolo', value: 'base-sm' },
+  { title: '12px - Piccolo', value: 'sm' },
   { title: '16px - Normale', value: 'base' },
-  { title: '18px - Medio', value: 'lg' },
-  { title: '20px - Grande', value: 'xl' },
-  { title: '24px - Molto Grande', value: '2xl' },
-  { title: '30px - Extra Grande', value: '3xl' },
-  { title: '36px - Enorme', value: '4xl' },
-  { title: '48px - Gigante', value: '5xl' },
-  { title: '60px - Massimo', value: '6xl' },
-  { title: '72px - Display', value: '7xl' },
-  { title: '96px - Hero', value: '8xl' },
-  { title: '128px - Mega', value: '9xl' },
+  { title: '20px - Grande', value: 'lg' },
+  { title: '24px - Molto Grande', value: 'xl' },
+  { title: '32px - Extra Grande', value: '2xl' },
+  { title: '48px - Gigante', value: '3xl' },
 ]
 
 // ============================================
-// FONT FAMILY
+// BLOCK CONTENT SEMPLIFICATO
 // ============================================
-const fontFamilies = [
-  { title: 'Default (Sistema)', value: 'default' },
-  { title: 'Sans Serif (Pulito)', value: 'sans' },
-  { title: 'Serif (Elegante)', value: 'serif' },
-  { title: 'Monospace (Codice)', value: 'mono' },
-  { title: 'Display (Titoli)', value: 'display' },
-  { title: 'Handwriting (Scritto a mano)', value: 'handwriting' },
-]
-
-// ============================================
-// FONT WEIGHT
-// ============================================
-const fontWeights = [
-  { title: 'Thin (100)', value: '100' },
-  { title: 'Extra Light (200)', value: '200' },
-  { title: 'Light (300)', value: '300' },
-  { title: 'Normal (400)', value: '400' },
-  { title: 'Medium (500)', value: '500' },
-  { title: 'Semi Bold (600)', value: '600' },
-  { title: 'Bold (700)', value: '700' },
-  { title: 'Extra Bold (800)', value: '800' },
-  { title: 'Black (900)', value: '900' },
-]
-
-// ============================================
-// LETTER SPACING
-// ============================================
-const letterSpacings = [
-  { title: 'Molto Stretto (-0.05em)', value: 'tighter' },
-  { title: 'Stretto (-0.025em)', value: 'tight' },
-  { title: 'Normale', value: 'normal' },
-  { title: 'Largo (0.025em)', value: 'wide' },
-  { title: 'Molto Largo (0.05em)', value: 'wider' },
-  { title: 'Larghissimo (0.1em)', value: 'widest' },
-]
-
-// ============================================
-// LINE HEIGHT
-// ============================================
-const lineHeights = [
-  { title: 'Nessuna (1)', value: 'none' },
-  { title: 'Stretta (1.25)', value: 'tight' },
-  { title: 'Compatta (1.375)', value: 'snug' },
-  { title: 'Normale (1.5)', value: 'normal' },
-  { title: 'Rilassata (1.625)', value: 'relaxed' },
-  { title: 'Ampia (2)', value: 'loose' },
-]
-
-// ============================================
-// EFFETTI TESTO - Ombre
-// ============================================
-const textShadows = [
-  { title: 'Nessuna', value: 'none' },
-  { title: 'Leggera', value: 'sm' },
-  { title: 'Media', value: 'md' },
-  { title: 'Forte', value: 'lg' },
-  { title: 'Molto Forte', value: 'xl' },
-  { title: 'Neon Blu', value: 'neon-blue' },
-  { title: 'Neon Verde', value: 'neon-green' },
-  { title: 'Neon Rosa', value: 'neon-pink' },
-  { title: 'Neon Oro', value: 'neon-gold' },
-  { title: 'Neon Rosso', value: 'neon-red' },
-  { title: 'Neon Viola', value: 'neon-purple' },
-  { title: 'Glow Bianco', value: 'glow-white' },
-  { title: 'Ombra Lunga', value: 'long' },
-  { title: 'Ombra 3D', value: '3d' },
-  { title: 'Retro', value: 'retro' },
-  { title: 'Inciso', value: 'inset' },
-]
-
-// ============================================
-// EFFETTI TESTO - Gradienti
-// ============================================
-const textGradients = [
-  { title: 'Nessuno', value: 'none' },
-  { title: '🌅 Tramonto (Arancio → Rosa)', value: 'sunset' },
-  { title: '🌊 Oceano (Blu → Ciano)', value: 'ocean' },
-  { title: '🌲 Foresta (Verde → Smeraldo)', value: 'forest' },
-  { title: '🔥 Fuoco (Rosso → Arancio)', value: 'fire' },
-  { title: '💜 Aurora (Viola → Rosa)', value: 'aurora' },
-  { title: '🪙 Oro (Giallo → Arancio)', value: 'gold' },
-  { title: '🥈 Argento (Grigio Chiaro → Bianco)', value: 'silver' },
-  { title: '🌈 Arcobaleno', value: 'rainbow' },
-  { title: '🌙 Notte (Blu Scuro → Viola)', value: 'night' },
-  { title: '🍭 Candy (Rosa → Viola → Blu)', value: 'candy' },
-  { title: '⚡ Elettrico (Giallo → Verde)', value: 'electric' },
-  { title: '🖤 Dark Mode (Grigio → Nero)', value: 'dark' },
-  { title: '❄️ Ghiaccio (Bianco → Azzurro)', value: 'ice' },
-  { title: '🍊 Agrumi (Arancio → Giallo)', value: 'citrus' },
-  { title: '🍇 Uva (Viola → Blu)', value: 'grape' },
-  { title: '🌸 Sakura (Rosa → Bianco)', value: 'sakura' },
-]
-
-// ============================================
-// ANIMAZIONI TESTO
-// ============================================
-const textAnimations = [
-  { title: 'Nessuna', value: 'none' },
-  { title: '✨ Fade In', value: 'fade-in' },
-  { title: '⬆️ Slide Up', value: 'slide-up' },
-  { title: '⬇️ Slide Down', value: 'slide-down' },
-  { title: '⬅️ Slide Left', value: 'slide-left' },
-  { title: '➡️ Slide Right', value: 'slide-right' },
-  { title: '📈 Zoom In', value: 'zoom-in' },
-  { title: '📉 Zoom Out', value: 'zoom-out' },
-  { title: '🔄 Flip', value: 'flip' },
-  { title: '💫 Bounce', value: 'bounce' },
-  { title: '🌀 Rotate', value: 'rotate' },
-  { title: '💓 Pulse', value: 'pulse' },
-  { title: '🌊 Wave', value: 'wave' },
-  { title: '⌨️ Typewriter', value: 'typewriter' },
-  { title: '✏️ Scrittura', value: 'draw' },
-  { title: '🌟 Glitter', value: 'glitter' },
-  { title: '🔥 Shake', value: 'shake' },
-  { title: '👻 Float', value: 'float' },
-  { title: '💥 Pop', value: 'pop' },
-  { title: '🎯 Focus', value: 'focus' },
-]
-
-// ============================================
-// DECORAZIONI TESTO SPECIALI
-// ============================================
-const textDecorations = [
-  { title: 'Nessuna', value: 'none' },
-  { title: 'Sottolineato', value: 'underline' },
-  { title: 'Sottolineato Ondulato', value: 'underline-wavy' },
-  { title: 'Sottolineato Doppio', value: 'underline-double' },
-  { title: 'Sottolineato Punteggiato', value: 'underline-dotted' },
-  { title: 'Sottolineato Tratteggiato', value: 'underline-dashed' },
-  { title: 'Sopralineato', value: 'overline' },
-  { title: 'Barrato', value: 'line-through' },
-]
-
-// ============================================
-// TRASFORMAZIONI TESTO
-// ============================================
-const textTransforms = [
-  { title: 'Normale', value: 'none' },
-  { title: 'MAIUSCOLO', value: 'uppercase' },
-  { title: 'minuscolo', value: 'lowercase' },
-  { title: 'Prima Lettera Maiuscola', value: 'capitalize' },
-  { title: 'Maiuscoletto', value: 'small-caps' },
-]
-
-// ============================================
-// ICONE DISPONIBILI
-// ============================================
-const icons = [
-  // Frecce
-  { title: '→ Freccia Destra', value: 'arrow-right' },
-  { title: '← Freccia Sinistra', value: 'arrow-left' },
-  { title: '↑ Freccia Su', value: 'arrow-up' },
-  { title: '↓ Freccia Giù', value: 'arrow-down' },
-  { title: '↗ Freccia Diagonale', value: 'arrow-diagonal' },
-  { title: '➜ Freccia Piena', value: 'arrow-filled' },
-  { title: '▶ Triangolo Destra', value: 'triangle-right' },
-  { title: '◀ Triangolo Sinistra', value: 'triangle-left' },
-
-  // Check e status
-  { title: '✓ Check', value: 'check' },
-  { title: '✔ Check Pieno', value: 'check-filled' },
-  { title: '✗ X', value: 'x' },
-  { title: '✘ X Piena', value: 'x-filled' },
-  { title: '⚠ Warning', value: 'warning' },
-  { title: '⛔ Stop', value: 'stop' },
-  { title: 'ℹ Info', value: 'info' },
-  { title: '❓ Domanda', value: 'question' },
-  { title: '❗ Esclamazione', value: 'exclamation' },
-
-  // Stelle e rating
-  { title: '★ Stella Piena', value: 'star' },
-  { title: '☆ Stella Vuota', value: 'star-empty' },
-  { title: '✦ Stella 4 punte', value: 'star-4' },
-  { title: '✧ Stella Brillante', value: 'star-sparkle' },
-
-  // Cuori
-  { title: '♥ Cuore Pieno', value: 'heart' },
-  { title: '♡ Cuore Vuoto', value: 'heart-empty' },
-  { title: '💖 Cuore Brillante', value: 'heart-sparkle' },
-
-  // Forme
-  { title: '● Cerchio Pieno', value: 'circle' },
-  { title: '○ Cerchio Vuoto', value: 'circle-empty' },
-  { title: '■ Quadrato Pieno', value: 'square' },
-  { title: '□ Quadrato Vuoto', value: 'square-empty' },
-  { title: '◆ Diamante', value: 'diamond' },
-  { title: '◇ Diamante Vuoto', value: 'diamond-empty' },
-
-  // Business
-  { title: '📞 Telefono', value: 'phone' },
-  { title: '✉ Email', value: 'email' },
-  { title: '📍 Location', value: 'location' },
-  { title: '🌐 Web', value: 'web' },
-  { title: '💼 Business', value: 'business' },
-  { title: '📅 Calendario', value: 'calendar' },
-  { title: '⏰ Orologio', value: 'clock' },
-  { title: '💰 Soldi', value: 'money' },
-  { title: '🎯 Target', value: 'target' },
-  { title: '🏆 Trofeo', value: 'trophy' },
-
-  // Tech
-  { title: '⚡ Fulmine', value: 'lightning' },
-  { title: '🔧 Ingranaggio', value: 'gear' },
-  { title: '🔒 Lucchetto', value: 'lock' },
-  { title: '🔓 Lucchetto Aperto', value: 'unlock' },
-  { title: '🔔 Notifica', value: 'bell' },
-  { title: '💡 Idea', value: 'bulb' },
-  { title: '🚀 Rocket', value: 'rocket' },
-  { title: '⚙️ Settings', value: 'settings' },
-
-  // Social
-  { title: '👍 Like', value: 'like' },
-  { title: '👎 Dislike', value: 'dislike' },
-  { title: '👤 Utente', value: 'user' },
-  { title: '👥 Gruppo', value: 'users' },
-  { title: '💬 Chat', value: 'chat' },
-  { title: '📣 Megafono', value: 'megaphone' },
-
-  // Natura
-  { title: '☀ Sole', value: 'sun' },
-  { title: '🌙 Luna', value: 'moon' },
-  { title: '🌟 Stella Brillante', value: 'star-bright' },
-  { title: '🔥 Fuoco', value: 'fire' },
-  { title: '💧 Goccia', value: 'drop' },
-  { title: '🌿 Foglia', value: 'leaf' },
-  { title: '🌸 Fiore', value: 'flower' },
-
-  // Simboli speciali
-  { title: '© Copyright', value: 'copyright' },
-  { title: '® Registered', value: 'registered' },
-  { title: '™ Trademark', value: 'trademark' },
-  { title: '∞ Infinito', value: 'infinity' },
-  { title: '§ Sezione', value: 'section' },
-  { title: '¶ Paragrafo', value: 'paragraph' },
-  { title: '† Croce', value: 'dagger' },
-  { title: '‡ Doppia Croce', value: 'double-dagger' },
-]
-
-// ============================================
-// EFFETTI BLOCCO - Sfondo
-// ============================================
-const blockBackgrounds = [
-  { title: 'Nessuno', value: 'none' },
-  { title: 'Bianco', value: 'white' },
-  { title: 'Grigio Chiaro', value: 'gray-light' },
-  { title: 'Grigio', value: 'gray' },
-  { title: 'Nero', value: 'black' },
-  { title: 'Blu GLOS', value: 'primary' },
-  { title: 'Blu Chiaro', value: 'primary-light' },
-  { title: 'Verde', value: 'green' },
-  { title: 'Rosso', value: 'red' },
-  { title: 'Giallo', value: 'yellow' },
-  { title: 'Arancione', value: 'orange' },
-  { title: 'Viola', value: 'purple' },
-  { title: 'Rosa', value: 'pink' },
-  { title: 'Ciano', value: 'cyan' },
-  { title: 'Gradiente Orizzontale', value: 'gradient-h' },
-  { title: 'Gradiente Verticale', value: 'gradient-v' },
-  { title: 'Gradiente Diagonale', value: 'gradient-d' },
-  { title: 'Glass Effect', value: 'glass' },
-]
-
-// ============================================
-// EFFETTI BLOCCO - Bordi
-// ============================================
-const blockBorders = [
-  { title: 'Nessuno', value: 'none' },
-  { title: 'Sottile', value: 'thin' },
-  { title: 'Medio', value: 'medium' },
-  { title: 'Spesso', value: 'thick' },
-  { title: 'Solo Sinistra', value: 'left' },
-  { title: 'Solo Destra', value: 'right' },
-  { title: 'Solo Sopra', value: 'top' },
-  { title: 'Solo Sotto', value: 'bottom' },
-  { title: 'Arrotondato', value: 'rounded' },
-  { title: 'Pillola', value: 'pill' },
-  { title: 'Tratteggiato', value: 'dashed' },
-  { title: 'Punteggiato', value: 'dotted' },
-]
-
-// ============================================
-// EFFETTI BLOCCO - Ombra
-// ============================================
-const blockShadows = [
-  { title: 'Nessuna', value: 'none' },
-  { title: 'Leggera', value: 'sm' },
-  { title: 'Media', value: 'md' },
-  { title: 'Forte', value: 'lg' },
-  { title: 'Molto Forte', value: 'xl' },
-  { title: 'Interna', value: 'inner' },
-  { title: 'Colorata', value: 'colored' },
-  { title: 'Neon', value: 'neon' },
-]
-
-// ============================================
-// PADDING BLOCCO
-// ============================================
-const blockPaddings = [
-  { title: 'Nessuno', value: 'none' },
-  { title: 'Piccolo (8px)', value: 'sm' },
-  { title: 'Medio (16px)', value: 'md' },
-  { title: 'Grande (24px)', value: 'lg' },
-  { title: 'Extra Grande (32px)', value: 'xl' },
-  { title: 'Enorme (48px)', value: '2xl' },
-]
-
-// ============================================
-// CONFIGURAZIONE BLOCK CONTENT
-// ============================================
-const richTextBlock = defineArrayMember({
+const simpleRichTextBlock = defineArrayMember({
   type: 'block',
-
-  // STILI DI PARAGRAFO - Estesi
   styles: [
     { title: 'Normale', value: 'normal' },
-    { title: 'Lead (Intro grande)', value: 'lead' },
-    { title: 'Titolo Hero', value: 'hero' },
-    { title: 'Titolo Display', value: 'display' },
     { title: 'Titolo 1', value: 'h1' },
     { title: 'Titolo 2', value: 'h2' },
     { title: 'Titolo 3', value: 'h3' },
     { title: 'Titolo 4', value: 'h4' },
-    { title: 'Titolo 5', value: 'h5' },
-    { title: 'Titolo 6', value: 'h6' },
-    { title: 'Sottotitolo', value: 'subtitle' },
     { title: 'Citazione', value: 'blockquote' },
-    { title: 'Citazione Grande', value: 'blockquote-large' },
-    { title: 'Callout Info', value: 'callout' },
-    { title: 'Callout Success', value: 'callout-success' },
-    { title: 'Callout Warning', value: 'callout-warning' },
-    { title: 'Callout Error', value: 'callout-error' },
-    { title: 'Caption (Didascalia)', value: 'caption' },
-    { title: 'Piccolo', value: 'small' },
-    { title: 'Codice', value: 'code-block' },
   ],
-
-  // LISTE - Estese
   lists: [
-    { title: '• Elenco Puntato', value: 'bullet' },
-    { title: '1. Elenco Numerato', value: 'number' },
-    { title: '✓ Checklist Verde', value: 'check' },
-    { title: '✗ Checklist Rosso', value: 'check-red' },
-    { title: '→ Frecce Blu', value: 'arrow' },
-    { title: '➜ Frecce Verdi', value: 'arrow-green' },
-    { title: '★ Stelle Gialle', value: 'star' },
-    { title: '★ Stelle Blu', value: 'star-blue' },
-    { title: '♥ Cuori Rossi', value: 'heart' },
-    { title: '● Pallini Blu', value: 'dot-blue' },
-    { title: '● Pallini Verdi', value: 'dot-green' },
-    { title: '● Pallini Rossi', value: 'dot-red' },
-    { title: '◆ Diamanti', value: 'diamond' },
-    { title: '⚡ Fulmini', value: 'lightning' },
-    { title: '🔥 Fuochi', value: 'fire' },
-    { title: '🚀 Rockets', value: 'rocket' },
+    { title: 'Elenco Puntato', value: 'bullet' },
+    { title: 'Elenco Numerato', value: 'number' },
   ],
-
-  // MARKS - Decoratori e Annotazioni
   marks: {
-    // Decoratori base (toggle on/off) con preview
     decorators: [
-      { title: 'Grassetto', value: 'strong', component: StrongPreview },
-      { title: 'Corsivo', value: 'em', component: EmPreview },
-      { title: 'Sottolineato', value: 'underline', component: UnderlinePreview },
-      { title: 'Barrato', value: 'strike-through', component: StrikeThroughPreview },
-      { title: 'Codice Inline', value: 'code', component: CodePreview },
-      { title: 'Apice (superscript)', value: 'sup', component: SupPreview },
-      { title: 'Pedice (subscript)', value: 'sub', component: SubPreview },
-      { title: 'Testo Marcato', value: 'mark', component: MarkPreview },
-      { title: 'Testo Piccolo', value: 'small-text', component: SmallTextPreview },
-      { title: 'Abbreviazione', value: 'abbr', component: AbbrPreview },
-      { title: 'Keyboard', value: 'kbd', component: KbdPreview },
+      { title: 'Grassetto', value: 'strong' },
+      { title: 'Corsivo', value: 'em' },
+      { title: 'Sottolineato', value: 'underline' },
+      { title: 'Barrato', value: 'strike-through' },
+      { title: 'Codice', value: 'code' },
     ],
-
-    // Annotazioni (con opzioni)
     annotations: [
-      // ========== LINK ==========
+      // Link
       {
         name: 'link',
         type: 'object',
-        title: '🔗 Link',
-        components: { annotation: LinkPreview },
+        title: 'Link',
         fields: [
           {
             name: 'href',
@@ -519,49 +94,11 @@ const richTextBlock = defineArrayMember({
           },
         ],
       },
-
-      // ========== ICONA INLINE ==========
-      {
-        name: 'inlineIcon',
-        type: 'object',
-        title: '🎯 Icona',
-        components: { annotation: InlineIconPreview },
-        fields: [
-          {
-            name: 'icon',
-            type: 'string',
-            title: 'Icona',
-            components: { input: IconPicker },
-          },
-          {
-            name: 'color',
-            type: 'string',
-            title: 'Colore Icona',
-            options: { list: textColors },
-          },
-          {
-            name: 'size',
-            type: 'string',
-            title: 'Dimensione',
-            options: {
-              list: [
-                { title: 'Piccola', value: 'sm' },
-                { title: 'Normale', value: 'base' },
-                { title: 'Grande', value: 'lg' },
-                { title: 'Extra Grande', value: 'xl' },
-              ],
-            },
-            initialValue: 'base',
-          },
-        ],
-      },
-
-      // ========== COLORE TESTO ==========
+      // Colore Testo
       {
         name: 'textColor',
         type: 'object',
-        title: '🎨 Colore Testo',
-        components: { annotation: TextColorPreview },
+        title: 'Colore Testo',
         fields: [
           {
             name: 'color',
@@ -571,417 +108,32 @@ const richTextBlock = defineArrayMember({
           },
         ],
       },
-
-      // ========== EVIDENZIAZIONE ==========
+      // Evidenziazione
       {
         name: 'highlight',
         type: 'object',
-        title: '🖍️ Evidenzia',
-        components: { annotation: HighlightPreview },
+        title: 'Evidenzia',
         fields: [
           {
             name: 'color',
             type: 'string',
-            title: 'Colore Evidenziatore',
+            title: 'Colore',
             options: { list: highlightColors },
             initialValue: 'yellow',
           },
         ],
       },
-
-      // ========== DIMENSIONE FONT ==========
+      // Dimensione Font
       {
         name: 'fontSize',
         type: 'object',
-        title: '📏 Dimensione Font',
-        components: { annotation: FontSizePreview },
+        title: 'Dimensione',
         fields: [
           {
             name: 'size',
             type: 'string',
             title: 'Dimensione',
             options: { list: fontSizes },
-          },
-        ],
-      },
-
-      // ========== FONT FAMILY ==========
-      {
-        name: 'fontFamily',
-        type: 'object',
-        title: '🔤 Font',
-        components: { annotation: FontFamilyPreview },
-        fields: [
-          {
-            name: 'family',
-            type: 'string',
-            title: 'Tipo di Font',
-            options: { list: fontFamilies },
-          },
-        ],
-      },
-
-      // ========== FONT WEIGHT ==========
-      {
-        name: 'fontWeight',
-        type: 'object',
-        title: '💪 Spessore Font',
-        components: { annotation: FontWeightPreview },
-        fields: [
-          {
-            name: 'weight',
-            type: 'string',
-            title: 'Spessore',
-            options: { list: fontWeights },
-          },
-        ],
-      },
-
-      // ========== LETTER SPACING ==========
-      {
-        name: 'letterSpacing',
-        type: 'object',
-        title: '↔️ Spaziatura Lettere',
-        components: { annotation: LetterSpacingPreview },
-        fields: [
-          {
-            name: 'spacing',
-            type: 'string',
-            title: 'Spaziatura',
-            options: { list: letterSpacings },
-          },
-        ],
-      },
-
-      // ========== LINE HEIGHT ==========
-      {
-        name: 'lineHeight',
-        type: 'object',
-        title: '↕️ Altezza Riga',
-        components: { annotation: LineHeightPreview },
-        fields: [
-          {
-            name: 'height',
-            type: 'string',
-            title: 'Altezza',
-            options: { list: lineHeights },
-          },
-        ],
-      },
-
-      // ========== ALLINEAMENTO ==========
-      {
-        name: 'textAlign',
-        type: 'object',
-        title: '📐 Allineamento',
-        fields: [
-          {
-            name: 'align',
-            type: 'string',
-            title: 'Allineamento',
-            options: {
-              list: [
-                { title: '⬅️ Sinistra', value: 'left' },
-                { title: '↔️ Centro', value: 'center' },
-                { title: '➡️ Destra', value: 'right' },
-                { title: '⬜ Giustificato', value: 'justify' },
-              ],
-            },
-          },
-        ],
-      },
-
-      // ========== TRASFORMAZIONE TESTO ==========
-      {
-        name: 'textTransform',
-        type: 'object',
-        title: '🔠 Trasformazione',
-        components: { annotation: TextTransformPreview },
-        fields: [
-          {
-            name: 'transform',
-            type: 'string',
-            title: 'Tipo',
-            options: { list: textTransforms },
-          },
-        ],
-      },
-
-      // ========== DECORAZIONE TESTO ==========
-      {
-        name: 'textDecoration',
-        type: 'object',
-        title: '〰️ Decorazione',
-        components: { annotation: TextDecorationPreview },
-        fields: [
-          {
-            name: 'decoration',
-            type: 'string',
-            title: 'Tipo',
-            options: { list: textDecorations },
-          },
-          {
-            name: 'color',
-            type: 'string',
-            title: 'Colore Decorazione',
-            options: { list: textColors },
-          },
-        ],
-      },
-
-      // ========== OMBRA TESTO ==========
-      {
-        name: 'textShadow',
-        type: 'object',
-        title: '👥 Ombra Testo',
-        components: { annotation: TextShadowPreview },
-        fields: [
-          {
-            name: 'shadow',
-            type: 'string',
-            title: 'Tipo Ombra',
-            options: { list: textShadows },
-          },
-          {
-            name: 'color',
-            type: 'string',
-            title: 'Colore Ombra',
-            options: { list: textColors },
-          },
-        ],
-      },
-
-      // ========== GRADIENTE TESTO ==========
-      {
-        name: 'textGradient',
-        type: 'object',
-        title: '🌈 Gradiente Testo',
-        components: { annotation: GradientPreview },
-        fields: [
-          {
-            name: 'gradient',
-            type: 'string',
-            title: 'Tipo Gradiente',
-            options: { list: textGradients },
-          },
-        ],
-      },
-
-      // ========== ANIMAZIONE TESTO ==========
-      {
-        name: 'textAnimation',
-        type: 'object',
-        title: '✨ Animazione',
-        components: { annotation: AnimationPreview },
-        fields: [
-          {
-            name: 'animation',
-            type: 'string',
-            title: 'Tipo Animazione',
-            options: { list: textAnimations },
-          },
-          {
-            name: 'duration',
-            type: 'string',
-            title: 'Durata',
-            options: {
-              list: [
-                { title: 'Veloce (0.3s)', value: 'fast' },
-                { title: 'Normale (0.5s)', value: 'normal' },
-                { title: 'Lenta (1s)', value: 'slow' },
-                { title: 'Molto Lenta (2s)', value: 'slower' },
-              ],
-            },
-            initialValue: 'normal',
-          },
-          {
-            name: 'delay',
-            type: 'string',
-            title: 'Ritardo',
-            options: {
-              list: [
-                { title: 'Nessuno', value: '0' },
-                { title: '0.2s', value: '200' },
-                { title: '0.5s', value: '500' },
-                { title: '1s', value: '1000' },
-                { title: '2s', value: '2000' },
-              ],
-            },
-            initialValue: '0',
-          },
-          {
-            name: 'repeat',
-            type: 'string',
-            title: 'Ripetizione',
-            options: {
-              list: [
-                { title: 'Una volta', value: 'once' },
-                { title: 'Infinito', value: 'infinite' },
-              ],
-            },
-            initialValue: 'once',
-          },
-        ],
-      },
-
-      // ========== OUTLINE TESTO ==========
-      {
-        name: 'textOutline',
-        type: 'object',
-        title: '⭕ Contorno Testo',
-        components: { annotation: TextOutlinePreview },
-        fields: [
-          {
-            name: 'width',
-            type: 'string',
-            title: 'Spessore',
-            options: {
-              list: [
-                { title: 'Sottile (1px)', value: 'thin' },
-                { title: 'Medio (2px)', value: 'medium' },
-                { title: 'Spesso (3px)', value: 'thick' },
-              ],
-            },
-          },
-          {
-            name: 'color',
-            type: 'string',
-            title: 'Colore Contorno',
-            options: { list: textColors },
-          },
-        ],
-      },
-
-      // ========== BADGE/TAG ==========
-      {
-        name: 'badge',
-        type: 'object',
-        title: '🏷️ Badge',
-        fields: [
-          {
-            name: 'variant',
-            type: 'string',
-            title: 'Stile',
-            options: {
-              list: [
-                { title: 'Default (Grigio)', value: 'default' },
-                { title: 'Primary (Blu)', value: 'primary' },
-                { title: 'Success (Verde)', value: 'success' },
-                { title: 'Warning (Arancio)', value: 'warning' },
-                { title: 'Danger (Rosso)', value: 'danger' },
-                { title: 'Info (Ciano)', value: 'info' },
-                { title: 'Purple (Viola)', value: 'purple' },
-                { title: 'Pink (Rosa)', value: 'pink' },
-                { title: 'Outline', value: 'outline' },
-                { title: 'Gradient', value: 'gradient' },
-              ],
-            },
-          },
-          {
-            name: 'rounded',
-            type: 'boolean',
-            title: 'Arrotondato (Pillola)',
-            initialValue: false,
-          },
-        ],
-      },
-
-      // ========== BUTTON STYLE ==========
-      {
-        name: 'buttonStyle',
-        type: 'object',
-        title: '🔘 Stile Bottone',
-        components: { annotation: ButtonStylePreview },
-        fields: [
-          {
-            name: 'variant',
-            type: 'string',
-            title: 'Stile',
-            options: {
-              list: [
-                { title: 'Primario', value: 'primary' },
-                { title: 'Secondario', value: 'secondary' },
-                { title: 'Outline', value: 'outline' },
-                { title: 'Ghost', value: 'ghost' },
-                { title: 'Success', value: 'success' },
-                { title: 'Danger', value: 'danger' },
-              ],
-            },
-          },
-          {
-            name: 'size',
-            type: 'string',
-            title: 'Dimensione',
-            options: {
-              list: [
-                { title: 'Piccolo', value: 'sm' },
-                { title: 'Normale', value: 'md' },
-                { title: 'Grande', value: 'lg' },
-              ],
-            },
-            initialValue: 'md',
-          },
-        ],
-      },
-
-      // ========== TOOLTIP ==========
-      {
-        name: 'tooltip',
-        type: 'object',
-        title: '💬 Tooltip',
-        fields: [
-          {
-            name: 'text',
-            type: 'string',
-            title: 'Testo Tooltip',
-          },
-          {
-            name: 'position',
-            type: 'string',
-            title: 'Posizione',
-            options: {
-              list: [
-                { title: 'Sopra', value: 'top' },
-                { title: 'Sotto', value: 'bottom' },
-                { title: 'Sinistra', value: 'left' },
-                { title: 'Destra', value: 'right' },
-              ],
-            },
-            initialValue: 'top',
-          },
-        ],
-      },
-
-      // ========== BORDO INLINE ==========
-      {
-        name: 'inlineBorder',
-        type: 'object',
-        title: '🔲 Bordo Inline',
-        components: { annotation: InlineBorderPreview },
-        fields: [
-          {
-            name: 'style',
-            type: 'string',
-            title: 'Stile',
-            options: {
-              list: [
-                { title: 'Solido', value: 'solid' },
-                { title: 'Tratteggiato', value: 'dashed' },
-                { title: 'Punteggiato', value: 'dotted' },
-              ],
-            },
-          },
-          {
-            name: 'color',
-            type: 'string',
-            title: 'Colore',
-            options: { list: textColors },
-          },
-          {
-            name: 'rounded',
-            type: 'boolean',
-            title: 'Arrotondato',
-            initialValue: true,
           },
         ],
       },
@@ -992,9 +144,6 @@ const richTextBlock = defineArrayMember({
 // ============================================
 // EXPORT TIPO PRINCIPALE
 // ============================================
-// NOTA: Rimosso blockWithEffects (styledBlock) perché causava SchemaError
-// La struttura nidificata con defineArrayMember dentro defineArrayMember non è supportata
-// Tutte le funzionalità di formattazione sono comunque disponibili nel richTextBlock
 export default defineType({
   name: 'localeRichText',
   title: 'Testo Formattato Multilingua',
@@ -1003,6 +152,6 @@ export default defineType({
     name: lang.id,
     title: lang.title,
     type: 'array',
-    of: [richTextBlock],
+    of: [simpleRichTextBlock],
   })),
 })

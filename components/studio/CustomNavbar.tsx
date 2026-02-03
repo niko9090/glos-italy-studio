@@ -5,12 +5,17 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO - Aggiorna qui prima di ogni deploy importante
 // ============================================
-const SITE_VERSION = '1.9.1'
+const SITE_VERSION = '1.9.2'
 
 // ============================================
 // CHANGELOG - Note di rilascio per ogni versione
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '1.9.2': [
+    '🐛 Fix SchemaError: versione semplificata localeRichText',
+    '✅ Rimossi componenti custom problematici',
+    '🔧 Rich text base: grassetto, corsivo, colori, link, dimensioni',
+  ],
   '1.9.1': [
     '🐛 Fix SchemaError: rimosso styledBlock nidificato',
     '✅ Semplificato localeRichText per compatibilità Sanity',
