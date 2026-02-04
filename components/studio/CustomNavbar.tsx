@@ -5,12 +5,25 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO
 // ============================================
-const SITE_VERSION = '2.0.5'
+const SITE_VERSION = '2.0.8'
 
 // ============================================
 // CHANGELOG - Solo versioni funzionanti
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '2.0.8': [
+    '🔧 Fix dati misti localeRichText -> string',
+    '📊 Script migrazione dati automatico',
+  ],
+  '2.0.7': [
+    '🔄 Ripristino localeRichText (richText)',
+  ],
+  '2.0.6': [
+    '🛡️ Nuova sezione Trust Badges (Qualita)',
+    '🏷️ Badge prodotti completi (Nuovo, In Evidenza, ecc)',
+    '🗺️ Mappa: disabilitato zoom rotella mouse',
+    '💬 WhatsApp: popup se non configurato',
+  ],
   '2.0.5': [
     '🏭 Settori Applicazione: nuovo documento + sezione',
     '📋 Case Studies: sfida/soluzione/risultati',
