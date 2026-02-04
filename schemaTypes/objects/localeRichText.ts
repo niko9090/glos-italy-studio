@@ -1,4 +1,4 @@
-// Tipo: Rich Text Multilingua
+// Tipo: Rich Text Multilingua - usa string per compatibilita con dati esistenti
 import { defineType } from 'sanity'
 
 // Lingue supportate
@@ -15,6 +15,6 @@ export default defineType({
   fields: supportedLanguages.map(lang => ({
     name: lang.id,
     title: lang.title,
-    type: 'richText',
+    type: 'string',
   })),
 })
