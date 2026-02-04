@@ -1,14 +1,13 @@
-// Tipo: Rich Text Multilingua - TEMPORANEO: alias per localeString per debug
+// Tipo: Rich Text Multilingua
 import { defineType } from 'sanity'
 
 // Lingue supportate
 const supportedLanguages = [
   { id: 'it', title: 'Italiano', isDefault: true },
   { id: 'en', title: 'English' },
-  { id: 'es', title: 'Español' },
+  { id: 'es', title: 'Espanol' },
 ]
 
-// TEMPORANEO: usa string semplice come localeString per isolare il problema
 export default defineType({
   name: 'localeRichText',
   title: 'Testo Formattato Multilingua',
@@ -16,6 +15,6 @@ export default defineType({
   fields: supportedLanguages.map(lang => ({
     name: lang.id,
     title: lang.title,
-    type: 'string',
+    type: 'richText',
   })),
 })
