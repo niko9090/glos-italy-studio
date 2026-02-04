@@ -1,4 +1,4 @@
-// Schema: Impostazioni Sito - v1.5.0
+// Schema: Impostazioni Sito - v2.0.0
 import { defineType, defineField } from 'sanity'
 
 export default defineType({
@@ -9,6 +9,8 @@ export default defineType({
 
   groups: [
     { name: 'company', title: '🏢 Azienda', default: true },
+    { name: 'header', title: '🔝 Header' },
+    { name: 'footer', title: '🔻 Footer' },
     { name: 'contact', title: '📞 Contatti' },
     { name: 'legal', title: '📋 Dati Legali' },
     { name: 'social', title: '🌐 Social' },
@@ -64,6 +66,242 @@ export default defineType({
       type: 'image',
       group: 'company',
       description: 'Icona per la tab del browser (32x32 o 64x64 px)',
+    }),
+
+    // === HEADER ===
+    defineField({
+      name: 'headerLogoSize',
+      title: 'Dimensione Logo Header',
+      type: 'string',
+      group: 'header',
+      description: 'Altezza del logo nella barra di navigazione',
+      options: {
+        list: [
+          { title: 'Piccolo (32px)', value: 'sm' },
+          { title: 'Medio (40px)', value: 'md' },
+          { title: 'Normale (48px)', value: 'lg' },
+          { title: 'Grande (56px)', value: 'xl' },
+          { title: 'Extra Grande (64px)', value: '2xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'headerHeight',
+      title: 'Altezza Header',
+      type: 'string',
+      group: 'header',
+      options: {
+        list: [
+          { title: 'Compatta (64px)', value: 'sm' },
+          { title: 'Normale (80px)', value: 'md' },
+          { title: 'Alta (96px)', value: 'lg' },
+        ],
+      },
+      initialValue: 'md',
+    }),
+
+    defineField({
+      name: 'headerStyle',
+      title: 'Stile Header',
+      type: 'string',
+      group: 'header',
+      options: {
+        list: [
+          { title: 'Metallico (default)', value: 'metal' },
+          { title: 'Bianco', value: 'white' },
+          { title: 'Trasparente', value: 'transparent' },
+          { title: 'Scuro', value: 'dark' },
+        ],
+      },
+      initialValue: 'metal',
+    }),
+
+    defineField({
+      name: 'headerCtaText',
+      title: 'Testo Pulsante CTA',
+      type: 'localeString',
+      group: 'header',
+      description: 'Testo del pulsante in alto a destra (es: "Contattaci")',
+    }),
+
+    defineField({
+      name: 'headerCtaLink',
+      title: 'Link Pulsante CTA',
+      type: 'string',
+      group: 'header',
+      description: 'URL di destinazione (es: /contatti)',
+      initialValue: '/contatti',
+    }),
+
+    defineField({
+      name: 'headerShowLanguageSelector',
+      title: 'Mostra Selettore Lingua',
+      type: 'boolean',
+      group: 'header',
+      initialValue: true,
+    }),
+
+    defineField({
+      name: 'headerNavGap',
+      title: 'Distanza tra Voci Menu',
+      type: 'string',
+      group: 'header',
+      options: {
+        list: [
+          { title: 'Compatto (16px)', value: '4' },
+          { title: 'Normale (24px)', value: '6' },
+          { title: 'Ampio (32px)', value: '8' },
+          { title: 'Extra (40px)', value: '10' },
+        ],
+      },
+      initialValue: '8',
+    }),
+
+    // === FOOTER ===
+    defineField({
+      name: 'footerLogoSize',
+      title: 'Dimensione Logo Footer',
+      type: 'string',
+      group: 'footer',
+      description: 'Altezza del logo nel footer',
+      options: {
+        list: [
+          { title: 'Piccolo (32px)', value: 'sm' },
+          { title: 'Medio (40px)', value: 'md' },
+          { title: 'Normale (48px)', value: 'lg' },
+          { title: 'Grande (56px)', value: 'xl' },
+          { title: 'Extra Grande (64px)', value: '2xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'footerStyle',
+      title: 'Stile Footer',
+      type: 'string',
+      group: 'footer',
+      options: {
+        list: [
+          { title: 'Scuro Metallico (default)', value: 'metal-dark' },
+          { title: 'Nero', value: 'black' },
+          { title: 'Grigio Scuro', value: 'gray-dark' },
+          { title: 'Blu GLOS', value: 'primary' },
+        ],
+      },
+      initialValue: 'metal-dark',
+    }),
+
+    defineField({
+      name: 'footerColumns',
+      title: 'Numero Colonne',
+      type: 'string',
+      group: 'footer',
+      options: {
+        list: [
+          { title: '2 Colonne', value: '2' },
+          { title: '3 Colonne', value: '3' },
+          { title: '4 Colonne (default)', value: '4' },
+        ],
+      },
+      initialValue: '4',
+    }),
+
+    defineField({
+      name: 'footerShowSocial',
+      title: 'Mostra Social',
+      type: 'boolean',
+      group: 'footer',
+      initialValue: true,
+    }),
+
+    defineField({
+      name: 'footerShowQuickLinks',
+      title: 'Mostra Link Rapidi',
+      type: 'boolean',
+      group: 'footer',
+      initialValue: true,
+    }),
+
+    defineField({
+      name: 'footerShowProducts',
+      title: 'Mostra Sezione Prodotti',
+      type: 'boolean',
+      group: 'footer',
+      initialValue: true,
+    }),
+
+    defineField({
+      name: 'footerShowContacts',
+      title: 'Mostra Contatti',
+      type: 'boolean',
+      group: 'footer',
+      initialValue: true,
+    }),
+
+    defineField({
+      name: 'footerPadding',
+      title: 'Padding Footer',
+      type: 'string',
+      group: 'footer',
+      options: {
+        list: [
+          { title: 'Piccolo (32px)', value: 'sm' },
+          { title: 'Medio (48px)', value: 'md' },
+          { title: 'Normale (64px)', value: 'lg' },
+          { title: 'Grande (80px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'footerColumnsGap',
+      title: 'Distanza tra Colonne',
+      type: 'string',
+      group: 'footer',
+      options: {
+        list: [
+          { title: 'Compatto (24px)', value: '6' },
+          { title: 'Normale (32px)', value: '8' },
+          { title: 'Ampio (48px)', value: '12' },
+        ],
+      },
+      initialValue: '12',
+    }),
+
+    defineField({
+      name: 'footerCopyrightText',
+      title: 'Testo Copyright',
+      type: 'string',
+      group: 'footer',
+      description: 'Lascia vuoto per usare il default. Usa {year} per anno corrente.',
+    }),
+
+    defineField({
+      name: 'footerBottomLinks',
+      title: 'Link Bottom Bar',
+      type: 'array',
+      group: 'footer',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'label', title: 'Etichetta', type: 'string' },
+          { name: 'href', title: 'Link', type: 'string' },
+        ],
+        preview: {
+          select: { label: 'label', href: 'href' },
+          prepare({ label, href }) {
+            return { title: label || 'Link', subtitle: href }
+          },
+        },
+      }],
+      initialValue: [
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Cookie Policy', href: '/cookie' },
+      ],
     }),
 
     // === CONTATTI ===

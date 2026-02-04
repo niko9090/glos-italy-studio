@@ -5,12 +5,18 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO
 // ============================================
-const SITE_VERSION = '2.0.9'
+const SITE_VERSION = '2.1.0'
 
 // ============================================
 // CHANGELOG - Solo versioni funzionanti
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '2.1.0': [
+    '🔝 Header personalizzabile (logo size, stile, CTA)',
+    '🔻 Footer personalizzabile (colonne, stile, links)',
+    '📏 Spaziature interne per TUTTE le sezioni',
+    '🎛️ Schema condiviso internalSpacingFields',
+  ],
   '2.0.9': [
     '📏 Spaziature granulari sezione Contatti',
     '🎛️ 8 nuovi controlli distanze (header, form, info, mappa)',
