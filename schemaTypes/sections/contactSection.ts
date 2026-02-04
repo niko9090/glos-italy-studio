@@ -18,6 +18,7 @@ export default defineType({
     { name: 'form', title: '📝 Form' },
     { name: 'info', title: '📍 Info Contatto' },
     { name: 'layout', title: '📐 Layout' },
+    { name: 'spacing', title: '📏 Spaziature Interne' },
     { name: 'typography', title: '🔤 Tipografia' },
     { name: 'style', title: '🎨 Stile' },
   ],
@@ -720,6 +721,149 @@ export default defineType({
         list: containerWidthOptions,
       },
       initialValue: 'normal',
+    }),
+
+    // === SPAZIATURE INTERNE ===
+    defineField({
+      name: 'headerMarginBottom',
+      title: 'Distanza Header → Contenuto',
+      type: 'string',
+      group: 'spacing',
+      description: 'Spazio tra titolo/sottotitolo e il contenuto sottostante',
+      options: {
+        list: [
+          { title: 'Nessuno (0)', value: '0' },
+          { title: 'Minimo (8px)', value: '2' },
+          { title: 'Piccolo (16px)', value: '4' },
+          { title: 'Medio (24px)', value: '6' },
+          { title: 'Normale (32px)', value: '8' },
+          { title: 'Grande (48px)', value: '12' },
+          { title: 'Extra Grande (64px)', value: '16' },
+        ],
+      },
+      initialValue: '12',
+    }),
+
+    defineField({
+      name: 'columnsGap',
+      title: 'Distanza tra Colonne',
+      type: 'string',
+      group: 'spacing',
+      description: 'Spazio tra form e info contatto (layout a colonne)',
+      options: {
+        list: [
+          { title: 'Nessuno (0)', value: '0' },
+          { title: 'Piccolo (16px)', value: '4' },
+          { title: 'Medio (24px)', value: '6' },
+          { title: 'Normale (32px)', value: '8' },
+          { title: 'Grande (48px)', value: '12' },
+          { title: 'Extra Grande (64px)', value: '16' },
+        ],
+      },
+      initialValue: '8',
+    }),
+
+    defineField({
+      name: 'formPadding',
+      title: 'Padding Form',
+      type: 'string',
+      group: 'spacing',
+      description: 'Spaziatura interna del box form',
+      options: {
+        list: [
+          { title: 'Piccolo (16px)', value: 'sm' },
+          { title: 'Medio (24px)', value: 'md' },
+          { title: 'Normale (32px)', value: 'lg' },
+          { title: 'Grande (48px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'formFieldsGap',
+      title: 'Distanza tra Campi Form',
+      type: 'string',
+      group: 'spacing',
+      description: 'Spazio tra i campi del form',
+      options: {
+        list: [
+          { title: 'Compatto (12px)', value: '3' },
+          { title: 'Piccolo (16px)', value: '4' },
+          { title: 'Normale (20px)', value: '5' },
+          { title: 'Grande (24px)', value: '6' },
+        ],
+      },
+      initialValue: '5',
+    }),
+
+    defineField({
+      name: 'infoPadding',
+      title: 'Padding Info Contatto',
+      type: 'string',
+      group: 'spacing',
+      description: 'Spaziatura interna del box info',
+      options: {
+        list: [
+          { title: 'Piccolo (16px)', value: 'sm' },
+          { title: 'Medio (24px)', value: 'md' },
+          { title: 'Normale (32px)', value: 'lg' },
+          { title: 'Grande (48px)', value: 'xl' },
+        ],
+      },
+      initialValue: 'lg',
+    }),
+
+    defineField({
+      name: 'infoItemsGap',
+      title: 'Distanza tra Info',
+      type: 'string',
+      group: 'spacing',
+      description: 'Spazio tra i singoli elementi info (telefono, email, ecc)',
+      options: {
+        list: [
+          { title: 'Compatto (8px)', value: '2' },
+          { title: 'Piccolo (12px)', value: '3' },
+          { title: 'Normale (16px)', value: '4' },
+          { title: 'Grande (24px)', value: '6' },
+        ],
+      },
+      initialValue: '4',
+    }),
+
+    defineField({
+      name: 'infoSectionsGap',
+      title: 'Distanza tra Blocchi Info',
+      type: 'string',
+      group: 'spacing',
+      description: 'Spazio tra blocchi (es. contatti → orari → social)',
+      options: {
+        list: [
+          { title: 'Piccolo (16px)', value: '4' },
+          { title: 'Medio (24px)', value: '6' },
+          { title: 'Normale (32px)', value: '8' },
+          { title: 'Grande (48px)', value: '12' },
+        ],
+      },
+      initialValue: '8',
+    }),
+
+    defineField({
+      name: 'mapMarginTop',
+      title: 'Distanza Mappa da Info',
+      type: 'string',
+      group: 'spacing',
+      description: 'Spazio tra info contatto e mappa',
+      options: {
+        list: [
+          { title: 'Nessuno (0)', value: '0' },
+          { title: 'Piccolo (16px)', value: '4' },
+          { title: 'Medio (24px)', value: '6' },
+          { title: 'Normale (32px)', value: '8' },
+          { title: 'Grande (48px)', value: '12' },
+        ],
+      },
+      initialValue: '8',
     }),
 
     // === TIPOGRAFIA ===

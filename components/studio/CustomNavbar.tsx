@@ -5,12 +5,16 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO
 // ============================================
-const SITE_VERSION = '2.0.8'
+const SITE_VERSION = '2.0.9'
 
 // ============================================
 // CHANGELOG - Solo versioni funzionanti
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '2.0.9': [
+    '📏 Spaziature granulari sezione Contatti',
+    '🎛️ 8 nuovi controlli distanze (header, form, info, mappa)',
+  ],
   '2.0.8': [
     '🔧 Fix dati misti localeRichText -> string',
     '📊 Script migrazione dati automatico',
