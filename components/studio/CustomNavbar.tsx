@@ -5,12 +5,17 @@ import { useState } from 'react'
 // ============================================
 // VERSIONE SITO
 // ============================================
-const SITE_VERSION = '2.1.1'
+const SITE_VERSION = '2.1.2'
 
 // ============================================
 // CHANGELOG - Solo versioni funzionanti
 // ============================================
 const CHANGELOG: Record<string, string[]> = {
+  '2.1.2': [
+    '🗺️ Geocoding migliorato con fallback multipli',
+    '📍 Avviso visivo per rivenditori non localizzati',
+    '🔧 Debug logging per diagnosi problemi mappa',
+  ],
   '2.1.1': [
     '🐛 Fix rivenditori non visibili sulla mappa',
     '✅ Campo "Pubblicato" spostato in cima',
