@@ -139,6 +139,7 @@ export function CustomNavbar(props: NavbarProps) {
               maxHeight: '400px',
               overflowY: 'auto',
               boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+              zIndex: 9999,
             }}
           >
             <div style={{ fontWeight: '700', marginBottom: '12px', color: '#0077FF' }}>
