@@ -16,6 +16,16 @@ export default defineType({
   ],
 
   fields: [
+    // === ATTIVO (in cima per visibilità) ===
+    defineField({
+      name: 'isActive',
+      title: '✅ Pubblicato sul Sito',
+      type: 'boolean',
+      group: 'info',
+      initialValue: true,
+      description: '⚠️ IMPORTANTE: Attiva per mostrare questo rivenditore sulla mappa e nella lista',
+    }),
+
     // === INFORMAZIONI ===
     defineField({
       name: 'name',
@@ -215,15 +225,6 @@ export default defineType({
     }),
 
     // === IMPOSTAZIONI ===
-    defineField({
-      name: 'isActive',
-      title: 'Attivo',
-      type: 'boolean',
-      group: 'settings',
-      initialValue: true,
-      description: 'Disattiva per nascondere dalla mappa e dalla lista',
-    }),
-
     defineField({
       name: 'isFeatured',
       title: 'In Evidenza',
