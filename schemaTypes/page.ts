@@ -73,6 +73,7 @@ export default defineType({
         { type: 'sectorsSection' },
         { type: 'featuresSection' },
         { type: 'strengthsSection' },
+        { type: 'trustBadgesSection' },
         { type: 'pricingSection' },
         { type: 'iconBoxesSection' },
         { type: 'tabsSection' },

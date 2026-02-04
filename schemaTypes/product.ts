@@ -311,6 +311,64 @@ export default defineType({
       description: 'Mostra badge "Nuovo" sul prodotto',
       initialValue: false,
     }),
+
+    defineField({
+      name: 'badges',
+      title: 'Badge Aggiuntivi',
+      type: 'array',
+      group: 'settings',
+      description: 'Seleziona i badge da mostrare sul prodotto',
+      of: [{ type: 'string' }],
+      options: {
+        list: [
+          { title: 'Bestseller', value: 'bestseller' },
+          { title: 'Offerta Speciale', value: 'offerta' },
+          { title: 'Promo', value: 'promo' },
+          { title: 'Esaurito', value: 'esaurito' },
+          { title: 'In Arrivo', value: 'in-arrivo' },
+          { title: 'Edizione Limitata', value: 'limitato' },
+          { title: 'Consigliato', value: 'consigliato' },
+          { title: 'Made in Italy', value: 'made-italy' },
+          { title: 'Garanzia Estesa', value: 'garanzia' },
+          { title: 'Eco-Friendly', value: 'eco' },
+        ],
+        layout: 'grid',
+      },
+    }),
+
+    defineField({
+      name: 'customBadge',
+      title: 'Badge Personalizzato',
+      type: 'object',
+      group: 'settings',
+      description: 'Crea un badge personalizzato',
+      fields: [
+        {
+          name: 'text',
+          title: 'Testo',
+          type: 'string',
+          description: 'Es: -20%, Novità 2026, ecc.',
+        },
+        {
+          name: 'color',
+          title: 'Colore',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Blu (primario)', value: 'primary' },
+              { title: 'Rosso', value: 'red' },
+              { title: 'Verde', value: 'green' },
+              { title: 'Giallo', value: 'yellow' },
+              { title: 'Arancione', value: 'orange' },
+              { title: 'Viola', value: 'purple' },
+              { title: 'Grigio', value: 'gray' },
+              { title: 'Nero', value: 'black' },
+            ],
+          },
+          initialValue: 'primary',
+        },
+      ],
+    }),
   ],
 
   preview: {
@@ -321,12 +379,21 @@ export default defineType({
       active: 'isActive',
       featured: 'isFeatured',
       isNew: 'isNew',
+      badges: 'badges',
+      customBadge: 'customBadge',
     },
-    prepare({ title, category, media, active, featured, isNew }) {
-      const badges = []
-      if (featured) badges.push('⭐')
-      if (isNew) badges.push('🆕')
-      const badgeStr = badges.length > 0 ? ` ${badges.join(' ')}` : ''
+    prepare({ title, category, media, active, featured, isNew, badges, customBadge }) {
+      const badgeIcons = []
+      if (featured) badgeIcons.push('⭐')
+      if (isNew) badgeIcons.push('🆕')
+      if (badges?.includes('bestseller')) badgeIcons.push('🏆')
+      if (badges?.includes('offerta')) badgeIcons.push('🏷️')
+      if (badges?.includes('promo')) badgeIcons.push('💥')
+      if (badges?.includes('esaurito')) badgeIcons.push('⛔')
+      if (badges?.includes('made-italy')) badgeIcons.push('🇮🇹')
+      if (badges?.includes('eco')) badgeIcons.push('🌱')
+      if (customBadge?.text) badgeIcons.push('🔖')
+      const badgeStr = badgeIcons.length > 0 ? ` ${badgeIcons.join('')}` : ''
       return {
         title: title,
         subtitle: `${category || 'Senza categoria'} ${active ? '✅' : '❌'}${badgeStr}`,

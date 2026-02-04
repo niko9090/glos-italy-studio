@@ -53,6 +53,7 @@ import counterSection from './sections/counterSection'
 import sectorsSection from './sections/sectorsSection'
 import strengthsSection from './sections/strengthsSection'
 import caseStudiesSection from './sections/caseStudiesSection'
+import trustBadgesSection from './sections/trustBadgesSection'
 
 export const schemaTypes = [
   // Tipi oggetto base (ORDINE IMPORTANTE: richText prima di localeRichText)
@@ -107,4 +108,5 @@ export const schemaTypes = [
   sectorsSection,
   strengthsSection,
   caseStudiesSection,
+  trustBadgesSection,
 ]
