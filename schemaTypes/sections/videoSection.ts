@@ -115,6 +115,67 @@ export default defineType({
       group: 'video',
       initialValue: true,
     }),
+    defineField({
+      name: 'muted',
+      title: 'Muto',
+      type: 'boolean',
+      group: 'video',
+      initialValue: false,
+      description: 'Avvia il video senza audio',
+    }),
+    defineField({
+      name: 'showPlayButton',
+      title: 'Mostra Pulsante Play',
+      type: 'boolean',
+      group: 'video',
+      initialValue: true,
+      description: 'Mostra il pulsante play sopra il poster',
+    }),
+    defineField({
+      name: 'playButtonSize',
+      title: 'Dimensione Pulsante Play',
+      type: 'string',
+      group: 'video',
+      options: {
+        list: [
+          { title: 'Piccolo', value: 'small' },
+          { title: 'Medio', value: 'medium' },
+          { title: 'Grande', value: 'large' },
+        ],
+      },
+      initialValue: 'medium',
+      hidden: ({ parent }) => parent?.showPlayButton === false,
+    }),
+    defineField({
+      name: 'playButtonStyle',
+      title: 'Stile Pulsante Play',
+      type: 'string',
+      group: 'video',
+      options: {
+        list: [
+          { title: 'Solido', value: 'solid' },
+          { title: 'Contorno', value: 'outline' },
+          { title: 'Glass', value: 'glass' },
+        ],
+      },
+      initialValue: 'solid',
+      hidden: ({ parent }) => parent?.showPlayButton === false,
+    }),
+    defineField({
+      name: 'overlayColor',
+      title: 'Colore Overlay',
+      type: 'string',
+      group: 'video',
+      description: 'Colore overlay sopra il poster (es: #000000)',
+    }),
+    defineField({
+      name: 'overlayOpacity',
+      title: 'Opacita Overlay (%)',
+      type: 'number',
+      group: 'video',
+      validation: (Rule) => Rule.min(0).max(100),
+      initialValue: 30,
+    }),
 
     // === TIPOGRAFIA ===
     defineField({

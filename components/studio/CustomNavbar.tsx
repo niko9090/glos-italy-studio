@@ -5,7 +5,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 // ============================================
 // VERSIONE ATTUALE
 // ============================================
-const SITE_VERSION = '3.0.0'
+const SITE_VERSION = '3.2.0'
 
 // ============================================
 // LINK VERCEL E GITHUB
@@ -20,12 +20,48 @@ const GITHUB_STUDIO = 'https://github.com/niko9090/glos-italy-studio'
 // ============================================
 interface VersionInfo {
   changelog: string[]
-  branch?: string      // Git branch associato
-  tag?: string         // Git tag
+  date: string           // Data rilascio (YYYY-MM-DD)
+  branch?: string        // Git branch associato
+  tag?: string           // Git tag
   status: 'production' | 'available' | 'archived'
 }
 
+// Formatta data da YYYY-MM-DD a DD/MM/YYYY
+function formatDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split('-')
+  return `${d}/${m}/${y}`
+}
+
 const VERSIONS: Record<string, VersionInfo> = {
+  '3.2.0': {
+    changelog: [
+      'Audit capillare 28+ sezioni: fix allineamento schema/query/componente',
+      'Fix LogoCloudSection: campo image/link vs logo/url',
+      'Fix CounterSection: conversione unita animationDuration (sec→ms)',
+      'Rewrite SectorsSection schema: 6→25+ campi inline items',
+      'Rewrite CaseStudiesSection schema: 6→25+ campi inline items',
+      'Spacing CMS: getSpacingClasses in 9 sezioni (Products, Video, Carousel, BeforeAfter, Tabs, Embed, Download, IconBoxes, Map)',
+      'Fix MapSection: backgroundColor da inline CSS a classi Tailwind',
+      'HeroSection: toggle CMS per particelle, glow lines, text shadow, button glow',
+      'VideoSection schema: aggiunti muted, showPlayButton, playButtonSize, playButtonStyle, overlayColor, overlayOpacity',
+    ],
+    date: '2026-02-05',
+    branch: 'main',
+    tag: 'v3.2.0',
+    status: 'production',
+  },
+  '3.1.0': {
+    changelog: [
+      'Date rilascio in changelog versioni',
+      'Fix navigationQuery: filtro isActive per menu items',
+      'Footer: aggiunti social YouTube, Twitter/X, TikTok',
+      'Audit completo sezioni: allineamento schema/query/componente',
+    ],
+    date: '2026-02-05',
+    branch: 'main',
+    tag: 'v3.1.0',
+    status: 'available',
+  },
   '3.0.0': {
     changelog: [
       'Page Builder con drag-and-drop sezioni (@dnd-kit)',
@@ -36,9 +72,10 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Upgrade sanity v3.80+',
       'Data attributes per click-to-edit',
     ],
+    date: '2026-01-20',
     branch: 'main',
     tag: 'v3.0.0',
-    status: 'production',
+    status: 'available',
   },
   '2.1.2': {
     changelog: [
@@ -46,9 +83,10 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Avviso visivo per rivenditori non localizzati',
       'Debug logging per diagnosi problemi mappa',
     ],
+    date: '2026-01-10',
     branch: 'v2-stable',
     tag: 'v2.1.2',
-    status: 'available',
+    status: 'archived',
   },
   '2.1.1': {
     changelog: [
@@ -56,6 +94,7 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Campo "Pubblicato" spostato in cima',
       'Query piu permissiva per isActive',
     ],
+    date: '2026-01-05',
     tag: 'v2.1.1',
     status: 'archived',
   },
@@ -66,6 +105,7 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Spaziature interne per TUTTE le sezioni',
       'Schema condiviso internalSpacingFields',
     ],
+    date: '2025-12-28',
     status: 'archived',
   },
   '2.0.9': {
@@ -73,6 +113,7 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Spaziature granulari sezione Contatti',
       '8 nuovi controlli distanze (header, form, info, mappa)',
     ],
+    date: '2025-12-20',
     status: 'archived',
   },
   '2.0.8': {
@@ -80,12 +121,14 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Fix dati misti localeRichText -> string',
       'Script migrazione dati automatico',
     ],
+    date: '2025-12-15',
     status: 'archived',
   },
   '2.0.7': {
     changelog: [
       'Ripristino localeRichText (richText)',
     ],
+    date: '2025-12-10',
     status: 'archived',
   },
   '2.0.6': {
@@ -95,6 +138,7 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Mappa: disabilitato zoom rotella mouse',
       'WhatsApp: popup se non configurato',
     ],
+    date: '2025-12-05',
     status: 'archived',
   },
   '2.0.5': {
@@ -106,6 +150,7 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Font Inter + Palette metallica',
       'Form contatto con tipo richiesta',
     ],
+    date: '2025-11-25',
     status: 'archived',
   },
   '2.0.4': {
@@ -114,6 +159,7 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Transizioni fluide gradient/curve/slant',
       'Grafica moderna con Framer Motion',
     ],
+    date: '2025-11-15',
     status: 'archived',
   },
   '2.0.3': {
@@ -121,6 +167,7 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Fix layout altezza - rimosso flex problematico',
       'CustomNavbar semplificato',
     ],
+    date: '2025-11-10',
     status: 'archived',
   },
   '2.0.0': {
@@ -128,6 +175,7 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Fix SchemaError: rimossi campi duplicati',
       'statsSection e ctaSection corretti',
     ],
+    date: '2025-11-01',
     status: 'archived',
   },
   '1.8.0': {
@@ -135,24 +183,28 @@ const VERSIONS: Record<string, VersionInfo> = {
       'Editor Rich Text in tutti i campi testo',
       '72 campi convertiti in localeRichText',
     ],
+    date: '2025-10-20',
     status: 'archived',
   },
   '1.7.0': {
     changelog: [
       'Tipografia personalizzabile',
     ],
+    date: '2025-10-10',
     status: 'archived',
   },
   '1.6.0': {
     changelog: [
       'Dashboard Pagine v3',
     ],
+    date: '2025-10-01',
     status: 'archived',
   },
   '1.5.0': {
     changelog: [
       'Spaziatura granulare sezioni',
     ],
+    date: '2025-09-20',
     status: 'archived',
   },
 }
@@ -381,6 +433,9 @@ export function CustomNavbar(props: NavbarProps) {
                           {info.branch}
                         </div>
                       )}
+                      <div style={{ fontSize: '9px', color: '#555', marginTop: '2px' }}>
+                        {formatDate(info.date)}
+                      </div>
                     </button>
                   )
                 })}
@@ -397,12 +452,19 @@ export function CustomNavbar(props: NavbarProps) {
                     <div style={{
                       display: 'flex',
                       alignItems: 'center',
-                      marginBottom: '10px',
+                      marginBottom: '4px',
                     }}>
                       <span style={{ fontWeight: '700', fontSize: '16px' }}>
                         v{activeVersion}
                       </span>
                       <StatusBadge status={activeInfo.status} />
+                    </div>
+                    <div style={{
+                      fontSize: '11px',
+                      color: '#888',
+                      marginBottom: '10px',
+                    }}>
+                      Rilasciata il {formatDate(activeInfo.date)}
                     </div>
 
                     {/* Branch / Tag info */}
