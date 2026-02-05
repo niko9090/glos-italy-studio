@@ -1,6 +1,7 @@
 // Schema: Pagina
 import { defineType, defineField } from 'sanity'
 import { DocumentIcon } from '@sanity/icons'
+import { SectionArrayInput } from '../components/inputs/SectionArrayInput'
 
 export default defineType({
   name: 'page',
@@ -50,6 +51,9 @@ export default defineType({
       type: 'array',
       description: '🔄 Trascina le sezioni per riordinarle. Clicca per modificare.',
       group: 'content',
+      components: {
+        input: SectionArrayInput,
+      },
       options: {
         sortable: true,
       },

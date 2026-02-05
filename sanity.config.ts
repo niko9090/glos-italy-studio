@@ -231,8 +231,4 @@ export default defineConfig({
       return prev
     },
   },
-
-  form: {
-    components: {},
-  },
 })

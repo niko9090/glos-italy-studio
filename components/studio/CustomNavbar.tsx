@@ -28,13 +28,12 @@ interface VersionInfo {
 const VERSIONS: Record<string, VersionInfo> = {
   '3.0.0': {
     changelog: [
-      'Visual Page Builder con drag-and-drop sezioni',
+      'Page Builder con drag-and-drop sezioni (@dnd-kit)',
+      '29 tipi di sezione con editor visuale personalizzato',
+      'Dialog aggiunta sezioni raggruppate per categoria',
       'Modifica testo inline nella preview',
-      'Pulsanti sposta/elimina sezione nella preview',
-      'Upgrade next-sanity v12 con defineLive',
-      'Upgrade @sanity/visual-editing v5',
+      'Pulsanti sposta/duplica/elimina sezione',
       'Upgrade sanity v3.80+',
-      'Rimosso gestione manuale draft mode',
       'Data attributes per click-to-edit',
     ],
     branch: 'main',
