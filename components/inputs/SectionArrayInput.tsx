@@ -1,11 +1,10 @@
-// SectionArrayInput.tsx - Editor sezioni con drag-and-drop (@dnd-kit)
+// SectionArrayInput.tsx - Custom wrapper per array sezioni
+// Aggiunge header personalizzato + dialog raggruppato, preservando il rendering di Sanity
 import React, { useCallback, useState, useMemo } from 'react'
 import {
   ArrayOfObjectsInputProps,
   insert,
   setIfMissing,
-  unset,
-  set,
 } from 'sanity'
 import {
   Box,
@@ -19,34 +18,7 @@ import {
   Text,
   useToast,
 } from '@sanity/ui'
-import {
-  AddIcon,
-  TrashIcon,
-  CopyIcon,
-  ChevronUpIcon,
-  ChevronDownIcon,
-  EditIcon,
-  DragHandleIcon,
-} from '@sanity/icons'
-import {
-  DndContext,
-  DragEndEvent,
-  DragOverlay,
-  DragStartEvent,
-  PointerSensor,
-  KeyboardSensor,
-  useSensor,
-  useSensors,
-  closestCenter,
-} from '@dnd-kit/core'
-import {
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-  arrayMove,
-} from '@dnd-kit/sortable'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import { CSS } from '@dnd-kit/utilities'
+import { AddIcon } from '@sanity/icons'
 
 // ============================================
 // CONFIGURAZIONE 29 SEZIONI
@@ -287,288 +259,16 @@ const SECTION_GROUPS: { name: string; color: string }[] = [
 ]
 
 // ============================================
-// HELPER
-// ============================================
-function extractTitle(title: any, fallback: string): string {
-  if (!title) return fallback
-  if (typeof title === 'string') return title
-  if (typeof title === 'object') {
-    return title.it || title.en || title.es || fallback
-  }
-  return fallback
-}
-
-// ============================================
-// SORTABLE SECTION CARD
-// ============================================
-interface SectionCardProps {
-  item: any
-  index: number
-  totalItems: number
-  onEdit: () => void
-  onDuplicate: () => void
-  onDelete: () => void
-  onMoveUp: () => void
-  onMoveDown: () => void
-}
-
-function SortableSectionCard({
-  item,
-  index,
-  totalItems,
-  onEdit,
-  onDuplicate,
-  onDelete,
-  onMoveUp,
-  onMoveDown,
-}: SectionCardProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: item._key })
-
-  const style: React.CSSProperties = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.4 : 1,
-    zIndex: isDragging ? 10 : 'auto',
-  }
-
-  const sectionType = item._type || 'unknown'
-  const config = SECTION_CONFIG[sectionType] || {
-    emoji: '❓',
-    color: '#6b7280',
-    label: sectionType,
-    description: '',
-    group: 'Altro',
-  }
-
-  const sectionTitle = extractTitle(item.title, config.label)
-
-  return (
-    <div ref={setNodeRef} style={style}>
-      <Card
-        padding={3}
-        radius={2}
-        shadow={1}
-        style={{
-          borderLeft: `4px solid ${config.color}`,
-          marginBottom: '8px',
-        }}
-      >
-        <Flex align="center" gap={3}>
-          {/* Drag handle */}
-          <button
-            {...attributes}
-            {...listeners}
-            style={{
-              cursor: isDragging ? 'grabbing' : 'grab',
-              border: 'none',
-              background: 'none',
-              padding: '4px',
-              display: 'flex',
-              alignItems: 'center',
-              color: '#999',
-              touchAction: 'none',
-            }}
-            title="Trascina per riordinare"
-          >
-            <DragHandleIcon />
-          </button>
-
-          {/* Numero posizione */}
-          <Box
-            style={{
-              width: '28px',
-              height: '28px',
-              borderRadius: '50%',
-              backgroundColor: config.color,
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 'bold',
-              fontSize: '13px',
-              flexShrink: 0,
-            }}
-          >
-            {index + 1}
-          </Box>
-
-          {/* Emoji e Info */}
-          <Box flex={1} style={{ minWidth: 0 }}>
-            <Flex align="center" gap={2}>
-              <Text size={2}>{config.emoji}</Text>
-              <Box style={{ minWidth: 0 }}>
-                <Text weight="semibold" size={2} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {sectionTitle}
-                </Text>
-                <Text size={1} muted>
-                  {config.label}
-                </Text>
-              </Box>
-            </Flex>
-          </Box>
-
-          {/* Azioni */}
-          <Flex gap={1} style={{ flexShrink: 0 }}>
-            <Button
-              icon={ChevronUpIcon}
-              mode="ghost"
-              disabled={index === 0}
-              onClick={onMoveUp}
-              title="Sposta su"
-              padding={2}
-            />
-            <Button
-              icon={ChevronDownIcon}
-              mode="ghost"
-              disabled={index === totalItems - 1}
-              onClick={onMoveDown}
-              title="Sposta giu"
-              padding={2}
-            />
-            <Button
-              icon={EditIcon}
-              mode="ghost"
-              tone="primary"
-              onClick={onEdit}
-              title="Modifica"
-              padding={2}
-            />
-            <Button
-              icon={CopyIcon}
-              mode="ghost"
-              onClick={onDuplicate}
-              title="Duplica"
-              padding={2}
-            />
-            <Button
-              icon={TrashIcon}
-              mode="ghost"
-              tone="critical"
-              onClick={onDelete}
-              title="Elimina"
-              padding={2}
-            />
-          </Flex>
-        </Flex>
-      </Card>
-    </div>
-  )
-}
-
-// Card statica usata nel DragOverlay
-function DragOverlayCard({ item, index }: { item: any; index: number }) {
-  const sectionType = item._type || 'unknown'
-  const config = SECTION_CONFIG[sectionType] || {
-    emoji: '❓',
-    color: '#6b7280',
-    label: sectionType,
-    description: '',
-    group: 'Altro',
-  }
-  const sectionTitle = extractTitle(item.title, config.label)
-
-  return (
-    <Card
-      padding={3}
-      radius={2}
-      shadow={2}
-      style={{
-        borderLeft: `4px solid ${config.color}`,
-        backgroundColor: 'var(--card-bg-color, #fff)',
-        opacity: 0.95,
-        cursor: 'grabbing',
-      }}
-    >
-      <Flex align="center" gap={3}>
-        <Box style={{ padding: '4px', display: 'flex', alignItems: 'center', color: '#999' }}>
-          <DragHandleIcon />
-        </Box>
-        <Box
-          style={{
-            width: '28px',
-            height: '28px',
-            borderRadius: '50%',
-            backgroundColor: config.color,
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: '13px',
-            flexShrink: 0,
-          }}
-        >
-          {index + 1}
-        </Box>
-        <Box flex={1}>
-          <Flex align="center" gap={2}>
-            <Text size={2}>{config.emoji}</Text>
-            <Box>
-              <Text weight="semibold" size={2}>{sectionTitle}</Text>
-              <Text size={1} muted>{config.label}</Text>
-            </Box>
-          </Flex>
-        </Box>
-      </Flex>
-    </Card>
-  )
-}
-
-// ============================================
 // COMPONENTE PRINCIPALE
 // ============================================
 export function SectionArrayInput(props: ArrayOfObjectsInputProps) {
-  const { value = [], onChange, onItemOpen } = props
+  const { onChange, renderDefault } = props
   const toast = useToast()
   const [addDialogOpen, setAddDialogOpen] = useState(false)
-  const [activeId, setActiveId] = useState<string | null>(null)
 
-  const items = value as any[]
-  const itemKeys = useMemo(() => items.map((item) => item._key), [items])
+  const items = (props.value || []) as any[]
 
-  // Sensori per drag
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 },
-    }),
-    useSensor(KeyboardSensor)
-  )
-
-  // Drag handlers
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    setActiveId(event.active.id as string)
-  }, [])
-
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      const { active, over } = event
-      setActiveId(null)
-
-      if (!over || active.id === over.id) return
-
-      const oldIndex = items.findIndex((item) => item._key === active.id)
-      const newIndex = items.findIndex((item) => item._key === over.id)
-
-      if (oldIndex === -1 || newIndex === -1) return
-
-      const reordered = arrayMove(items, oldIndex, newIndex)
-      onChange(set(reordered))
-    },
-    [items, onChange]
-  )
-
-  const handleDragCancel = useCallback(() => {
-    setActiveId(null)
-  }, [])
-
-  // Aggiungi sezione
+  // Aggiungi sezione dal dialog personalizzato
   const handleAddSection = useCallback(
     (type: string) => {
       const newItem = {
@@ -585,51 +285,6 @@ export function SectionArrayInput(props: ArrayOfObjectsInputProps) {
     [onChange, toast]
   )
 
-  // Duplica sezione
-  const handleDuplicate = useCallback(
-    (index: number) => {
-      const item = items[index]
-      if (!item) return
-      const duplicatedItem = {
-        ...JSON.parse(JSON.stringify(item)),
-        _key: `section-${Date.now()}`,
-      }
-      onChange(insert([duplicatedItem], 'after', [index]))
-      toast.push({ status: 'success', title: 'Sezione duplicata' })
-    },
-    [items, onChange, toast]
-  )
-
-  // Elimina sezione (con conferma browser)
-  const handleDelete = useCallback(
-    (index: number) => {
-      const item = items[index]
-      const config = SECTION_CONFIG[item?._type] || { label: 'Sezione' }
-
-      if (!window.confirm(`Eliminare la sezione "${config.label}"?`)) {
-        return
-      }
-
-      onChange(unset([index]))
-      toast.push({ status: 'success', title: 'Sezione eliminata' })
-    },
-    [items, onChange, toast]
-  )
-
-  // Sposta sezione (fallback buttons)
-  const handleMove = useCallback(
-    (fromIndex: number, toIndex: number) => {
-      if (toIndex < 0 || toIndex >= items.length) return
-      const reordered = arrayMove(items, fromIndex, toIndex)
-      onChange(set(reordered))
-    },
-    [items, onChange]
-  )
-
-  // Item attivo per DragOverlay
-  const activeItem = activeId ? items.find((item) => item._key === activeId) : null
-  const activeIndex = activeId ? items.findIndex((item) => item._key === activeId) : -1
-
   // Raggruppamento sezioni per dialog
   const groupedSections = useMemo(() => {
     const groups: Record<string, { type: string; config: SectionConfigItem }[]> = {}
@@ -644,7 +299,7 @@ export function SectionArrayInput(props: ArrayOfObjectsInputProps) {
 
   return (
     <Stack space={4}>
-      {/* Header */}
+      {/* Header personalizzato */}
       <Card padding={3} radius={2} tone="primary">
         <Flex align="center" justify="space-between">
           <Box>
@@ -653,58 +308,17 @@ export function SectionArrayInput(props: ArrayOfObjectsInputProps) {
           </Box>
           <Button
             icon={AddIcon}
-            text="Aggiungi"
+            text="Aggiungi Sezione"
             tone="primary"
             onClick={() => setAddDialogOpen(true)}
           />
         </Flex>
       </Card>
 
-      {/* Lista sezioni con drag-and-drop */}
-      {items.length === 0 ? (
-        <Card padding={5} radius={2} style={{ textAlign: 'center', border: '2px dashed #ccc' }}>
-          <Stack space={3}>
-            <Text size={3}>📄</Text>
-            <Text size={2} muted>Nessuna sezione</Text>
-            <Text size={1} muted>Clicca "Aggiungi" per iniziare</Text>
-          </Stack>
-        </Card>
-      ) : (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          modifiers={[restrictToVerticalAxis]}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-          onDragCancel={handleDragCancel}
-        >
-          <SortableContext items={itemKeys} strategy={verticalListSortingStrategy}>
-            <Stack space={0}>
-              {items.map((item, index) => (
-                <SortableSectionCard
-                  key={item._key}
-                  item={item}
-                  index={index}
-                  totalItems={items.length}
-                  onEdit={() => onItemOpen([index])}
-                  onDuplicate={() => handleDuplicate(index)}
-                  onDelete={() => handleDelete(index)}
-                  onMoveUp={() => handleMove(index, index - 1)}
-                  onMoveDown={() => handleMove(index, index + 1)}
-                />
-              ))}
-            </Stack>
-          </SortableContext>
+      {/* Rendering default di Sanity - gestisce editing, drag-and-drop nativo, modali, ecc. */}
+      {renderDefault(props)}
 
-          <DragOverlay>
-            {activeItem ? (
-              <DragOverlayCard item={activeItem} index={activeIndex} />
-            ) : null}
-          </DragOverlay>
-        </DndContext>
-      )}
-
-      {/* Dialog Aggiungi Sezione - raggruppato */}
+      {/* Dialog Aggiungi Sezione - raggruppato per categoria */}
       {addDialogOpen && (
         <Dialog
           id="add-section-dialog"
