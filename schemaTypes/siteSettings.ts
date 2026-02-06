@@ -355,6 +355,24 @@ export default defineType({
       initialValue: 'Ciao, vorrei informazioni sui vostri prodotti.',
     }),
 
+    // === LIVE CHAT (Tawk.to) ===
+    defineField({
+      name: 'tawkPropertyId',
+      title: 'Tawk.to Property ID',
+      type: 'string',
+      group: 'contact',
+      description: 'ID proprietà Tawk.to. Vai su tawk.to → Administration → Chat Widget → copia il primo ID dall\'URL del widget',
+    }),
+
+    defineField({
+      name: 'tawkWidgetId',
+      title: 'Tawk.to Widget ID',
+      type: 'string',
+      group: 'contact',
+      description: 'ID widget Tawk.to. Di solito è "default" oppure il secondo ID nell\'URL del widget',
+      initialValue: 'default',
+    }),
+
     defineField({
       name: 'fax',
       title: 'Fax',
