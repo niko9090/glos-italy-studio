@@ -9,6 +9,7 @@ export default defineType({
 
   groups: [
     { name: 'company', title: '🏢 Azienda', default: true },
+    { name: 'downloads', title: '📥 Download' },
     { name: 'header', title: '🔝 Header' },
     { name: 'footer', title: '🔻 Footer' },
     { name: 'contact', title: '📞 Contatti' },
@@ -66,6 +67,29 @@ export default defineType({
       type: 'image',
       group: 'company',
       description: 'Icona per la tab del browser (32x32 o 64x64 px)',
+    }),
+
+    // === DOWNLOAD ===
+    defineField({
+      name: 'listinoPrezziPdf',
+      title: 'Listino Prezzi PDF',
+      type: 'file',
+      group: 'downloads',
+      description: 'PDF del listino prezzi da scaricare. Carica qui il file PDF aggiornato.',
+      options: {
+        accept: '.pdf',
+      },
+    }),
+
+    defineField({
+      name: 'catalogoPdf',
+      title: 'Catalogo Prodotti PDF',
+      type: 'file',
+      group: 'downloads',
+      description: 'Catalogo generale dei prodotti (opzionale)',
+      options: {
+        accept: '.pdf',
+      },
     }),
 
     // === HEADER ===
