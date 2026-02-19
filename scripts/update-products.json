@@ -1,0 +1,80 @@
+{
+  "mutations": [
+    {
+      "patch": {
+        "id": "prod-blender-bg2",
+        "set": {
+          "shortDescription": "Il rivoluzionario miscelatore professionale con tecnologia brevettata Mix Glos System. Rotazione alternata a velocita variabile che garantisce una miscelazione perfetta senza inglobare aria. Ideale per colorifici, rivenditori e centri tintometrici.",
+          "fullDescription": "Il Blender GLOS BG2 rappresenta il vertice della tecnologia nella miscelazione professionale delle vernici. Nato da anni di ricerca e sviluppo, questo miscelatore a colonna incorpora il brevettato Mix Glos System, un sistema di rotazione alternata che rivoluziona il modo di miscelare le vernici ad acqua.\n\nA differenza dei miscelatori tradizionali, il BG2 non ingloba aria durante la miscelazione, garantendo un prodotto finale di qualita superiore, pronto per essere utilizzato immediatamente senza attese. La velocita variabile permette di adattare il processo a qualsiasi tipo di vernice.\n\nCon una capacita di oltre 150 secchi al giorno, il Blender GLOS BG2 e progettato per i professionisti che non accettano compromessi.",
+          "features": [
+            {"_key": "f1", "icon": "star", "title": "Tecnologia Brevettata", "description": "Mix Glos System con rotazione alternata per miscelazione perfetta"},
+            {"_key": "f2", "icon": "lightning", "title": "Alta Produttivita", "description": "Fino a 150 secchi al giorno per massima efficienza"},
+            {"_key": "f3", "icon": "shield", "title": "Zero Aria Inglobata", "description": "Vernice pronta all uso senza attese o schiuma"},
+            {"_key": "f4", "icon": "gear", "title": "Velocita Variabile", "description": "Adattabile a ogni tipo di vernice e contenitore"}
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "prod-twin-120-20",
+        "set": {
+          "shortDescription": "La taglierina professionale per eccellenza. Struttura autoportante in alluminio e acciaio inox, progettata per tagli perfetti a 45 gradi, scanalature e diagonali. La scelta dei professionisti del cappotto termico.",
+          "fullDescription": "La Policut Twin 120/20 e il punto di riferimento per i professionisti dell isolamento termico. Questa taglierina autoportante combina leggerezza e robustezza grazie alla sua struttura in alluminio e acciaio inossidabile.\n\nProgettata per tagli di precisione su pannelli isolanti fino a 1320mm, offre la possibilita di eseguire tagli a 45 gradi sia a destra che a sinistra, scanalature per angoli perfetti e tagli diagonali. Il sistema di riscaldamento a filo garantisce tagli netti e puliti senza produrre polvere.\n\nIl design autoportante permette di lavorare in qualsiasi condizione, sia in cantiere che in laboratorio, con la massima stabilita e precisione.",
+          "features": [
+            {"_key": "f1", "icon": "target", "title": "Precisione Assoluta", "description": "Tagli perfetti a 45 gradi, scanalature e diagonali"},
+            {"_key": "f2", "icon": "shield", "title": "Materiali Premium", "description": "Alluminio e acciaio inox per massima durabilita"},
+            {"_key": "f3", "icon": "rocket", "title": "Autoportante", "description": "Lavora ovunque senza bisogno di supporti esterni"},
+            {"_key": "f4", "icon": "check", "title": "Taglio Pulito", "description": "Nessuna polvere, nessuno spreco di materiale"}
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "prod-fiber-cut",
+        "set": {
+          "shortDescription": "Innovativa taglierina progettata specificamente per pannelli in fibre minerali e lane di vetro. Sistema a ganascia brevettato per tagli perfetti anche sui materiali piu difficili da lavorare.",
+          "fullDescription": "La Fiber Cut 1200/20 nasce per rispondere alle esigenze dei professionisti che lavorano con materiali isolanti in fibra minerale e lana di vetro. Questi materiali, notoriamente difficili da tagliare con precisione, richiedono un approccio completamente diverso.\n\nIl sistema a ganascia brevettato blocca saldamente il pannello durante il taglio, mentre la barra bloccalastra garantisce che il materiale rimanga perfettamente in posizione. L arco di taglio e stato studiato per penetrare le fibre senza sfilacciarle.\n\nRisultato: tagli netti e precisi che riducono gli sprechi e velocizzano il lavoro in cantiere. Un must per chi lavora nell isolamento acustico e termico con materiali fibrosi.",
+          "features": [
+            {"_key": "f1", "icon": "star", "title": "Sistema a Ganascia", "description": "Blocco sicuro del pannello durante il taglio"},
+            {"_key": "f2", "icon": "target", "title": "Per Fibre Minerali", "description": "Progettata specificamente per lane di vetro e roccia"},
+            {"_key": "f3", "icon": "check", "title": "Tagli Senza Sfilacciature", "description": "Bordi netti anche sui materiali piu difficili"},
+            {"_key": "f4", "icon": "lightning", "title": "Alta Produttivita", "description": "Velocizza il lavoro riducendo gli sprechi"}
+          ],
+          "isNew": true
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "prod-termolight-con",
+        "set": {
+          "shortDescription": "Il termoventilatore professionale che rivoluziona l asciugatura in cantiere. 1600 metri cubi ora di portata, ricicla l aria ambiente 22 volte ogni ora. Con lampade professionali e centralina per il controllo dell umidita.",
+          "fullDescription": "Il Termolight e molto piu di un semplice riscaldatore: e un sistema completo per l asciugatura professionale in cantiere. Con una portata di 1600 metri cubi all ora, questo termoventilatore ricicla completamente l aria di un ambiente standard 22 volte ogni ora.\n\nLe due lampade professionali integrate permettono di lavorare anche in condizioni di scarsa illuminazione, mentre la centralina per il controllo dell umidita garantisce che l ambiente raggiunga le condizioni ottimali per la verniciatura e la stuccatura.\n\nLeggero (solo 5 kg) e facile da trasportare grazie al cavalletto incluso, il Termolight e diventato uno strumento indispensabile per imbianchini e decoratori professionisti che non vogliono dipendere dalle condizioni meteorologiche.",
+          "features": [
+            {"_key": "f1", "icon": "lightning", "title": "1600 m3/h", "description": "Portata aria per asciugatura rapida"},
+            {"_key": "f2", "icon": "bulb", "title": "Lampade Integrate", "description": "Due lampade professionali per lavorare ovunque"},
+            {"_key": "f3", "icon": "gear", "title": "Controllo Umidita", "description": "Centralina per monitorare le condizioni ambientali"},
+            {"_key": "f4", "icon": "rocket", "title": "Ultra Leggero", "description": "Solo 5 kg per massima portabilita"}
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "prod-wash-station",
+        "set": {
+          "shortDescription": "La stazione di lavaggio eco-compatibile che rispetta l ambiente. Progettata per la pulizia rapida e sicura di rulli, pennelli e attrezzi utilizzati con vernici e materiali a base acqua.",
+          "fullDescription": "La GLOS Wash Station rappresenta la soluzione definitiva per il lavaggio degli attrezzi da pittura nel rispetto dell ambiente. Progettata per essere utilizzata con materiali a base acqua, questa stazione permette di pulire rapidamente rulli, pennelli e altri attrezzi senza sprecare acqua e senza inquinare.\n\nIl sistema di filtraggio integrato separa i residui di vernice dall acqua, permettendo di riutilizzare l acqua per piu cicli di lavaggio. I residui solidi possono essere smaltiti come rifiuti normali una volta asciutti.\n\nCon una capienza di 30 litri e un funzionamento ad aria compressa, la Wash Station e perfetta per cantieri di qualsiasi dimensione. La struttura robusta e il design ergonomico la rendono facile da usare e da trasportare.",
+          "features": [
+            {"_key": "f1", "icon": "shield", "title": "Eco-Compatibile", "description": "Rispetta l ambiente con sistema di filtraggio"},
+            {"_key": "f2", "icon": "lightning", "title": "Lavaggio Rapido", "description": "Pulizia veloce di rulli e pennelli"},
+            {"_key": "f3", "icon": "gear", "title": "Aria Compressa", "description": "Funzionamento semplice e affidabile"},
+            {"_key": "f4", "icon": "check", "title": "Riutilizzo Acqua", "description": "30 litri per molteplici cicli di lavaggio"}
+          ]
+        }
+      }
+    }
+  ]
+}

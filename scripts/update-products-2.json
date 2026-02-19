@@ -1,0 +1,80 @@
+{
+  "mutations": [
+    {
+      "patch": {
+        "id": "prod-easy-1200-20",
+        "set": {
+          "shortDescription": "Il top di gamma della serie Easy. Massima produttivita e capacita di taglio per pannelli di grande dimensione. Struttura autoportante ma utilizzabile anche in appoggio su qualsiasi superficie.",
+          "fullDescription": "La Policut Easy 1200/20 rappresenta l apice della gamma Easy, pensata per i professionisti che richiedono il massimo in termini di produttivita e versatilita. Con una capacita di taglio fino a 1320mm, questa taglierina gestisce senza problemi i pannelli isolanti di qualsiasi formato.\n\nLa struttura autoportante garantisce stabilita durante il taglio, ma il design permette anche di utilizzarla in appoggio su un piano di lavoro o direttamente sul ponteggio. Questa flessibilita la rende perfetta per qualsiasi situazione di cantiere.\n\nIl sistema a filo caldo assicura tagli netti e precisi, mentre la profondita di taglio di 210mm copre la maggior parte degli spessori di isolante utilizzati.",
+          "features": [
+            {"_key": "f1", "icon": "trophy", "title": "Top di Gamma", "description": "Il modello piu performante della serie Easy"},
+            {"_key": "f2", "icon": "target", "title": "Taglio 1320mm", "description": "Per pannelli di grande formato"},
+            {"_key": "f3", "icon": "gear", "title": "Doppio Utilizzo", "description": "Autoportante o in appoggio"},
+            {"_key": "f4", "icon": "lightning", "title": "Alta Produttivita", "description": "Per cantieri impegnativi"}
+          ],
+          "isFeatured": true
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "prod-easy-1000-20",
+        "set": {
+          "shortDescription": "Il perfetto equilibrio tra portabilita e prestazioni. Abbastanza compatta da essere trasportata facilmente, abbastanza potente per gestire la maggior parte dei lavori. La scelta ideale per i professionisti mobili.",
+          "fullDescription": "La Policut Easy 1000/20 e la scelta preferita dai professionisti che si spostano frequentemente tra cantieri diversi. Con una capacita di taglio di 1110mm, copre la stragrande maggioranza delle esigenze senza sacrificare la portabilita.\n\nPiu leggera e compatta del modello 1200, mantiene comunque tutte le caratteristiche che rendono la serie Easy un punto di riferimento: taglio preciso, facilita d uso, costruzione robusta.\n\nLa profondita di taglio di 210mm la rende perfetta per gli spessori di isolante piu comuni, mentre il peso contenuto facilita il trasporto anche su ponteggi alti.",
+          "features": [
+            {"_key": "f1", "icon": "rocket", "title": "Compatta e Potente", "description": "Il giusto compromesso tra dimensioni e prestazioni"},
+            {"_key": "f2", "icon": "target", "title": "Taglio 1110mm", "description": "Copre la maggior parte delle esigenze"},
+            {"_key": "f3", "icon": "lightning", "title": "Facile da Trasportare", "description": "Ideale per chi lavora su piu cantieri"},
+            {"_key": "f4", "icon": "check", "title": "Costruzione Robusta", "description": "Affidabilita nel tempo"}
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "prod-easy-700-20",
+        "set": {
+          "shortDescription": "La piu compatta e leggera della famiglia Easy. Progettata per spazi ristretti e ponteggi alti dove ogni grammo conta. Non rinuncia alla qualita di taglio tipica della serie.",
+          "fullDescription": "La Policut Easy 700/20 e stata progettata pensando a una situazione specifica: il lavoro in quota su ponteggi stretti e luoghi difficili da raggiungere. In queste condizioni, ogni grammo di peso risparmiato fa la differenza.\n\nCon una capacita di taglio di 645mm, e perfetta per i tagli piu comuni richiesti sui ponteggi: spallette di finestre, sottotetti, angoli. Il suo peso ridotto permette di trasportarla facilmente anche salendo scale e trabattelli.\n\nNonostante le dimensioni compatte, la Easy 700/20 mantiene lo stesso standard qualitativo della serie: taglio preciso, costruzione robusta, affidabilita nel tempo.",
+          "features": [
+            {"_key": "f1", "icon": "rocket", "title": "Ultra Compatta", "description": "La piu leggera della gamma Easy"},
+            {"_key": "f2", "icon": "target", "title": "Per Spazi Ristretti", "description": "Perfetta per ponteggi e luoghi difficili"},
+            {"_key": "f3", "icon": "lightning", "title": "Peso Minimo", "description": "Facile da portare in quota"},
+            {"_key": "f4", "icon": "check", "title": "Stessa Qualita", "description": "Standard costruttivo della serie Easy"}
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "prod-minicut-con-trasf",
+        "set": {
+          "shortDescription": "La taglierina manuale per eccellenza. Ideale per tagli di precisione su sottotrave, spallette e piccoli lavori dove le taglierine da banco non possono arrivare. Include trasformatore.",
+          "fullDescription": "Il Minicut e lo strumento indispensabile per ogni professionista del cappotto termico. Progettato per quei tagli che le taglierine da banco non possono fare: sottotetti inclinati, spallette di finestre, angoli complessi, punti difficili da raggiungere.\n\nL impugnatura ergonomica garantisce il massimo controllo durante il taglio, mentre l appoggio in plexiglass permette di guidare il filo con precisione. Con uno spessore di taglio variabile da 200 a 360mm, copre tutte le esigenze di rifinitura.\n\nQuesta versione include il trasformatore, permettendo di iniziare a lavorare subito senza accessori aggiuntivi.",
+          "features": [
+            {"_key": "f1", "icon": "target", "title": "Precisione Assoluta", "description": "Per tagli di rifinitura perfetti"},
+            {"_key": "f2", "icon": "gear", "title": "Ergonomico", "description": "Impugnatura studiata per lunghe sessioni di lavoro"},
+            {"_key": "f3", "icon": "lightning", "title": "Completo", "description": "Include trasformatore pronto all uso"},
+            {"_key": "f4", "icon": "check", "title": "Versatile", "description": "Spessore taglio da 200 a 360mm"}
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "prod-hot-knife",
+        "set": {
+          "shortDescription": "Il coltello a caldo professionale per tagli bisellati e angolari. Perfetto per creare giunzioni invisibili e biselli perfetti su pannelli isolanti. Con valigetta, lame di ricambio e slitta guida in acciaio inox.",
+          "fullDescription": "L Hot Knife e lo strumento specializzato per realizzare tagli bisellati perfetti su pannelli isolanti. A differenza delle taglierine tradizionali che eseguono solo tagli verticali, questo coltello a caldo permette di tagliare a qualsiasi angolazione da 0 a 90 gradi.\n\nIl risultato sono giunzioni praticamente invisibili, biselli perfetti per gli angoli, e una finitura professionale che fa la differenza. La slitta guida in acciaio inox garantisce tagli uniformi e ripetibili.\n\nIl kit completo include valigetta per il trasporto, lame di ricambio e tutti gli accessori necessari. Il funzionamento a intermittenza (30 secondi ON, 50 secondi OFF) protegge il dispositivo dall usura.",
+          "features": [
+            {"_key": "f1", "icon": "target", "title": "Tagli Angolari", "description": "Da 0 a 90 gradi per biselli perfetti"},
+            {"_key": "f2", "icon": "star", "title": "Kit Completo", "description": "Valigetta, lame e accessori inclusi"},
+            {"_key": "f3", "icon": "shield", "title": "Guida in Inox", "description": "Per tagli uniformi e ripetibili"},
+            {"_key": "f4", "icon": "gear", "title": "Protezione Termica", "description": "Sistema a intermittenza per lunga durata"}
+          ]
+        }
+      }
+    }
+  ]
+}
