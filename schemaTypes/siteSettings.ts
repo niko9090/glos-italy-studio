@@ -71,11 +71,33 @@ export default defineType({
 
     // === DOWNLOAD ===
     defineField({
-      name: 'listinoPrezziPdf',
-      title: 'Listino Prezzi PDF',
+      name: 'listinoPrezziPdfIt',
+      title: '🇮🇹 Listino Prezzi PDF (Italiano)',
       type: 'file',
       group: 'downloads',
-      description: 'PDF del listino prezzi da scaricare. Carica qui il file PDF aggiornato.',
+      description: 'PDF del listino prezzi in italiano',
+      options: {
+        accept: '.pdf',
+      },
+    }),
+
+    defineField({
+      name: 'listinoPrezziPdfEn',
+      title: '🇬🇧 Listino Prezzi PDF (English)',
+      type: 'file',
+      group: 'downloads',
+      description: 'PDF del listino prezzi in inglese. Usato come fallback se la lingua richiesta non è disponibile.',
+      options: {
+        accept: '.pdf',
+      },
+    }),
+
+    defineField({
+      name: 'listinoPrezziPdfEs',
+      title: '🇪🇸 Listino Prezzi PDF (Español)',
+      type: 'file',
+      group: 'downloads',
+      description: 'PDF del listino prezzi in spagnolo',
       options: {
         accept: '.pdf',
       },
