@@ -106,6 +106,7 @@ export default defineType({
           { title: '🔲 Griglia Uniforme', value: 'grid' },
           { title: '🧱 Masonry (altezze variabili)', value: 'masonry' },
           { title: '📱 Carousel Orizzontale', value: 'carousel' },
+          { title: '🎬 Marquee (scorrimento continuo)', value: 'marquee' },
           { title: '🎴 Justified (righe piene)', value: 'justified' },
           { title: '🔳 Collage', value: 'collage' },
           { title: '📰 Featured + Grid', value: 'featured-grid' },
@@ -113,6 +114,37 @@ export default defineType({
         ],
       },
       initialValue: 'grid',
+    }),
+
+    defineField({
+      name: 'marqueeSpeed',
+      title: 'Velocità Scorrimento',
+      type: 'string',
+      group: 'layout',
+      options: {
+        list: [
+          { title: 'Lento', value: 'slow' },
+          { title: 'Normale', value: 'normal' },
+          { title: 'Veloce', value: 'fast' },
+        ],
+      },
+      initialValue: 'slow',
+      hidden: ({ parent }) => parent?.layout !== 'marquee',
+    }),
+
+    defineField({
+      name: 'marqueeDirection',
+      title: 'Direzione',
+      type: 'string',
+      group: 'layout',
+      options: {
+        list: [
+          { title: '← Sinistra', value: 'left' },
+          { title: '→ Destra', value: 'right' },
+        ],
+      },
+      initialValue: 'left',
+      hidden: ({ parent }) => parent?.layout !== 'marquee',
     }),
 
     defineField({
@@ -505,6 +537,7 @@ export default defineType({
         grid: 'Griglia',
         masonry: 'Masonry',
         carousel: 'Carousel',
+        marquee: 'Marquee',
         justified: 'Justified',
         collage: 'Collage',
         'featured-grid': 'Featured',
