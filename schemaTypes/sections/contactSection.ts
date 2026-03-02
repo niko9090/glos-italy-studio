@@ -954,6 +954,8 @@ export default defineType({
           { title: 'Blu Chiaro', value: 'primary-light' },
           { title: 'Nero', value: 'black' },
           { title: 'Gradiente', value: 'gradient' },
+          { title: 'Gradiente Blu (come Chi Siamo)', value: 'gradient-blue' },
+          { title: 'Gradiente Blu Dinamico', value: 'gradient-blue-light' },
         ],
       },
       initialValue: 'white',
