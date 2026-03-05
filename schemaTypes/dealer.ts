@@ -193,11 +193,30 @@ export default defineType({
 
     // === MEDIA ===
     defineField({
+      name: 'videoFile',
+      title: 'Video Caricato',
+      type: 'file',
+      group: 'media',
+      options: {
+        accept: 'video/*',
+      },
+      description: 'Carica un video direttamente (MP4 consigliato)',
+    }),
+
+    defineField({
+      name: 'localVideoPath',
+      title: 'Video Locale (Percorso)',
+      type: 'string',
+      group: 'media',
+      description: 'Percorso del video nella cartella public (es: /videos/nome-video.mp4)',
+    }),
+
+    defineField({
       name: 'youtubeVideo',
-      title: 'Video YouTube',
+      title: 'Video YouTube (Alternativa)',
       type: 'url',
       group: 'media',
-      description: 'Link al video YouTube del rivenditore (es: https://www.youtube.com/watch?v=xxxxx)',
+      description: 'Oppure inserisci un link YouTube (es: https://www.youtube.com/watch?v=xxxxx)',
       validation: Rule => Rule.uri({
         scheme: ['http', 'https'],
       }),
