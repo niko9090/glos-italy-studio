@@ -77,17 +77,7 @@ const structure = (S: any) =>
   S.list()
     .title('GLOS Italy CMS')
     .items([
-      // === PAGINE ===
-      S.listItem()
-        .title('Pagine')
-        .icon(() => '📄')
-        .child(
-          S.documentTypeList('page').title('Tutte le Pagine')
-        ),
-
-      S.divider(),
-
-      // === CATALOGO ===
+      // === PRODOTTI (priorita alta) ===
       S.listItem()
         .title('Prodotti')
         .icon(() => '🏷️')
@@ -104,35 +94,34 @@ const structure = (S: any) =>
 
       S.divider(),
 
-      // === SETTORI ===
+      // === LISTINO PREZZI (nuovo) ===
       S.listItem()
-        .title('Settori Applicazione')
-        .icon(() => '🏭')
+        .title('Listino Prezzi')
+        .icon(() => '💰')
         .child(
-          S.documentTypeList('sector').title('Settori')
-        ),
-
-      // === CASE STUDIES ===
-      S.listItem()
-        .title('Case Studies')
-        .icon(() => '📋')
-        .child(
-          S.documentTypeList('caseStudy').title('Case Studies')
+          S.documentTypeList('listinoItem').title('Articoli Listino')
         ),
 
       S.divider(),
 
-      // === RIVENDITORI ===
+      // === COMMUNITY VIDEO (nuovo) ===
       S.listItem()
-        .title('Rivenditori')
-        .icon(() => '🏪')
+        .title('Video Community')
+        .icon(() => '🎬')
         .child(
-          S.documentTypeList('dealer').title('Rete Vendita')
+          S.documentTypeList('communityVideo').title('Tutti i Video')
         ),
 
       S.divider(),
 
-      // === CONTENUTI EXTRA (appiattiti) ===
+      // === CONTENUTI TESTUALI ===
+      S.listItem()
+        .title('Pagine')
+        .icon(() => '📄')
+        .child(
+          S.documentTypeList('page').title('Tutte le Pagine')
+        ),
+
       S.listItem()
         .title('Testimonianze')
         .icon(() => '💬')
@@ -145,6 +134,33 @@ const structure = (S: any) =>
         .icon(() => '❓')
         .child(
           S.documentTypeList('faq').title('Domande Frequenti')
+        ),
+
+      S.divider(),
+
+      // === RETE VENDITA ===
+      S.listItem()
+        .title('Rivenditori')
+        .icon(() => '🏪')
+        .child(
+          S.documentTypeList('dealer').title('Rete Vendita')
+        ),
+
+      S.divider(),
+
+      // === ALTRO ===
+      S.listItem()
+        .title('Settori Applicazione')
+        .icon(() => '🏭')
+        .child(
+          S.documentTypeList('sector').title('Settori')
+        ),
+
+      S.listItem()
+        .title('Case Studies')
+        .icon(() => '📋')
+        .child(
+          S.documentTypeList('caseStudy').title('Case Studies')
         ),
 
       S.divider(),

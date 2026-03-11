@@ -13,6 +13,9 @@ import mediaItem from './mediaItem'
 // Nuovi schemi documento
 import sector from './sector'
 import caseStudy from './caseStudy'
+// Nuovi schemi per listino e community
+import listinoItem from './listinoItem'
+import communityVideo from './communityVideo'
 
 // Tipi oggetto per multilingua
 import localeString from './objects/localeString'
@@ -75,6 +78,9 @@ export const schemaTypes = [
   mediaItem,
   sector,
   caseStudy,
+  // Listino e Community
+  listinoItem,
+  communityVideo,
 
   // Sezioni (oggetti riutilizzabili)
   heroSection,
