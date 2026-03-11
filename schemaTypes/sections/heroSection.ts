@@ -18,10 +18,10 @@ export default defineType({
     { name: 'content', title: '📝 Contenuto', default: true },
     { name: 'buttons', title: '🔘 Pulsanti' },
     { name: 'media', title: '🖼️ Media' },
-    { name: 'layout', title: '📐 Layout', hidden: true },
-    { name: 'style', title: '🎨 Stile', hidden: true },
-    { name: 'effects', title: '✨ Effetti Moderni', hidden: true },
-    { name: 'advanced', title: '⚙️ Avanzato', hidden: true },
+    { name: 'layout', title: '📐 Layout' },
+    { name: 'style', title: '🎨 Stile' },
+    { name: 'effects', title: '✨ Effetti Moderni' },
+    { name: 'advanced', title: '⚙️ Avanzato' },
   ],
 
   fields: [
