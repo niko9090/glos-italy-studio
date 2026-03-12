@@ -284,7 +284,13 @@ export default defineType({
       title: 'Link Footer',
       type: 'array',
       hidden: true,
-      of: [{ type: 'object', fields: [] }],
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'label', title: 'Label', type: 'string' },
+          { name: 'href', title: 'Link', type: 'string' },
+        ],
+      }],
     }),
 
     defineField({
@@ -418,7 +424,13 @@ export default defineType({
       title: 'Orari',
       type: 'array',
       hidden: true,
-      of: [{ type: 'object', fields: [] }],
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'days', title: 'Giorni', type: 'string' },
+          { name: 'hours', title: 'Orari', type: 'string' },
+        ],
+      }],
     }),
 
     defineField({

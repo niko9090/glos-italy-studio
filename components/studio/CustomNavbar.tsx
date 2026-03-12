@@ -5,7 +5,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 // ============================================
 // VERSIONE ATTUALE
 // ============================================
-const SITE_VERSION = '3.2.0'
+const SITE_VERSION = '4.0.0'
 
 // ============================================
 // LINK VERCEL E GITHUB
@@ -33,6 +33,25 @@ function formatDate(dateStr: string): string {
 }
 
 const VERSIONS: Record<string, VersionInfo> = {
+  '4.0.0': {
+    changelog: [
+      'RISTRUTTURAZIONE COMPLETA: Studio semplificato per utente finale',
+      'Menu ridotto a 4 voci: Prodotti, Listino, Video, Impostazioni',
+      'Nascosta sezione Pagine (codice preservato)',
+      'Nuovi schemi: listinoItem (prezzi), communityVideo (video+commenti)',
+      'product.ts: semplificato a 3 gruppi (Info, Foto, Specifiche)',
+      'listinoItem.ts: 2 gruppi (Articolo, Prezzo)',
+      'communityVideo.ts: 2 gruppi (Video, Commenti)',
+      'productCategory.ts: rimossa complessita sottocategorie',
+      'siteSettings.ts: ridotto a 3 gruppi (Azienda, Contatti, Social)',
+      'Disabilitati plugin avanzati (Editor Visuale, Dashboard)',
+      'Tutti i campi avanzati nascosti con hidden:true',
+    ],
+    date: '2026-03-12',
+    branch: 'main',
+    tag: 'v4.0.0',
+    status: 'production',
+  },
   '3.2.0': {
     changelog: [
       'Audit capillare 28+ sezioni: fix allineamento schema/query/componente',
@@ -48,7 +67,7 @@ const VERSIONS: Record<string, VersionInfo> = {
     date: '2026-02-05',
     branch: 'main',
     tag: 'v3.2.0',
-    status: 'production',
+    status: 'available',
   },
   '3.1.0': {
     changelog: [
