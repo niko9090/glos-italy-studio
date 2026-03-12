@@ -51,18 +51,16 @@ export default defineType({
     defineField({
       name: 'shortDescription',
       title: 'Descrizione Breve',
-      type: 'text',
+      type: 'richText',
       group: 'info',
-      rows: 2,
       description: 'Breve descrizione (1-2 frasi)',
     }),
 
     defineField({
       name: 'fullDescription',
       title: 'Descrizione Completa',
-      type: 'text',
+      type: 'richText',
       group: 'info',
-      rows: 5,
       description: 'Descrizione dettagliata del prodotto',
     }),
 
