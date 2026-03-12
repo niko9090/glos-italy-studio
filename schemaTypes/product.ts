@@ -1,4 +1,4 @@
-// Schema: Prodotto - VERSIONE SEMPLIFICATA
+// Schema: Prodotto - VERSIONE SEMPLIFICATA (compatibile con dati multilingua)
 import { defineType, defineField } from 'sanity'
 
 export default defineType({
@@ -20,10 +20,9 @@ export default defineType({
     defineField({
       name: 'name',
       title: 'Nome Prodotto',
-      type: 'string',
+      type: 'localeString',
       group: 'info',
-      description: 'Il nome del prodotto come apparira sul sito',
-      validation: Rule => Rule.required().error('Il nome e obbligatorio'),
+      description: 'Il nome del prodotto',
     }),
 
     defineField({
@@ -33,7 +32,7 @@ export default defineType({
       group: 'info',
       description: 'Clicca "Generate" per creare automaticamente',
       options: {
-        source: 'name',
+        source: 'name.it',
         maxLength: 96,
       },
       validation: Rule => Rule.required().error('URL obbligatorio'),
@@ -51,7 +50,7 @@ export default defineType({
     defineField({
       name: 'shortDescription',
       title: 'Descrizione Breve',
-      type: 'richText',
+      type: 'localeText',
       group: 'info',
       description: 'Breve descrizione (1-2 frasi)',
     }),
@@ -59,7 +58,7 @@ export default defineType({
     defineField({
       name: 'fullDescription',
       title: 'Descrizione Completa',
-      type: 'richText',
+      type: 'localeText',
       group: 'info',
       description: 'Descrizione dettagliata del prodotto',
     }),
@@ -258,12 +257,14 @@ export default defineType({
       isNew: 'isNew',
     },
     prepare({ title, category, media, active, featured, isNew }) {
+      // Gestisce sia string che localeString
+      const titleStr = typeof title === 'object' ? (title?.it || title?.en || 'Senza nome') : (title || 'Senza nome')
       const badges = []
       if (featured) badges.push('⭐')
       if (isNew) badges.push('🆕')
       const badgeStr = badges.length > 0 ? ` ${badges.join('')}` : ''
       return {
-        title: `${title || 'Senza nome'}${badgeStr}`,
+        title: `${titleStr}${badgeStr}`,
         subtitle: `${category || 'Senza categoria'} ${active ? '✅' : '❌'}`,
         media,
       }
@@ -274,7 +275,7 @@ export default defineType({
     {
       title: 'Nome A-Z',
       name: 'nameAsc',
-      by: [{ field: 'name', direction: 'asc' }],
+      by: [{ field: 'name.it', direction: 'asc' }],
     },
     {
       title: 'Ultima modifica',
