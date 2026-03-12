@@ -1,14 +1,11 @@
 // sanity.config.ts - Configurazione principale Sanity Studio (v3.0.0)
+// VERSIONE SEMPLIFICATA per utente finale
 import { defineConfig, definePlugin } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { presentationTool, defineLocations } from 'sanity/presentation'
 import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './schemaTypes'
-import { PageDashboard } from './components/tools/PageDashboard'
-import { DealerDashboard } from './components/tools/DealerDashboard'
 import { CustomNavbar } from './components/studio/CustomNavbar'
-import { DocumentsIcon, UsersIcon } from '@sanity/icons'
-import { cleanPastePlugin } from './plugins/cleanPaste'
 import { TranslateAction } from './actions/translateAction'
 
 // URL del frontend per preview
@@ -46,138 +43,114 @@ const resolve = {
   },
 }
 
-// Plugin Dashboard Pagine
-const pageDashboardPlugin = definePlugin({
-  name: 'page-dashboard',
-  tools: [
-    {
-      name: 'page-dashboard',
-      title: 'Dashboard Pagine',
-      icon: DocumentsIcon,
-      component: PageDashboard,
-    },
-  ],
-})
-
-// Plugin Dashboard Rivenditori
-const dealerDashboardPlugin = definePlugin({
-  name: 'dealer-dashboard',
-  tools: [
-    {
-      name: 'dealer-dashboard',
-      title: 'Dashboard Rivenditori',
-      icon: UsersIcon,
-      component: DealerDashboard,
-    },
-  ],
-})
-
-// Struttura personalizzata del pannello admin (semplificata)
+// ============================================================
+// STRUTTURA MENU SEMPLIFICATA - 3 AREE PRINCIPALI
+// ============================================================
 const structure = (S: any) =>
   S.list()
-    .title('GLOS Italy CMS')
+    .title('GLOS Italy')
     .items([
-      // === PRODOTTI (priorita alta) ===
+      // ══════════════════════════════════════════════════════
+      // AREA 1: PRODOTTI
+      // ══════════════════════════════════════════════════════
       S.listItem()
-        .title('Prodotti')
-        .icon(() => '🏷️')
+        .title('PRODOTTI')
+        .icon(() => '📦')
         .child(
-          S.documentTypeList('product').title('Tutti i Prodotti')
-        ),
-
-      S.listItem()
-        .title('Categorie Prodotti')
-        .icon(() => '📂')
-        .child(
-          S.documentTypeList('productCategory').title('Categorie')
+          S.list()
+            .title('Gestione Prodotti')
+            .items([
+              S.listItem()
+                .title('Tutti i Prodotti')
+                .icon(() => '🏷️')
+                .child(S.documentTypeList('product').title('Catalogo Prodotti')),
+              S.listItem()
+                .title('Categorie')
+                .icon(() => '📂')
+                .child(S.documentTypeList('productCategory').title('Categorie')),
+            ])
         ),
 
       S.divider(),
 
-      // === LISTINO PREZZI (nuovo) ===
+      // ══════════════════════════════════════════════════════
+      // AREA 2: LISTINO PREZZI
+      // ══════════════════════════════════════════════════════
       S.listItem()
-        .title('Listino Prezzi')
+        .title('LISTINO PREZZI')
         .icon(() => '💰')
-        .child(
-          S.documentTypeList('listinoItem').title('Articoli Listino')
-        ),
+        .child(S.documentTypeList('listinoItem').title('Articoli Listino')),
 
       S.divider(),
 
-      // === COMMUNITY VIDEO (nuovo) ===
+      // ══════════════════════════════════════════════════════
+      // AREA 3: VIDEO COMMUNITY
+      // ══════════════════════════════════════════════════════
       S.listItem()
-        .title('Video Community')
+        .title('VIDEO COMMUNITY')
         .icon(() => '🎬')
-        .child(
-          S.documentTypeList('communityVideo').title('Tutti i Video')
-        ),
+        .child(S.documentTypeList('communityVideo').title('Video e Commenti')),
 
       S.divider(),
 
-      // === CONTENUTI TESTUALI ===
+      // ══════════════════════════════════════════════════════
+      // IMPOSTAZIONI (solo essenziali)
+      // ══════════════════════════════════════════════════════
       S.listItem()
-        .title('Pagine')
-        .icon(() => '📄')
-        .child(
-          S.documentTypeList('page').title('Tutte le Pagine')
-        ),
-
-      S.listItem()
-        .title('Testimonianze')
-        .icon(() => '💬')
-        .child(
-          S.documentTypeList('testimonial').title('Testimonianze Clienti')
-        ),
-
-      S.listItem()
-        .title('FAQ')
-        .icon(() => '❓')
-        .child(
-          S.documentTypeList('faq').title('Domande Frequenti')
-        ),
-
-      S.divider(),
-
-      // === RETE VENDITA ===
-      S.listItem()
-        .title('Rivenditori')
-        .icon(() => '🏪')
-        .child(
-          S.documentTypeList('dealer').title('Rete Vendita')
-        ),
-
-      S.divider(),
-
-      // === ALTRO ===
-      S.listItem()
-        .title('Settori Applicazione')
-        .icon(() => '🏭')
-        .child(
-          S.documentTypeList('sector').title('Settori')
-        ),
-
-      S.listItem()
-        .title('Case Studies')
-        .icon(() => '📋')
-        .child(
-          S.documentTypeList('caseStudy').title('Case Studies')
-        ),
-
-      S.divider(),
-
-      // === CONFIGURAZIONE ===
-      S.listItem()
-        .title('Impostazioni Sito')
+        .title('Impostazioni')
         .icon(() => '⚙️')
         .child(
           S.document()
             .schemaType('siteSettings')
             .documentId('siteSettings')
-            .title('Impostazioni Globali')
+            .title('Dati Azienda')
         ),
 
+      // ══════════════════════════════════════════════════════
+      // SEZIONI NASCOSTE (codice mantenuto ma commentato)
+      // Per riabilitare: decommentare la sezione desiderata
+      // ══════════════════════════════════════════════════════
+
+      /*
+      // --- PAGINE (Page Builder - nascosto per utente finale) ---
       S.listItem()
-        .title('Menu Navigazione')
+        .title('Pagine')
+        .icon(() => '📄')
+        .child(S.documentTypeList('page').title('Tutte le Pagine')),
+
+      // --- TESTIMONIANZE ---
+      S.listItem()
+        .title('Testimonianze')
+        .icon(() => '💬')
+        .child(S.documentTypeList('testimonial').title('Testimonianze')),
+
+      // --- FAQ ---
+      S.listItem()
+        .title('FAQ')
+        .icon(() => '❓')
+        .child(S.documentTypeList('faq').title('Domande Frequenti')),
+
+      // --- RIVENDITORI ---
+      S.listItem()
+        .title('Rivenditori')
+        .icon(() => '🏪')
+        .child(S.documentTypeList('dealer').title('Rete Vendita')),
+
+      // --- SETTORI APPLICAZIONE ---
+      S.listItem()
+        .title('Settori')
+        .icon(() => '🏭')
+        .child(S.documentTypeList('sector').title('Settori')),
+
+      // --- CASE STUDIES ---
+      S.listItem()
+        .title('Case Studies')
+        .icon(() => '📋')
+        .child(S.documentTypeList('caseStudy').title('Case Studies')),
+
+      // --- MENU NAVIGAZIONE ---
+      S.listItem()
+        .title('Menu')
         .icon(() => '🧭')
         .child(
           S.document()
@@ -185,11 +158,12 @@ const structure = (S: any) =>
             .documentId('mainNavigation')
             .title('Menu Principale')
         ),
+      */
     ])
 
 export default defineConfig({
   name: 'glos-italy',
-  title: 'GLOS Italy CMS',
+  title: 'GLOS Italy',
 
   projectId: process.env.SANITY_STUDIO_PROJECT_ID || '97oreljh',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
@@ -202,14 +176,22 @@ export default defineConfig({
   },
 
   plugins: [
-    // Pulizia testo incollato - DISABILITATO per debug layout
-    // cleanPastePlugin(),
+    // ══════════════════════════════════════════════════════
+    // PLUGIN ATTIVI
+    // ══════════════════════════════════════════════════════
 
-    // Dashboard personalizzate
-    pageDashboardPlugin(),
-    dealerDashboardPlugin(),
+    // Gestione Contenuti (struttura ad albero)
+    structureTool({ structure, title: 'Contenuti' }),
 
-    // Editor Visuale con Preview Live
+    // Gestione Media
+    media(),
+
+    // ══════════════════════════════════════════════════════
+    // PLUGIN DISABILITATI (troppo avanzati per utente finale)
+    // ══════════════════════════════════════════════════════
+
+    /*
+    // Editor Visuale con Preview Live (per sviluppatori)
     presentationTool({
       name: 'editor',
       title: 'Editor Visuale',
@@ -222,15 +204,7 @@ export default defineConfig({
       },
       resolve,
     }),
-
-    // Gestione Contenuti (struttura ad albero)
-    structureTool({ structure, title: 'Contenuti' }),
-
-    // Gestione Media Avanzata
-    media(),
-
-    // Vision Tool rimosso - era per sviluppatori (query GROQ)
-    // Se serve per debug, decommentare: visionTool(),
+    */
   ],
 
   schema: {

@@ -1,4 +1,4 @@
-// Schema: Elemento Listino Prezzi
+// Schema: Listino Prezzi - VERSIONE SEMPLIFICATA
 import { defineType, defineField } from 'sanity'
 
 export default defineType({
@@ -8,27 +8,29 @@ export default defineType({
   icon: () => '💰',
 
   groups: [
-    { name: 'info', title: 'Informazioni', default: true },
-    { name: 'pricing', title: 'Prezzi' },
-    { name: 'settings', title: 'Impostazioni' },
+    { name: 'info', title: '📝 Articolo', default: true },
+    { name: 'pricing', title: '💶 Prezzo' },
   ],
 
   fields: [
-    // === INFORMAZIONI PRODOTTO ===
+    // ══════════════════════════════════════════════════════
+    // INFORMAZIONI ARTICOLO
+    // ══════════════════════════════════════════════════════
     defineField({
       name: 'name',
-      title: 'Nome Prodotto',
+      title: 'Nome Articolo',
       type: 'string',
       group: 'info',
-      validation: Rule => Rule.required(),
+      description: 'Nome del prodotto nel listino',
+      validation: Rule => Rule.required().error('Il nome e obbligatorio'),
     }),
 
     defineField({
       name: 'code',
-      title: 'Codice Articolo',
+      title: 'Codice',
       type: 'string',
       group: 'info',
-      description: 'Codice identificativo del prodotto (es: GLO-001)',
+      description: 'Codice articolo (es: GLO-001)',
     }),
 
     defineField({
@@ -44,12 +46,13 @@ export default defineType({
           { title: 'Ricambi', value: 'ricambi' },
           { title: 'Kit', value: 'kit' },
         ],
+        layout: 'dropdown',
       },
     }),
 
     defineField({
       name: 'description',
-      title: 'Descrizione Breve',
+      title: 'Descrizione',
       type: 'text',
       group: 'info',
       rows: 2,
@@ -57,101 +60,10 @@ export default defineType({
     }),
 
     defineField({
-      name: 'linkedProduct',
-      title: 'Prodotto Collegato',
-      type: 'reference',
-      to: [{ type: 'product' }],
-      group: 'info',
-      description: 'Collega a un prodotto del catalogo (opzionale)',
-    }),
-
-    // === PREZZI ===
-    defineField({
-      name: 'priceRetail',
-      title: 'Prezzo al Pubblico',
-      type: 'number',
-      group: 'pricing',
-      description: 'Prezzo di listino IVA inclusa (€)',
-      validation: Rule => Rule.min(0),
-    }),
-
-    defineField({
-      name: 'priceWholesale',
-      title: 'Prezzo Rivenditore',
-      type: 'number',
-      group: 'pricing',
-      description: 'Prezzo riservato ai rivenditori (€)',
-      validation: Rule => Rule.min(0),
-    }),
-
-    defineField({
-      name: 'pricePromo',
-      title: 'Prezzo Promo',
-      type: 'number',
-      group: 'pricing',
-      description: 'Prezzo promozionale (se attivo)',
-      validation: Rule => Rule.min(0),
-    }),
-
-    defineField({
-      name: 'isPromoActive',
-      title: 'Promo Attiva',
-      type: 'boolean',
-      group: 'pricing',
-      description: 'Attiva il prezzo promozionale',
-      initialValue: false,
-    }),
-
-    defineField({
-      name: 'promoEndDate',
-      title: 'Fine Promo',
-      type: 'date',
-      group: 'pricing',
-      description: 'Data di scadenza della promozione',
-      hidden: ({ parent }) => !parent?.isPromoActive,
-    }),
-
-    defineField({
-      name: 'unit',
-      title: 'Unita di Misura',
-      type: 'string',
-      group: 'pricing',
-      options: {
-        list: [
-          { title: 'Pezzo (pz)', value: 'pz' },
-          { title: 'Confezione (conf)', value: 'conf' },
-          { title: 'Kit', value: 'kit' },
-          { title: 'Metro (m)', value: 'm' },
-          { title: 'Kg', value: 'kg' },
-        ],
-      },
-      initialValue: 'pz',
-    }),
-
-    defineField({
-      name: 'minQuantity',
-      title: 'Quantita Minima',
-      type: 'number',
-      group: 'pricing',
-      description: 'Quantita minima ordinabile',
-      initialValue: 1,
-    }),
-
-    // === IMPOSTAZIONI ===
-    defineField({
-      name: 'sortOrder',
-      title: 'Ordine',
-      type: 'number',
-      group: 'settings',
-      description: 'Numero per ordinare nel listino (1 = primo)',
-      initialValue: 99,
-    }),
-
-    defineField({
       name: 'isActive',
       title: 'Visibile nel Listino',
       type: 'boolean',
-      group: 'settings',
+      group: 'info',
       initialValue: true,
     }),
 
@@ -159,18 +71,98 @@ export default defineType({
       name: 'isNew',
       title: 'Nuovo Articolo',
       type: 'boolean',
-      group: 'settings',
+      group: 'info',
       description: 'Mostra badge "Nuovo"',
       initialValue: false,
+    }),
+
+    // ══════════════════════════════════════════════════════
+    // PREZZO
+    // ══════════════════════════════════════════════════════
+    defineField({
+      name: 'priceRetail',
+      title: 'Prezzo (€)',
+      type: 'number',
+      group: 'pricing',
+      description: 'Prezzo di listino',
+      validation: Rule => Rule.min(0),
+    }),
+
+    defineField({
+      name: 'isPromoActive',
+      title: 'Prezzo in Promo',
+      type: 'boolean',
+      group: 'pricing',
+      description: 'Attiva il prezzo promozionale',
+      initialValue: false,
+    }),
+
+    defineField({
+      name: 'pricePromo',
+      title: 'Prezzo Promo (€)',
+      type: 'number',
+      group: 'pricing',
+      description: 'Prezzo scontato',
+      validation: Rule => Rule.min(0),
+      hidden: ({ parent }) => !parent?.isPromoActive,
     }),
 
     defineField({
       name: 'notes',
       title: 'Note',
       type: 'text',
-      group: 'settings',
+      group: 'pricing',
       rows: 2,
       description: 'Note interne (non visibili sul sito)',
+    }),
+
+    // ══════════════════════════════════════════════════════
+    // CAMPI NASCOSTI (mantenuti per compatibilita)
+    // ══════════════════════════════════════════════════════
+    defineField({
+      name: 'linkedProduct',
+      title: 'Prodotto Collegato',
+      type: 'reference',
+      to: [{ type: 'product' }],
+      hidden: true,
+    }),
+
+    defineField({
+      name: 'priceWholesale',
+      title: 'Prezzo Rivenditore',
+      type: 'number',
+      hidden: true,
+    }),
+
+    defineField({
+      name: 'promoEndDate',
+      title: 'Fine Promo',
+      type: 'date',
+      hidden: true,
+    }),
+
+    defineField({
+      name: 'unit',
+      title: 'Unita',
+      type: 'string',
+      hidden: true,
+      initialValue: 'pz',
+    }),
+
+    defineField({
+      name: 'minQuantity',
+      title: 'Quantita Minima',
+      type: 'number',
+      hidden: true,
+      initialValue: 1,
+    }),
+
+    defineField({
+      name: 'sortOrder',
+      title: 'Ordine',
+      type: 'number',
+      hidden: true,
+      initialValue: 99,
     }),
   ],
 
@@ -183,16 +175,26 @@ export default defineType({
       active: 'isActive',
       isNew: 'isNew',
       isPromo: 'isPromoActive',
+      pricePromo: 'pricePromo',
     },
-    prepare({ title, code, category, priceRetail, active, isNew, isPromo }) {
+    prepare({ title, code, category, priceRetail, active, isNew, isPromo, pricePromo }) {
       const badges = []
       if (isNew) badges.push('🆕')
       if (isPromo) badges.push('🏷️')
       const badgeStr = badges.length > 0 ? ` ${badges.join('')}` : ''
-      const price = priceRetail ? `€${priceRetail.toFixed(2)}` : 'Prezzo non impostato'
+
+      let priceStr = 'Prezzo non impostato'
+      if (priceRetail) {
+        if (isPromo && pricePromo) {
+          priceStr = `€${pricePromo} (era €${priceRetail})`
+        } else {
+          priceStr = `€${priceRetail}`
+        }
+      }
+
       return {
-        title: `${title}${badgeStr}`,
-        subtitle: `${code || 'No codice'} | ${category || 'No categoria'} | ${price} ${active ? '✅' : '❌'}`,
+        title: `${title || 'Senza nome'}${badgeStr}`,
+        subtitle: `${code || '-'} | ${category || '-'} | ${priceStr} ${active ? '✅' : '❌'}`,
       }
     },
   },
@@ -212,11 +214,6 @@ export default defineType({
       title: 'Prezzo (basso-alto)',
       name: 'priceAsc',
       by: [{ field: 'priceRetail', direction: 'asc' }],
-    },
-    {
-      title: 'Ordine manuale',
-      name: 'sortOrderAsc',
-      by: [{ field: 'sortOrder', direction: 'asc' }],
     },
   ],
 })

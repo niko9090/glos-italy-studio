@@ -1,18 +1,19 @@
-// Schema: Categoria Prodotto (con supporto sottocategorie)
+// Schema: Categoria Prodotto - VERSIONE SEMPLIFICATA
 import { defineType, defineField } from 'sanity'
 
 export default defineType({
   name: 'productCategory',
   title: 'Categorie',
   type: 'document',
-  icon: () => '🏷️',
+  icon: () => '📂',
 
   fields: [
     defineField({
       name: 'name',
       title: 'Nome Categoria',
       type: 'string',
-      validation: Rule => Rule.required(),
+      description: 'Il nome della categoria',
+      validation: Rule => Rule.required().error('Il nome e obbligatorio'),
     }),
 
     defineField({
@@ -28,36 +29,19 @@ export default defineType({
     }),
 
     defineField({
-      name: 'parentCategory',
-      title: 'Categoria Padre',
-      type: 'reference',
-      to: [{ type: 'productCategory' }],
-      description: 'Lascia vuoto se questa e una categoria principale. Seleziona una categoria se questa e una sottocategoria.',
-      options: {
-        filter: '!defined(parentCategory)', // Mostra solo categorie principali
-      },
-    }),
-
-    defineField({
       name: 'description',
       title: 'Descrizione',
       type: 'text',
-      rows: 3,
+      rows: 2,
+      description: 'Breve descrizione della categoria',
     }),
 
     defineField({
       name: 'image',
       title: 'Immagine',
       type: 'image',
+      description: 'Immagine rappresentativa della categoria',
       options: { hotspot: true },
-    }),
-
-    defineField({
-      name: 'sortOrder',
-      title: 'Ordine',
-      type: 'number',
-      description: 'Numero per ordinare le categorie (1 = primo)',
-      initialValue: 99,
     }),
 
     defineField({
@@ -66,21 +50,37 @@ export default defineType({
       type: 'boolean',
       initialValue: true,
     }),
+
+    // ══════════════════════════════════════════════════════
+    // CAMPI NASCOSTI (mantenuti per compatibilita)
+    // ══════════════════════════════════════════════════════
+    defineField({
+      name: 'parentCategory',
+      title: 'Categoria Padre',
+      type: 'reference',
+      to: [{ type: 'productCategory' }],
+      hidden: true,
+    }),
+
+    defineField({
+      name: 'sortOrder',
+      title: 'Ordine',
+      type: 'number',
+      hidden: true,
+      initialValue: 99,
+    }),
   ],
 
   preview: {
     select: {
       title: 'name',
-      parentName: 'parentCategory.name',
       media: 'image',
       isActive: 'isActive',
     },
-    prepare({ title, parentName, media, isActive }) {
+    prepare({ title, media, isActive }) {
       return {
-        title: parentName ? `  ${title}` : title,
-        subtitle: parentName
-          ? `Sottocategoria di: ${parentName}`
-          : `Categoria principale ${isActive ? '' : '(nascosta)'}`,
+        title: title || 'Categoria senza nome',
+        subtitle: isActive ? '✅ Visibile' : '❌ Nascosta',
         media,
       }
     },
@@ -88,25 +88,9 @@ export default defineType({
 
   orderings: [
     {
-      title: 'Per Ordine',
-      name: 'sortOrderAsc',
-      by: [
-        { field: 'sortOrder', direction: 'asc' },
-        { field: 'name', direction: 'asc' },
-      ],
-    },
-    {
-      title: 'Per Nome',
+      title: 'Nome A-Z',
       name: 'nameAsc',
       by: [{ field: 'name', direction: 'asc' }],
-    },
-    {
-      title: 'Categorie Principali Prima',
-      name: 'parentFirst',
-      by: [
-        { field: 'parentCategory', direction: 'asc' },
-        { field: 'sortOrder', direction: 'asc' },
-      ],
     },
   ],
 })

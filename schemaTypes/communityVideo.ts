@@ -1,4 +1,4 @@
-// Schema: Video Community con Commenti
+// Schema: Video Community - VERSIONE SEMPLIFICATA
 import { defineType, defineField } from 'sanity'
 
 export default defineType({
@@ -8,19 +8,21 @@ export default defineType({
   icon: () => '🎬',
 
   groups: [
-    { name: 'video', title: 'Video', default: true },
-    { name: 'comments', title: 'Commenti' },
-    { name: 'settings', title: 'Impostazioni' },
+    { name: 'video', title: '🎬 Video', default: true },
+    { name: 'comments', title: '💬 Commenti' },
   ],
 
   fields: [
-    // === VIDEO ===
+    // ══════════════════════════════════════════════════════
+    // VIDEO
+    // ══════════════════════════════════════════════════════
     defineField({
       name: 'title',
       title: 'Titolo Video',
       type: 'string',
       group: 'video',
-      validation: Rule => Rule.required(),
+      description: 'Il titolo del video',
+      validation: Rule => Rule.required().error('Il titolo e obbligatorio'),
     }),
 
     defineField({
@@ -29,6 +31,7 @@ export default defineType({
       type: 'text',
       group: 'video',
       rows: 3,
+      description: 'Descrizione del contenuto del video',
     }),
 
     defineField({
@@ -49,16 +52,16 @@ export default defineType({
 
     defineField({
       name: 'videoUrl',
-      title: 'URL Video',
+      title: 'Link Video',
       type: 'url',
       group: 'video',
-      description: 'URL di YouTube o Vimeo (es: https://www.youtube.com/watch?v=...)',
+      description: 'Incolla il link di YouTube o Vimeo',
       hidden: ({ parent }) => parent?.videoType === 'file',
     }),
 
     defineField({
       name: 'videoFile',
-      title: 'File Video',
+      title: 'Carica Video',
       type: 'file',
       group: 'video',
       options: {
@@ -69,19 +72,11 @@ export default defineType({
 
     defineField({
       name: 'thumbnail',
-      title: 'Anteprima',
+      title: 'Immagine Anteprima',
       type: 'image',
       group: 'video',
-      description: 'Immagine di anteprima (opzionale, altrimenti usa quella del video)',
+      description: 'Immagine che appare prima di riprodurre il video',
       options: { hotspot: true },
-    }),
-
-    defineField({
-      name: 'duration',
-      title: 'Durata',
-      type: 'string',
-      group: 'video',
-      description: 'Es: 5:30, 12:45',
     }),
 
     defineField({
@@ -89,36 +84,61 @@ export default defineType({
       title: 'Autore',
       type: 'string',
       group: 'video',
-      description: 'Nome di chi ha caricato il video',
+      description: 'Chi ha creato il video',
     }),
 
     defineField({
-      name: 'tags',
-      title: 'Tag',
-      type: 'array',
+      name: 'duration',
+      title: 'Durata',
+      type: 'string',
       group: 'video',
-      of: [{ type: 'string' }],
-      options: {
-        layout: 'tags',
-      },
-      description: 'Parole chiave per la ricerca',
+      description: 'Es: 5:30',
     }),
 
     defineField({
-      name: 'linkedProduct',
-      title: 'Prodotto Mostrato',
-      type: 'reference',
-      to: [{ type: 'product' }],
+      name: 'isActive',
+      title: 'Visibile',
+      type: 'boolean',
       group: 'video',
-      description: 'Se il video mostra un prodotto specifico',
+      description: 'Il video e visibile sul sito',
+      initialValue: true,
     }),
 
-    // === COMMENTI ===
+    defineField({
+      name: 'isFeatured',
+      title: 'In Evidenza',
+      type: 'boolean',
+      group: 'video',
+      description: 'Mostra in primo piano',
+      initialValue: false,
+    }),
+
+    defineField({
+      name: 'publishedAt',
+      title: 'Data Pubblicazione',
+      type: 'datetime',
+      group: 'video',
+      initialValue: () => new Date().toISOString(),
+    }),
+
+    // ══════════════════════════════════════════════════════
+    // COMMENTI
+    // ══════════════════════════════════════════════════════
+    defineField({
+      name: 'allowComments',
+      title: 'Permetti Commenti',
+      type: 'boolean',
+      group: 'comments',
+      description: 'I visitatori possono commentare',
+      initialValue: true,
+    }),
+
     defineField({
       name: 'comments',
       title: 'Commenti',
       type: 'array',
       group: 'comments',
+      description: 'Gestisci i commenti al video',
       of: [
         {
           type: 'object',
@@ -127,36 +147,16 @@ export default defineType({
           fields: [
             {
               name: 'authorName',
-              title: 'Nome Autore',
+              title: 'Nome',
               type: 'string',
               validation: Rule => Rule.required(),
-            },
-            {
-              name: 'authorEmail',
-              title: 'Email Autore',
-              type: 'string',
             },
             {
               name: 'content',
-              title: 'Testo Commento',
+              title: 'Commento',
               type: 'text',
-              rows: 3,
+              rows: 2,
               validation: Rule => Rule.required(),
-            },
-            {
-              name: 'rating',
-              title: 'Valutazione',
-              type: 'number',
-              description: 'Da 1 a 5 stelle',
-              options: {
-                list: [
-                  { title: '⭐', value: 1 },
-                  { title: '⭐⭐', value: 2 },
-                  { title: '⭐⭐⭐', value: 3 },
-                  { title: '⭐⭐⭐⭐', value: 4 },
-                  { title: '⭐⭐⭐⭐⭐', value: 5 },
-                ],
-              },
             },
             {
               name: 'createdAt',
@@ -168,14 +168,7 @@ export default defineType({
               name: 'isApproved',
               title: 'Approvato',
               type: 'boolean',
-              description: 'Il commento e visibile sul sito',
-              initialValue: false,
-            },
-            {
-              name: 'isHighlighted',
-              title: 'In Evidenza',
-              type: 'boolean',
-              description: 'Mostra in primo piano',
+              description: 'Visibile sul sito',
               initialValue: false,
             },
           ],
@@ -183,17 +176,12 @@ export default defineType({
             select: {
               author: 'authorName',
               content: 'content',
-              rating: 'rating',
               approved: 'isApproved',
-              highlighted: 'isHighlighted',
             },
-            prepare({ author, content, rating, approved, highlighted }) {
-              const stars = rating ? '⭐'.repeat(rating) : ''
-              const status = approved ? '✅' : '⏳'
-              const highlight = highlighted ? '📌' : ''
+            prepare({ author, content, approved }) {
               return {
-                title: `${author} ${stars} ${highlight}`,
-                subtitle: `${status} ${content?.substring(0, 50)}...`,
+                title: `${approved ? '✅' : '⏳'} ${author || 'Anonimo'}`,
+                subtitle: content?.substring(0, 60) + '...',
               }
             },
           },
@@ -201,57 +189,38 @@ export default defineType({
       ],
     }),
 
+    // ══════════════════════════════════════════════════════
+    // CAMPI NASCOSTI (mantenuti per compatibilita)
+    // ══════════════════════════════════════════════════════
     defineField({
-      name: 'allowComments',
-      title: 'Permetti Commenti',
-      type: 'boolean',
-      group: 'comments',
-      description: 'Se disabilitato, i visitatori non possono commentare',
-      initialValue: true,
-    }),
-
-    // === IMPOSTAZIONI ===
-    defineField({
-      name: 'publishedAt',
-      title: 'Data Pubblicazione',
-      type: 'datetime',
-      group: 'settings',
-      initialValue: () => new Date().toISOString(),
+      name: 'linkedProduct',
+      title: 'Prodotto Collegato',
+      type: 'reference',
+      to: [{ type: 'product' }],
+      hidden: true,
     }),
 
     defineField({
-      name: 'isActive',
-      title: 'Visibile',
-      type: 'boolean',
-      group: 'settings',
-      initialValue: true,
-    }),
-
-    defineField({
-      name: 'isFeatured',
-      title: 'In Evidenza',
-      type: 'boolean',
-      group: 'settings',
-      description: 'Mostra nella homepage community',
-      initialValue: false,
+      name: 'tags',
+      title: 'Tag',
+      type: 'array',
+      hidden: true,
+      of: [{ type: 'string' }],
     }),
 
     defineField({
       name: 'viewCount',
       title: 'Visualizzazioni',
       type: 'number',
-      group: 'settings',
-      description: 'Numero di visualizzazioni',
+      hidden: true,
       initialValue: 0,
-      readOnly: true,
     }),
 
     defineField({
       name: 'sortOrder',
       title: 'Ordine',
       type: 'number',
-      group: 'settings',
-      description: 'Numero per ordinare (1 = primo)',
+      hidden: true,
       initialValue: 99,
     }),
   ],
@@ -267,14 +236,13 @@ export default defineType({
       videoType: 'videoType',
     },
     prepare({ title, author, thumbnail, active, featured, comments, videoType }) {
-      const badges = []
-      if (featured) badges.push('⭐')
+      const typeIcon = videoType === 'youtube' ? '▶️' : videoType === 'vimeo' ? '🎥' : '📁'
       const commentCount = comments?.length || 0
       const approvedCount = comments?.filter((c: any) => c.isApproved)?.length || 0
-      const typeIcon = videoType === 'youtube' ? '▶️' : videoType === 'vimeo' ? '🎥' : '📁'
+
       return {
-        title: `${typeIcon} ${title}`,
-        subtitle: `${author || 'Senza autore'} | 💬 ${approvedCount}/${commentCount} commenti ${active ? '✅' : '❌'} ${badges.join('')}`,
+        title: `${typeIcon} ${title || 'Senza titolo'} ${featured ? '⭐' : ''}`,
+        subtitle: `${author || '-'} | 💬 ${approvedCount}/${commentCount} ${active ? '✅' : '❌'}`,
         media: thumbnail,
       }
     },
@@ -282,7 +250,7 @@ export default defineType({
 
   orderings: [
     {
-      title: 'Data (recenti)',
+      title: 'Piu recenti',
       name: 'publishedAtDesc',
       by: [{ field: 'publishedAt', direction: 'desc' }],
     },
@@ -290,11 +258,6 @@ export default defineType({
       title: 'Titolo A-Z',
       name: 'titleAsc',
       by: [{ field: 'title', direction: 'asc' }],
-    },
-    {
-      title: 'Piu visualizzati',
-      name: 'viewCountDesc',
-      by: [{ field: 'viewCount', direction: 'desc' }],
     },
     {
       title: 'In evidenza',

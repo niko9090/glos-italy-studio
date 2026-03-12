@@ -1,4 +1,4 @@
-// Schema: Prodotto
+// Schema: Prodotto - VERSIONE SEMPLIFICATA
 import { defineType, defineField } from 'sanity'
 
 export default defineType({
@@ -7,56 +7,36 @@ export default defineType({
   type: 'document',
   icon: () => '📦',
 
-  // Gruppi per organizzare i campi
   groups: [
-    {
-      name: 'basic',
-      title: 'Info Base',
-      default: true,
-    },
-    {
-      name: 'media',
-      title: 'Immagini',
-    },
-    {
-      name: 'details',
-      title: 'Dettagli',
-    },
-    {
-      name: 'files',
-      title: 'Documenti',
-    },
-    {
-      name: 'relations',
-      title: 'Correlati',
-    },
-    {
-      name: 'settings',
-      title: 'Impostazioni',
-    },
+    { name: 'info', title: '📝 Informazioni', default: true },
+    { name: 'media', title: '📷 Foto' },
+    { name: 'specs', title: '📋 Specifiche' },
   ],
 
   fields: [
-    // === INFO BASE ===
+    // ══════════════════════════════════════════════════════
+    // INFORMAZIONI BASE
+    // ══════════════════════════════════════════════════════
     defineField({
       name: 'name',
       title: 'Nome Prodotto',
       type: 'string',
-      group: 'basic',
-      validation: Rule => Rule.required(),
+      group: 'info',
+      description: 'Il nome del prodotto come apparira sul sito',
+      validation: Rule => Rule.required().error('Il nome e obbligatorio'),
     }),
 
     defineField({
       name: 'slug',
       title: 'URL',
       type: 'slug',
+      group: 'info',
       description: 'Clicca "Generate" per creare automaticamente',
-      group: 'basic',
       options: {
         source: 'name',
         maxLength: 96,
       },
-      validation: Rule => Rule.required(),
+      validation: Rule => Rule.required().error('URL obbligatorio'),
     }),
 
     defineField({
@@ -64,40 +44,73 @@ export default defineType({
       title: 'Categoria',
       type: 'reference',
       to: [{ type: 'productCategory' }],
-      group: 'basic',
+      group: 'info',
+      description: 'Seleziona la categoria del prodotto',
     }),
 
     defineField({
       name: 'shortDescription',
       title: 'Descrizione Breve',
-      type: 'richText',
-      description: 'Breve descrizione - puoi usare grassetto, colori, ecc.',
-      group: 'basic',
+      type: 'text',
+      group: 'info',
+      rows: 2,
+      description: 'Breve descrizione (1-2 frasi)',
     }),
 
     defineField({
       name: 'fullDescription',
       title: 'Descrizione Completa',
-      type: 'richText',
-      description: 'Descrizione dettagliata - puoi usare grassetto, colori, ecc.',
-      group: 'basic',
+      type: 'text',
+      group: 'info',
+      rows: 5,
+      description: 'Descrizione dettagliata del prodotto',
     }),
 
-    // === IMMAGINI ===
+    defineField({
+      name: 'isActive',
+      title: 'Visibile sul sito',
+      type: 'boolean',
+      group: 'info',
+      description: 'Se disattivato, il prodotto non sara visibile',
+      initialValue: true,
+    }),
+
+    defineField({
+      name: 'isFeatured',
+      title: 'Mostra in Homepage',
+      type: 'boolean',
+      group: 'info',
+      description: 'Mostra questo prodotto nella homepage',
+      initialValue: false,
+    }),
+
+    defineField({
+      name: 'isNew',
+      title: 'Nuovo Prodotto',
+      type: 'boolean',
+      group: 'info',
+      description: 'Mostra badge "Nuovo" sul prodotto',
+      initialValue: false,
+    }),
+
+    // ══════════════════════════════════════════════════════
+    // FOTO
+    // ══════════════════════════════════════════════════════
     defineField({
       name: 'mainImage',
       title: 'Foto Principale',
       type: 'image',
       group: 'media',
+      description: 'La foto principale del prodotto',
       options: { hotspot: true },
     }),
 
     defineField({
       name: 'gallery',
-      title: 'Galleria Immagini',
+      title: 'Altre Foto',
       type: 'array',
       group: 'media',
-      description: 'Aggiungi altre foto del prodotto per la galleria',
+      description: 'Aggiungi altre foto del prodotto',
       of: [
         {
           type: 'image',
@@ -105,13 +118,7 @@ export default defineType({
           fields: [
             {
               name: 'alt',
-              title: 'Testo Alternativo',
-              type: 'string',
-              description: 'Descrizione immagine per accessibilita',
-            },
-            {
-              name: 'caption',
-              title: 'Didascalia',
+              title: 'Descrizione',
               type: 'string',
             },
           ],
@@ -119,13 +126,15 @@ export default defineType({
       ],
     }),
 
-    // === DETTAGLI ===
+    // ══════════════════════════════════════════════════════
+    // SPECIFICHE
+    // ══════════════════════════════════════════════════════
     defineField({
       name: 'specifications',
       title: 'Specifiche Tecniche',
       type: 'array',
-      description: 'Aggiungi le specifiche del prodotto',
-      group: 'details',
+      group: 'specs',
+      description: 'Aggiungi le specifiche (es: Peso: 500g)',
       of: [
         {
           type: 'object',
@@ -134,88 +143,31 @@ export default defineType({
               name: 'label',
               title: 'Nome',
               type: 'string',
-              description: 'Es: Peso, Dimensioni, Materiale',
+              description: 'Es: Peso, Dimensioni',
             },
             {
               name: 'value',
               title: 'Valore',
               type: 'string',
-              description: 'Es: 500g, 30x20cm, Acciaio inox',
+              description: 'Es: 500g, 30x20cm',
             },
           ],
           preview: {
             select: { label: 'label', value: 'value' },
             prepare({ label, value }) {
-              return { title: `${label}: ${value}` }
+              return { title: `${label || ''}: ${value || ''}` }
             },
           },
         },
       ],
     }),
 
-    defineField({
-      name: 'features',
-      title: 'Caratteristiche Principali',
-      type: 'array',
-      group: 'details',
-      description: 'Lista delle caratteristiche chiave del prodotto',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            {
-              name: 'icon',
-              title: 'Icona',
-              type: 'string',
-              options: {
-                list: [
-                  { title: 'Ingranaggio', value: 'gear' },
-                  { title: 'Fulmine', value: 'lightning' },
-                  { title: 'Lucchetto', value: 'lock' },
-                  { title: 'Lampadina', value: 'bulb' },
-                  { title: 'Target', value: 'target' },
-                  { title: 'Trofeo', value: 'trophy' },
-                  { title: 'Razzo', value: 'rocket' },
-                  { title: 'Check', value: 'check' },
-                  { title: 'Stella', value: 'star' },
-                  { title: 'Scudo', value: 'shield' },
-                ],
-              },
-            },
-            {
-              name: 'title',
-              title: 'Titolo',
-              type: 'string',
-            },
-            {
-              name: 'description',
-              title: 'Descrizione',
-              type: 'text',
-              rows: 2,
-            },
-          ],
-          preview: {
-            select: { title: 'title', icon: 'icon' },
-            prepare({ title, icon }) {
-              const icons: Record<string, string> = {
-                gear: '⚙️', lightning: '⚡', lock: '🔒', bulb: '💡',
-                target: '🎯', trophy: '🏆', rocket: '🚀', check: '✓',
-                star: '★', shield: '🛡️',
-              }
-              return { title: `${icons[icon] || '•'} ${title}` }
-            },
-          },
-        },
-      ],
-    }),
-
-    // === DOCUMENTI ===
     defineField({
       name: 'documents',
-      title: 'Documenti Scaricabili',
+      title: 'Documenti PDF',
       type: 'array',
-      group: 'files',
-      description: 'Schede tecniche, manuali, cataloghi, ecc.',
+      group: 'specs',
+      description: 'Schede tecniche, manuali, ecc.',
       of: [
         {
           type: 'object',
@@ -224,149 +176,76 @@ export default defineType({
               name: 'title',
               title: 'Nome Documento',
               type: 'string',
-              description: 'Es: Scheda Tecnica, Manuale Utente, Catalogo',
             },
             {
               name: 'file',
-              title: 'File',
+              title: 'File PDF',
               type: 'file',
               options: {
-                accept: '.pdf,.doc,.docx,.xls,.xlsx,.zip',
-              },
-            },
-            {
-              name: 'fileType',
-              title: 'Tipo',
-              type: 'string',
-              options: {
-                list: [
-                  { title: 'PDF', value: 'pdf' },
-                  { title: 'Word', value: 'doc' },
-                  { title: 'Excel', value: 'xls' },
-                  { title: 'ZIP', value: 'zip' },
-                ],
+                accept: '.pdf',
               },
             },
           ],
           preview: {
-            select: { title: 'title', type: 'fileType' },
-            prepare({ title, type }) {
-              const icons: Record<string, string> = {
-                pdf: '📄', doc: '📝', xls: '📊', zip: '📦',
-              }
-              return { title: `${icons[type] || '📎'} ${title}` }
+            select: { title: 'title' },
+            prepare({ title }) {
+              return { title: `📄 ${title || 'Documento'}` }
             },
           },
         },
       ],
     }),
 
-    // === PRODOTTI CORRELATI ===
-    defineField({
-      name: 'relatedProducts',
-      title: 'Prodotti Correlati',
-      type: 'array',
-      group: 'relations',
-      description: 'Seleziona i prodotti da mostrare nella sezione "Ti potrebbe interessare"',
-      of: [
-        {
-          type: 'reference',
-          to: [{ type: 'product' }],
-        },
-      ],
-      validation: Rule => Rule.max(4).warning('Consigliato massimo 4 prodotti correlati'),
-    }),
-
-    // === IMPOSTAZIONI ===
+    // ══════════════════════════════════════════════════════
+    // CAMPI NASCOSTI (mantenuti per compatibilita)
+    // ══════════════════════════════════════════════════════
     defineField({
       name: 'sortOrder',
       title: 'Ordine',
       type: 'number',
-      group: 'settings',
-      description: 'Numero per ordinare i prodotti (1 = primo)',
+      hidden: true,
       initialValue: 99,
     }),
 
     defineField({
-      name: 'isActive',
-      title: 'Visibile sul sito',
-      type: 'boolean',
-      group: 'settings',
-      initialValue: true,
+      name: 'relatedProducts',
+      title: 'Prodotti Correlati',
+      type: 'array',
+      hidden: true,
+      of: [{ type: 'reference', to: [{ type: 'product' }] }],
     }),
 
     defineField({
-      name: 'isFeatured',
-      title: 'Mostra in Homepage',
-      type: 'boolean',
-      group: 'settings',
-      initialValue: false,
-    }),
-
-    defineField({
-      name: 'isNew',
-      title: 'Nuovo Prodotto',
-      type: 'boolean',
-      group: 'settings',
-      description: 'Mostra badge "Nuovo" sul prodotto',
-      initialValue: false,
+      name: 'features',
+      title: 'Caratteristiche',
+      type: 'array',
+      hidden: true,
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'icon', title: 'Icona', type: 'string' },
+          { name: 'title', title: 'Titolo', type: 'string' },
+          { name: 'description', title: 'Descrizione', type: 'text' },
+        ],
+      }],
     }),
 
     defineField({
       name: 'badges',
-      title: 'Badge Aggiuntivi',
+      title: 'Badge',
       type: 'array',
-      group: 'settings',
-      description: 'Seleziona i badge da mostrare sul prodotto',
+      hidden: true,
       of: [{ type: 'string' }],
-      options: {
-        list: [
-          { title: 'Bestseller', value: 'bestseller' },
-          { title: 'Offerta Speciale', value: 'offerta' },
-          { title: 'Promo', value: 'promo' },
-          { title: 'Esaurito', value: 'esaurito' },
-          { title: 'In Arrivo', value: 'in-arrivo' },
-          { title: 'Edizione Limitata', value: 'limitato' },
-          { title: 'Consigliato', value: 'consigliato' },
-          { title: 'Made in Italy', value: 'made-italy' },
-          { title: 'Garanzia Estesa', value: 'garanzia' },
-          { title: 'Eco-Friendly', value: 'eco' },
-        ],
-        layout: 'grid',
-      },
     }),
 
     defineField({
       name: 'customBadge',
       title: 'Badge Personalizzato',
       type: 'object',
-      group: 'settings',
-      description: 'Crea un badge personalizzato',
+      hidden: true,
       fields: [
-        {
-          name: 'text',
-          title: 'Testo',
-          type: 'string',
-          description: 'Es: -20%, Novità 2026, ecc.',
-        },
-        {
-          name: 'color',
-          title: 'Colore',
-          type: 'string',
-          options: {
-            list: [
-              { title: 'Blu (primario)', value: 'primary' },
-              { title: 'Rosso', value: 'red' },
-              { title: 'Verde', value: 'green' },
-              { title: 'Giallo', value: 'yellow' },
-              { title: 'Arancione', value: 'orange' },
-              { title: 'Viola', value: 'purple' },
-              { title: 'Grigio', value: 'gray' },
-              { title: 'Nero', value: 'black' },
-            ],
-          },
-          initialValue: 'primary',
-        },
+        { name: 'text', title: 'Testo', type: 'string' },
+        { name: 'color', title: 'Colore', type: 'string' },
       ],
     }),
   ],
@@ -379,26 +258,30 @@ export default defineType({
       active: 'isActive',
       featured: 'isFeatured',
       isNew: 'isNew',
-      badges: 'badges',
-      customBadge: 'customBadge',
     },
-    prepare({ title, category, media, active, featured, isNew, badges, customBadge }) {
-      const badgeIcons = []
-      if (featured) badgeIcons.push('⭐')
-      if (isNew) badgeIcons.push('🆕')
-      if (badges?.includes('bestseller')) badgeIcons.push('🏆')
-      if (badges?.includes('offerta')) badgeIcons.push('🏷️')
-      if (badges?.includes('promo')) badgeIcons.push('💥')
-      if (badges?.includes('esaurito')) badgeIcons.push('⛔')
-      if (badges?.includes('made-italy')) badgeIcons.push('🇮🇹')
-      if (badges?.includes('eco')) badgeIcons.push('🌱')
-      if (customBadge?.text) badgeIcons.push('🔖')
-      const badgeStr = badgeIcons.length > 0 ? ` ${badgeIcons.join('')}` : ''
+    prepare({ title, category, media, active, featured, isNew }) {
+      const badges = []
+      if (featured) badges.push('⭐')
+      if (isNew) badges.push('🆕')
+      const badgeStr = badges.length > 0 ? ` ${badges.join('')}` : ''
       return {
-        title: title,
-        subtitle: `${category || 'Senza categoria'} ${active ? '✅' : '❌'}${badgeStr}`,
+        title: `${title || 'Senza nome'}${badgeStr}`,
+        subtitle: `${category || 'Senza categoria'} ${active ? '✅' : '❌'}`,
         media,
       }
     },
   },
+
+  orderings: [
+    {
+      title: 'Nome A-Z',
+      name: 'nameAsc',
+      by: [{ field: 'name', direction: 'asc' }],
+    },
+    {
+      title: 'Ultima modifica',
+      name: 'updatedDesc',
+      by: [{ field: '_updatedAt', direction: 'desc' }],
+    },
+  ],
 })
