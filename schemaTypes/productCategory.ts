@@ -1,4 +1,4 @@
-// Schema: Categoria Prodotto - VERSIONE SEMPLIFICATA
+// Schema: Categoria Prodotto - VERSIONE SEMPLIFICATA (compatibile con dati multilingua)
 import { defineType, defineField } from 'sanity'
 
 export default defineType({
@@ -11,9 +11,8 @@ export default defineType({
     defineField({
       name: 'name',
       title: 'Nome Categoria',
-      type: 'string',
+      type: 'localeString',
       description: 'Il nome della categoria',
-      validation: Rule => Rule.required().error('Il nome e obbligatorio'),
     }),
 
     defineField({
@@ -22,7 +21,11 @@ export default defineType({
       type: 'slug',
       description: 'Clicca "Generate" per creare automaticamente',
       options: {
-        source: 'name',
+        source: (doc: any) => {
+          // Gestisce sia string che localeString
+          if (typeof doc.name === 'string') return doc.name
+          return doc.name?.it || doc.name?.en || ''
+        },
         maxLength: 96,
       },
       validation: Rule => Rule.required(),
@@ -31,8 +34,7 @@ export default defineType({
     defineField({
       name: 'description',
       title: 'Descrizione',
-      type: 'text',
-      rows: 2,
+      type: 'localeText',
       description: 'Breve descrizione della categoria',
     }),
 
@@ -78,8 +80,16 @@ export default defineType({
       isActive: 'isActive',
     },
     prepare({ title, media, isActive }) {
+      // Gestisce sia string che localeString
+      let titleStr = 'Categoria senza nome'
+      if (typeof title === 'string') {
+        titleStr = title
+      } else if (title && typeof title === 'object') {
+        titleStr = title.it || title.en || title.es || 'Categoria senza nome'
+      }
+
       return {
-        title: title || 'Categoria senza nome',
+        title: titleStr,
         subtitle: isActive ? '✅ Visibile' : '❌ Nascosta',
         media,
       }
@@ -90,7 +100,7 @@ export default defineType({
     {
       title: 'Nome A-Z',
       name: 'nameAsc',
-      by: [{ field: 'name', direction: 'asc' }],
+      by: [{ field: 'name.it', direction: 'asc' }],
     },
   ],
 })
