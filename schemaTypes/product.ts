@@ -262,13 +262,14 @@ export default defineType({
     prepare({ title, category, media, active, featured, isNew }) {
       // Gestisce sia string che localeString
       const titleStr = typeof title === 'object' ? (title?.it || title?.en || 'Senza nome') : (title || 'Senza nome')
+      const categoryStr = typeof category === 'object' ? (category?.it || category?.en || 'Senza categoria') : (category || 'Senza categoria')
       const badges = []
       if (featured) badges.push('⭐')
       if (isNew) badges.push('🆕')
       const badgeStr = badges.length > 0 ? ` ${badges.join('')}` : ''
       return {
         title: `${titleStr}${badgeStr}`,
-        subtitle: `${category || 'Senza categoria'} ${active ? '✅' : '❌'}`,
+        subtitle: `${categoryStr} ${active ? '✅' : '❌'}`,
         media,
       }
     },
