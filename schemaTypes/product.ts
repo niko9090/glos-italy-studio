@@ -139,20 +139,23 @@ export default defineType({
             {
               name: 'label',
               title: 'Nome',
-              type: 'string',
+              type: 'localeString',
               description: 'Es: Peso, Dimensioni',
             },
             {
               name: 'value',
               title: 'Valore',
-              type: 'string',
+              type: 'localeString',
               description: 'Es: 500g, 30x20cm',
             },
           ],
           preview: {
             select: { label: 'label', value: 'value' },
             prepare({ label, value }) {
-              return { title: `${label || ''}: ${value || ''}` }
+              // Gestisce sia string che localeString
+              const labelStr = typeof label === 'object' ? (label?.it || label?.en || '') : (label || '')
+              const valueStr = typeof value === 'object' ? (value?.it || value?.en || '') : (value || '')
+              return { title: `${labelStr}: ${valueStr}` }
             },
           },
         },
